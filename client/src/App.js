@@ -1,12 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Product from './containers/product/Product.jsx';
+import ProductCard from './components/product_card/ProductCard.jsx';
 
 function App() {
   return (
     <div className="App">
-    <Product />
+    	<ProductCard/>
+    	<ProductCard/>
+    	<ProductCard/>
+    	<ProductCard/>
     </div>
   );
 }
