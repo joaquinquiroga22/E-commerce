@@ -1,0 +1,14 @@
+.nav{
+	background-color:#71a733;
+	height: 60px;
+	width: 100%;
+	position: fixed;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.logo{
+	color: white;
+	margin: 0 0 0 15px;
+}
