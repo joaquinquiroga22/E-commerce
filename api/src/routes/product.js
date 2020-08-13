@@ -9,10 +9,10 @@ server.get("/", (req, res, next) => {
     })
     .catch(next);
 });
-server.get("/Category/:NameCategory", (req, res, next) => {
+server.get("/category/:nameCategory", (req, res, next) => {
   Category.findAll()
-    .then((Category) => {
-      res.send(Category);
+    .then((category) => {
+      res.send(category);
     })
     .catch(next);
 });
