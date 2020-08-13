@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import ProductCard from './components/product_card/ProductCard.jsx';
+import Product from './container/view_product/Product.jsx';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
     	<ProductCard/>
     	<ProductCard/>
     	<ProductCard/>
+      <Product /> 
     </div>
   );
 }
