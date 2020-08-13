@@ -28,12 +28,16 @@ server.get('/Category/:NameCategory', (req, res, next) => {
 				res.sendStatus(400);   
 			} 
 		});	
+		server.put("/:id", (req, res, next) => {
+			const { name, description, price, stock } = req.body;
+			Product.update(
+			  { name, description, price, stock },
+			  { where: { id: req.params.id }, returning: true }
+			).then((products) => {
+			  console.log(products[1][0]);
+			  res.send(products[1][0].dataValues);
+			});
+			// .catch(next);
+		  });
 
-
-
-
-
-serve.put('/:productsid', (req, res) =>{
-    
-});
 module.exports = server;
