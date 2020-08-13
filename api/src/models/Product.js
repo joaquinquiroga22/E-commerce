@@ -7,22 +7,44 @@ module.exports = (sequelize) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notNull: {
+                  msg: 'Please enter your name'
+                }
+              }
+              //validate: {
+               // len: [5, 10]
+              //} Esto tambien puede ir, son caracteres.
         },
         description: {
             type: DataTypes.TEXT,
             allowNull: false,
+            validate: {
+                notNull: {
+                  msg: 'Please enter your name'
+                }
+              }
         },
         price: {
             type: DataTypes.REAL,
             allowNull: false,
+            isNumeric: {
+                msg: "Solo Numeros"
+            }
+
         },
         image: {
             type: DataTypes.BLOB,
             allowNull: true,
+            //No se cual iria aca
+
         },
         stock: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            isInt:{
+                msg: "No es un entero"
+            }
         }
     });
 };
