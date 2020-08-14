@@ -39,5 +39,18 @@ server.get('/Category/:NameCategory', (req, res, next) => {
 			});
 			// .catch(next);
 		  });
+		server.delete("/:id", (req, res, next) =>{
+          Product.destroy({
+			  where: {
+				  id: req.params.id
+			  }
+		  })
+		  .then(function(deleted){
+			  if (deleted === 1){
+				  res.status(200).json({message: "Borrado Satisfactoriamente"});
+			  }
+		  })
+		  .catch(next);
+		});
 
 module.exports = server;
