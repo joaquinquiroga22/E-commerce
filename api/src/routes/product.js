@@ -1,14 +1,13 @@
-const server = require('express').Router();
-const { Product } = require('../db.js');
-const { Category } = require('../db.js');
+const server = require("express").Router();
+const { Product } = require("../db.js");
+const { Category } = require("../db.js");
 
-server.get('/', (req, res, next) => {
-	Product.findAll()
-		.then(products => {
-			res.send(products);
-		})
-		.catch(next);
+server.get("/", (req, res, next) => {
+  Product.findAll()
+    .then((products) => res.send(products))
+    .catch(next);
 });
+
 server.get('/Category/:NameCategory', (req, res, next) => {   
 	Category.findAll()
 	    .then(Category =>{              
@@ -28,17 +27,6 @@ server.get('/Category/:NameCategory', (req, res, next) => {
 				res.sendStatus(400);   
 			} 
 		});	
-		server.put("/:id", (req, res, next) => {
-			const { name, description, price, stock } = req.body;
-			Product.update(
-			  { name, description, price, stock },
-			  { where: { id: req.params.id }, returning: true }
-			).then((products) => {
-			  console.log(products[1][0]);
-			  res.send(products[1][0].dataValues);
-			});
-			// .catch(next);
-		  });
 		server.delete("/:id", (req, res, next) =>{
           Product.destroy({
 			  where: {
@@ -52,5 +40,22 @@ server.get('/Category/:NameCategory', (req, res, next) => {
 		  })
 		  .catch(next);
 		});
+server.put("/:id", (req, res, next) => {
+  const { name, description, price, stock } = req.body;
+  Product.update(
+    { name, description, price, stock },
+    { where: { id: req.params.id }, returning: true }
+  )
+    .then((products) => {
+      res.send(products[1][0].dataValues);
+    })
+    .catch(next);
+});
+
+server.get("/:id", (req, res, next) => {
+  Product.findAll({ where: { id: req.params.id }, returning: true })
+    .then((products) => res.send(products[0]))
+    .catch(next);
+});
 
 module.exports = server;
