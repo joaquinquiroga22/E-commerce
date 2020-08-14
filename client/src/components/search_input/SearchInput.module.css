@@ -4,7 +4,7 @@
 	display: inline-block;
 }
 
-input{
+.searchInput input{
 
 	font-size: 18px;
 	color:white;
@@ -18,17 +18,17 @@ input{
 	border: 1px solid #ccc;
 }
 
-input[type=text]{
+.searchInput input[type=text]{
 	color:black;
 	background-color: rgba(255,255,255,.8);
 	border-radius:10px 0 0 10px;
 	width:400px;	
 }
-input[type=text]::placeholder{
+.searchInput input[type=text]::placeholder{
 	color: gray;
 }
 
-input[type=submit]{
+.searchInput input[type=submit]{
 	border:1px solid #ccc;
 	border-left: none;
 	border-radius: 0 10px 10px 0;
@@ -36,7 +36,7 @@ input[type=submit]{
 	background-color:transparent;
 }
 
-input[type=submit]:hover{
+.searchInput input[type=submit]:hover{
 	border: 1px solid #4EA32A;
 	border-left: none;
 	background-color: #4EA32A;
