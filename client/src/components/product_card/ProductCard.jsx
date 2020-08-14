@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 //IMPORTS PROPIOS
 import defaultImg from '../../img/default.jpg';
@@ -23,6 +24,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     boxShadow: "0px 0px 26px -2px rgba(0,0,0,0.69)",
+    textDecoration: "none"
   },
   media: {
   	margin: 'auto',
@@ -35,13 +37,15 @@ const useStyles = makeStyles({
 const props = {title: "Aloe vera",
 description: "Soy una descripcion media floja jeje.",
 price: 403,
-cantidad: 31
+cantidad: 31,
+id: 3
 }
 
 export default function ProductCard() {
   const classes = useStyles();
 
   return (
+    <Link to={`/product/${props.id}`}> 
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
@@ -56,5 +60,7 @@ export default function ProductCard() {
 				</CardContent>
 			</CardActionArea>
     </Card>
+    </Link>
   );
+
 }
