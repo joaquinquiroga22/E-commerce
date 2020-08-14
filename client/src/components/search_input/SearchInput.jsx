@@ -18,7 +18,6 @@ export default function SearchInput({ onSearch }) {
       <Grid container>
         <Grid item>
           <input
-            className="input"
             type="text"
             placeholder="Buscar..."
             onChange={(e) => setSearchInfo(e.target.value)}
