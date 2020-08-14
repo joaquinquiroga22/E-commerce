@@ -1,40 +1,19 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+//Componentes
 import Navbar from "./containers/navbar/Navbar.jsx";
-import ProductCard from "./components/product_card/ProductCard.jsx";
-import Product from "./container/view_product/Product.jsx";
-import { Route } from "react-router-dom";
-
+import Product from "./components/view_product/Product.jsx";
+import Catalogue from "./containers/catalogue/Catalogue.jsx";
 function App() {
-  const [products, setProduct] = useState([]);
-
-  function OnFilter(productId) {
-    let product = products.filter((p) => p.id == parseInt(productId));
-    if (product > 0) {
-      return product[0];
-    } else {
-      alert("No hay productos con ese nombre");
-    }
-  }
-
   return (
-    <div className="App">
-      <Navbar />
-      <Route
-        path="/product/:productId"
-        render={({ match }) => (
-          <Product product={OnFilter(match.params.productId)} />
-        )}
-      />
-      <ProductCard />
-      {/* un get a la ruta del backedn que edvuelva ese id o que devuelva el producto que quieras / hasta que no esten las rutas no se puede seguir. / */}
-    </div>
+    <Router>
+      <div className="App">
+        <Route path="/" component={Navbar} />
+        <Route exact path="/" component={Catalogue} />
+      </div>
+    </Router>
   );
 }
 
 export default App;
-
-// ProductCard ==> Product
-//
-
