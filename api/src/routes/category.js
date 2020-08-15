@@ -25,6 +25,12 @@ server.delete("/:id", (req, res, next) => {
         res
           .status(200)
           .json({ message: "Categoria borrada Satisfactoriamente" });
+      } else {
+        var error = new Error(
+          `No se pudo eliminar la categoria con id: ${req.params.id}`
+        );
+        error.status = 400;
+        throw error;
       }
     })
     .catch(next);
@@ -37,10 +43,18 @@ server.put("/:id", (req, res, next) => {
     { where: { id: req.params.id }, returning: true }
   )
     .then((categories) => {
+      if (categories[0] === 0) {
+        var error = new Error(
+          `No se pudo actualizar la categoria con id: ${req.params.id}`
+        );
+        error.status = 400;
+        throw error;
+      }
       res.send(categories[1][0].dataValues);
     })
     .catch(next);
 });
+
 server.get("/:nameCategory", (req, res, next) => {
   Category.findAll({
     where: {
