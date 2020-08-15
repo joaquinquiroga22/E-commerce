@@ -51,8 +51,10 @@ server.get("/:id", (req, res, next) => {
 server.post("/products/:idProducto/category/:idCategoria", (req, res, next) => {
     const { idProducto, idCategoria } = req.params;
     Category_Products.findOrCreate({
-            productId: idProducto,
-            categoryId: idCategoria
+            where: {
+                productId: idProducto,
+                categoryId: idCategoria
+            }
         })
         .then(prodcat => {
             res.status(201).send(prodcat[0])
@@ -71,8 +73,6 @@ server.delete("/products/:idProducto/category/:idCategoria", (req, res, next) =>
             res.send("Categoria eliminada del producto")
         )
 })
-
-
 
 
 module.exports = server;
