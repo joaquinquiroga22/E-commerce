@@ -66,4 +66,5 @@ server.get("/:nameCategory", (req, res, next) => {
     })
     .catch(next);
 });
+
 module.exports = server;
