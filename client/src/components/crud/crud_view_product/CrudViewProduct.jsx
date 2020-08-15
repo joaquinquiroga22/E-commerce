@@ -4,14 +4,14 @@ import s from "./CrudViewProduct.module.css";
 import axios from "axios";
 
 export default function CrudDeleteProduct() {
-  const [renderProduct, setRenderProduct] = useState(true);
+  const [render, setRender] = useState(true);
   const [product, setProduct] = useState({
     name: "",
     price: 0,
     description: "",
     stock: 0,
   });
-  const testID = 2;
+  const testID = 9;
 
   useEffect(() => {
     axios
@@ -27,10 +27,10 @@ export default function CrudDeleteProduct() {
   }, []);
 
   const closeView = function () {
-    setRenderProduct(false);
+    setRender(false);
   };
 
-  if (renderProduct) {
+  if (render) {
     return (
       <form className={s.form}>
         <div className={s.viewProduct}>

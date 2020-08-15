@@ -3,7 +3,7 @@ import axios from "axios";
 import testImage from "../../../img/default.jpg";
 import s from "./CrudDeleteProduct.module.css";
 import Alert from "@material-ui/lab/Alert";
-
+import CloseBtn from "../../close_btn/CloseBtn.jsx";
 export default function CrudDeleteProduct() {
   const [product, setProduct] = useState({
     name: "",
@@ -14,7 +14,7 @@ export default function CrudDeleteProduct() {
   const [render, setRender] = useState(true);
   const [success, setSuccess] = useState(false);
 
-  const testID = 2;
+  const testID = 5;
 
   useEffect(() => {
     axios
@@ -37,6 +37,9 @@ export default function CrudDeleteProduct() {
       .then(function (res) {
         console.log(res);
         setSuccess(true);
+        setTimeout(function () {
+          setSuccess(false);
+        }, 3000);
       })
       .catch(function (error) {
         console.log(error);
@@ -49,6 +52,7 @@ export default function CrudDeleteProduct() {
   if (render) {
     return (
       <form className={s.form} onSubmit={onSubmitHandle}>
+        <CloseBtn close={closeView} />
         <div className={s.viewProduct}>
           <div className={s.image}>
             <img src={testImage} />
@@ -70,15 +74,12 @@ export default function CrudDeleteProduct() {
           </div>
         </div>
         {success && (
-          <div>
-            <Alert severity="success">Producto eliminado correctamente</Alert>
-            <input type="button" value="Volver" onClick={closeView} />
-          </div>
+          <Alert severity="success">Producto eliminado correctamente</Alert>
         )}
         {!success && (
           <div>
             <input className={s.deleteBtn} type="submit" value="Eliminar" />
-            <input type="button" value="Cancelar" />
+            <input onClick={closeView} type="button" value="Cancelar" />
           </div>
         )}
       </form>

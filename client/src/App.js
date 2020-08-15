@@ -8,16 +8,27 @@ import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import CrudUpdateProduct from "./components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudAddProduct from "./components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudDeleteProduct from "./components/crud/crud_delete_product/CrudDeleteProduct.jsx";
+import CrudViewProduct from "./components/crud/crud_view_product/CrudViewProduct.jsx";
+import AddCategory from "./components/crud/categoryform/CrudAddProduct.jsx";
 
 function App() {
+  const [search, setSearch] = useState("");
+
+  const searchQuery = function (valor) {
+    setSearch(valor);
+  };
   return (
     <Router>
       <div className="App">
-        <Route exact path="/" component={CrudDeleteProduct} />
+        <Route exact path="/delete" component={CrudDeleteProduct} />
         <Route exact path="/add" component={CrudAddProduct} />
         <Route exact path="/update" component={CrudUpdateProduct} />
-        <Route path="/" component={Navbar} />
-        <Route exact path="/catalogue" component={Catalogue} />
+        <Route exact path="/view" component={CrudViewProduct} />
+
+        <Route exact path="/category" component={AddCategory} />
+        <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
+
+        <Route exact path="/" component={Catalogue} />
         <Route exact path="/product/:id" component={Product} />
       </div>
     </Router>

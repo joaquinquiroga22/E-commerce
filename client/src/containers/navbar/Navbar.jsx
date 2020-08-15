@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 import s from "./Navbar.module.css";
 
-export default function Navbar() {
-  function onSearch(producto) {
-    console.log(producto);
-  }
+export default function Navbar({ onSearch }) {
   return (
     <div className={s.nav}>
       <Link to="/">

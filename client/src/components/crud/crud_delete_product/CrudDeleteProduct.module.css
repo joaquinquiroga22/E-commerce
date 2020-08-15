@@ -1,8 +1,13 @@
 .form{
+	position: relative;
+	background-color: gray;
 	height: auto;
 	width: 600px;
 	padding: 10px;
 	border: 1px solid black;
+	margin-left:auto;
+	margin-right:auto;
+	z-index:102;
 }
 .viewProduct{
 	display:flex;
