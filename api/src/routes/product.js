@@ -11,6 +11,14 @@ server.get("/", (req, res, next) => {
 
 server.post("/", (req, res, next) => {
   const { name, description, price, stock } = req.body;
+  const numero = isNaN(parseInt(price));
+  const numeroStock = isNaN(parseInt(stock));
+  if (parseInt(stock) < 0 || numeroStock) {
+    return res.status(400).send("El stock debe ser un Entero positivo");
+  }
+  if (parseInt(price) < 0 || numero) {
+    return res.status(400).send("El precio debe ser un numero positivo");
+  }
   if (name && description && price && stock) {
     Product.create({ name, description, price, stock })
       .then((product) => {
@@ -87,14 +95,11 @@ server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
     },
   })
     .then((prodcat) => {
-      if (!prodcat) {
-        var error = new Error("That page was not found!");
-        error.status = 404;
-        throw error;
-      }
       res.status(201).send(prodcat[0]);
     })
-    .catch(next);
+    .catch((error) => {
+      res.status(400).send(error.parent.detail);
+    });
 });
 
 server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
@@ -104,7 +109,11 @@ server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
       productId: idProducto,
       categoryId: idCategoria,
     },
-  }).then(res.send("Categoria eliminada del producto"));
+  })
+    .then(res.send("Categoria eliminada del producto"))
+    .catch((error) => {
+      res.status(400).send(error.parent.detail);
+    });
 });
 
 module.exports = server;
