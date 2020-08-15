@@ -7,10 +7,13 @@ import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import CrudUpdateProduct from "./components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudAddProduct from "./components/crud/crud_add_product/CrudAddProduct.jsx";
+import CrudDeleteProduct from "./components/crud/crud_delete_product/CrudDeleteProduct.jsx";
+
 function App() {
   return (
     <Router>
       <div className="App">
+        <Route exact path="/" component={CrudDeleteProduct} />
         <Route exact path="/add" component={CrudAddProduct} />
         <Route exact path="/update" component={CrudUpdateProduct} />
         <Route path="/" component={Navbar} />

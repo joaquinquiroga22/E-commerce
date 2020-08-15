@@ -1,0 +1,36 @@
+.card{
+	width: 800px;
+	height: 100px;
+	margin: 5px 0 5px 0;
+	background-color: #eee;
+	border-radius: 15px;
+	overflow: hidden;
+	padding: 15px;
+}
+.card a{
+	text-decoration: none;
+}
+.image{
+	background-color: white;
+	height: 100%;
+	width: 200px;
+	float:left;
+	overflow: hidden;
+}
+.image img{
+	height: 100%;
+}
+.content{
+	width: 550px;
+	text-align:left;
+}
+
+.content h2{
+	display: inline-block;
+	margin: 0px 0 0px 20px;
+}
+.content h3,p{
+	display: inline-block;
+	width: 60%;
+	margin: 5px 0 5px 20px;
+}
