@@ -48,7 +48,7 @@ server.get("/:id", (req, res, next) => {
         .catch(next);
 });
 
-server.post("/products/:idProducto/category/:idCategoria", (req, res, next) => {
+server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
     const { idProducto, idCategoria } = req.params;
     Category_Products.findOrCreate({
             where: {
@@ -61,7 +61,7 @@ server.post("/products/:idProducto/category/:idCategoria", (req, res, next) => {
         })
 })
 
-server.delete("/products/:idProducto/category/:idCategoria", (req, res, next) => {
+server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
     const { idProducto, idCategoria } = req.params;
     Category_Products.destroy({
             where: {
