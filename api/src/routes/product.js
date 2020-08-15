@@ -9,6 +9,7 @@ server.get("/", (req, res, next) => {
     .catch(next);
 });
 
+
 server.post("/", (req, res, next) => {
   const { name, description, price, stock } = req.body;
   if (name && description && price && stock) {
@@ -18,6 +19,7 @@ server.post("/", (req, res, next) => {
         res.send(product.dataValues);
       })
       .catch(next);
+
   } else {
     res.sendStatus(400);
   }
@@ -32,12 +34,14 @@ server.delete("/:id", (req, res, next) => {
     .then(function (deleted) {
       if (deleted === 1) {
         res.status(200).json({ message: "Borrado Satisfactoriamente" });
+
       } else {
         var error = new Error(
           `No se pudo eliminar el producto con id: ${req.params.id}`
         );
         error.status = 400;
         throw error;
+
       }
     })
     .catch(next);

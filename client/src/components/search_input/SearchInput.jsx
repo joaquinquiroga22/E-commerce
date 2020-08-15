@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Axios from "axios";
 //imports de material iu
 import Grid from "@material-ui/core/Grid";
 //Estilos personalizados
@@ -6,21 +7,31 @@ import s from "./SearchInput.module.css";
 
 //debe recibir una funcion por props
 export default function SearchInput({ onSearch }) {
-  const [searchInfo, setSearchInfo] = useState("");
+  const [search, setSearch] = useState("");
+  //Agregar onSubmit a la funcion pasada por props
+  ///search?valor=texto
+  const handleInputChange = function (e) {
+    setSearch({
+      ...search,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmitHandle = function (e) {
+    e.preventDefault();
+    Axios.get(`http://localhost:3000/products`).then(function (res) {
+      console.log(res);
+    });
+  };
+
   return (
-    <form
-      className={s.searchInput}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSearch(searchInfo);
-      }}
-    >
+    <form className={s.searchInput} onSubmit={onSubmitHandle}>
       <Grid container>
         <Grid item>
           <input
             type="text"
             placeholder="Buscar..."
-            onChange={(e) => setSearchInfo(e.target.value)}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item>

@@ -1,9 +1,10 @@
 import React from "react";
 import s from "./CrudAddProduct.module.css";
-import testImagen from "../../img/default.jpg";
+import testImagen from "../../../img/default.jpg";
 
-export default function CrudAddProduct() {
+export default function CrudAddCaterogy() {
   //nombre, descripcion, precio, imagen, stock
+
   return (
     <form className={s.form}>
       <div className={s.image}>
@@ -11,7 +12,7 @@ export default function CrudAddProduct() {
       </div>
       <div className={s.inputs}>
         <label for="nombre" autocomplete="false">
-          Nombre de la categoria: 
+          Nombre de la categoria:
         </label>
         <input type="text" />
         <label for="imagen">Imagen de la categoria: </label>

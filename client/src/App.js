@@ -1,30 +1,40 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+//Componentes
 import Navbar from "./containers/navbar/Navbar.jsx";
-import ProductCard from "./components/product_card/ProductCard.jsx";
-import Product from "./container/view_product/Product.jsx";
-import { Route } from "react-router-dom";
+import Product from "./components/view_product/Product.jsx";
+import Catalogue from "./containers/catalogue/Catalogue.jsx";
+import CrudUpdateProduct from "./components/crud/crud_update_product/CrudUpdateProduct.jsx";
+import CrudAddProduct from "./components/crud/crud_add_product/CrudAddProduct.jsx";
+import CrudDeleteProduct from "./components/crud/crud_delete_product/CrudDeleteProduct.jsx";
+import CrudViewProduct from "./components/crud/crud_view_product/CrudViewProduct.jsx";
+import AddCategory from "./components/crud/categoryform/CrudAddProduct.jsx";
 
 function App() {
-  const [products, setProduct] = useState([]);
 
+  const [search, setSearch] = useState("");
+
+  const searchQuery = function (valor) {
+    setSearch(valor);
+  };
   return (
-    <div className="App">
-    <Route
-        path="/product/:productId"
-        render={({ match }) => (
-          <Product product={OnFilter(match.params.productId)} />
-        )}
-      />
-      <ProductCard />
-      {/* un get a la ruta del backedn que edvuelva ese id o que devuelva el producto que quieras / hasta que no esten las rutas no se puede seguir. / */}
-    </div>
+    <Router>
+      <div className="App">
+        <Route exact path="/delete" component={CrudDeleteProduct} />
+        <Route exact path="/add" component={CrudAddProduct} />
+        <Route exact path="/update" component={CrudUpdateProduct} />
+        <Route exact path="/view" component={CrudViewProduct} />
+
+        <Route exact path="/category" component={AddCategory} />
+        <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
+
+        <Route exact path="/" component={Catalogue} />
+        <Route exact path="/product/:id" component={Product} />
+      </div>
+    </Router>
+
   );
 }
 
 export default App;
-
-// ProductCard ==> Product
-//
-
