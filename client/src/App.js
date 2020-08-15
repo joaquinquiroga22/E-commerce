@@ -12,6 +12,7 @@ import CrudViewProduct from "./components/crud/crud_view_product/CrudViewProduct
 import AddCategory from "./components/crud/categoryform/CrudAddProduct.jsx";
 
 function App() {
+
   const [search, setSearch] = useState("");
 
   const searchQuery = function (valor) {
@@ -32,6 +33,7 @@ function App() {
         <Route exact path="/product/:id" component={Product} />
       </div>
     </Router>
+
   );
 }
 
