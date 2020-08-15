@@ -11,16 +11,15 @@ export default function SearchInput({ onSearch }) {
   //Agregar onSubmit a la funcion pasada por props
   ///search?valor=texto
   const handleInputChange = function (e) {
-    setSearch({
-      ...search,
-      [e.target.name]: e.target.value,
-    });
+    setSearch(e.target.value);
   };
 
   const onSubmitHandle = function (e) {
     e.preventDefault();
-    Axios.get(`http://localhost:3000/products`).then(function (res) {
-      console.log(res);
+    Axios.get(`http://localhost:3000/search?valor=${search}`).then(function (
+      res
+    ) {
+      onSearch(res.data);
     });
   };
 
