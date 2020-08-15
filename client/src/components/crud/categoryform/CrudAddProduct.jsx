@@ -29,6 +29,7 @@ export default function CrudAddProduct() {
     axios.post()
   }
 
+
   return (
     <form className={s.form}>
       <div className={s.image}>
@@ -47,6 +48,7 @@ export default function CrudAddProduct() {
         <input type="file" name="imagen" />
         <input type="submit" value="Agregar Categoria" />
         <Link to='/'> <input type="submit" value="Cancelar" />  </Link>
+
       </div>
     </form>
   );

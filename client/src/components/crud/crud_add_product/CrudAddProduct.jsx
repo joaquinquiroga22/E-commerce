@@ -1,49 +1,106 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+
+import React, { useState } from "react";
+import axios from "axios";
+import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
 import testImagen from "../../../img/default.jpg";
-import Button from '@material-ui/core/Button';
+import CloseBtn from "../../close_btn/CloseBtn.jsx";
 
 export default function CrudAddProduct() {
   //nombre, descripcion, precio, imagen, stock
-  return (
-    <form className={s.form}>
-      <h2>Agregar un producto</h2>
-      <div className={s.image}>
-        <img src={testImagen} />
-        <label for="imagen">Imagen del producto</label>
-        <input type="file" name="imagen" />
-      </div>
-      <div className={s.inputs}>
-        <label for="nombre" autocomplete="false">
-          Nombre:
-        </label>
-        <input type="text" name="nombre" />
-        <label for="descripcion">Descripcion:</label>
-        <textarea
-          name="descripcion"
-          rows="5"
-          placeholder="Describe el nuevo producto"
-        ></textarea>
-        <div className={s.numbers}>
-          <label for="precio">Precio $</label>
-          <input type="number" name="precio" min="0" step="any" />
-          <label className={s.stock} for="stock">
-            Stock:
-          </label>
-          <input type="number" name="stock" min="0" step="1" />
+  const [render, setRender] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [input, setInput] = useState({
+    name: "",
+    price: 0,
+    description: "",
+    stock: 0,
+  });
+
+  const handleInputChange = function (e) {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+    if (e.target.name === "price" || e.target.name === "stock") {
+      setInput({ ...input, [e.target.name]: Number(e.target.value) });
+    }
+  };
+
+  const onSubmitHandle = function (event) {
+    event.preventDefault();
+
+    const data = {
+      name: input.name,
+      price: input.price,
+      description: input.description,
+      stock: input.stock,
+    };
+    axios.post("http://localhost:3000/products", data).then((res) => {
+      setSuccess(true);
+      setTimeout(function () {
+        setSuccess(false);
+      }, 4000);
+    });
+  };
+  const closeView = function () {
+    setRender(false);
+  };
+
+  if (render) {
+    return (
+      <form className={s.form} onSubmit={onSubmitHandle}>
+        <CloseBtn close={closeView} />
+        {success && (
+          <Alert severity="success">Producto Agregado correctamente</Alert>
+        )}
+        <h2>Agregar un producto</h2>
+        <div className={s.image}>
+          <img src={testImagen} />
+          <label htmlFor="imagen">Imagen del producto</label>
+          <input type="file" name="imagen" />
         </div>
-        <fieldset>
-          <legend>Categorias</legend>
-          <label for="planta">Planta</label>
-          <input type="checkbox" value="planta" />
-          <label for="maceta">Maceta</label>
-          <input type="checkbox" value="maceta" />
-        </fieldset>
-        <input type="submit" value="Agregar Producto" />
-        <Link to='/'> <input type="submit" value="Cancelar" />  </Link>
-      </div>
-      
-    </form>
-  );
+        <div className={s.inputs}>
+          <label htmlFor="name" autoComplete="off"></label>
+          <input onChange={handleInputChange} type="text" name="name" />
+          <label htmlFor="description">Descripcion:</label>
+          <textarea
+            onChange={handleInputChange}
+            name="description"
+            rows="5"
+            placeholder="Describe el nuevo producto"
+          ></textarea>
+          <div className={s.numbers}>
+            <label htmlFor="price">Precio $</label>
+            <input
+              onChange={handleInputChange}
+              type="number"
+              name="price"
+              min="0"
+              step="any"
+            />
+            <label className={s.stock} htmlFor="stock">
+              Stock:
+            </label>
+            <input
+              onChange={handleInputChange}
+              type="number"
+              name="stock"
+              min="0"
+              step="1"
+            />
+          </div>
+          <fieldset>
+            <legend>Categorias</legend>
+            <label htmlFor="planta">Planta</label>
+            <input type="checkbox" value="planta" />
+            <label htmlFor="maceta">Maceta</label>
+            <input type="checkbox" value="maceta" />
+          </fieldset>
+          <input type="submit" value="Agregar Producto" />
+        </div>
+      </form>
+    );
+  }
+  return null;
 }

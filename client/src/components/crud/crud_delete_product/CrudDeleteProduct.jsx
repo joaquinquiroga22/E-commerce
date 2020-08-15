@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
-import testImage from "../../../img/default.jpg";
-import s from "./CrudViewProduct.module.css";
 import axios from "axios";
-
+import testImage from "../../../img/default.jpg";
+import s from "./CrudDeleteProduct.module.css";
+import Alert from "@material-ui/lab/Alert";
+import CloseBtn from "../../close_btn/CloseBtn.jsx";
 export default function CrudDeleteProduct() {
-  const [render, setRender] = useState(true);
   const [product, setProduct] = useState({
     name: "",
     price: 0,
     description: "",
     stock: 0,
   });
-  const testID = 9;
+  const [render, setRender] = useState(true);
+  const [success, setSuccess] = useState(false);
+
+  const testID = 5;
 
   useEffect(() => {
     axios
@@ -26,13 +29,30 @@ export default function CrudDeleteProduct() {
       });
   }, []);
 
+  const onSubmitHandle = function (event) {
+    event.preventDefault();
+
+    axios
+      .delete(`http://localhost:3000/products/${testID}`)
+      .then(function (res) {
+        console.log(res);
+        setSuccess(true);
+        setTimeout(function () {
+          setSuccess(false);
+        }, 3000);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const closeView = function () {
     setRender(false);
   };
-
   if (render) {
     return (
-      <form className={s.form}>
+      <form className={s.form} onSubmit={onSubmitHandle}>
+        <CloseBtn close={closeView} />
         <div className={s.viewProduct}>
           <div className={s.image}>
             <img src={testImage} />
@@ -53,12 +73,17 @@ export default function CrudDeleteProduct() {
             </div>
           </div>
         </div>
-        <div>
-          <input type="button" value="Cerrar" onClick={closeView} />
-        </div>
+        {success && (
+          <Alert severity="success">Producto eliminado correctamente</Alert>
+        )}
+        {!success && (
+          <div>
+            <input className={s.deleteBtn} type="submit" value="Eliminar" />
+            <input onClick={closeView} type="button" value="Cancelar" />
+          </div>
+        )}
       </form>
     );
   }
-
   return null;
 }

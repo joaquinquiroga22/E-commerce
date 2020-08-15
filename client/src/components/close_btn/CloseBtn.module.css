@@ -1,0 +1,12 @@
+.closeBtn{
+	position: absolute;
+	right: 5px;
+	top:5px;
+	font-size:18px;
+	color:#eee;
+	width: 30px;
+	height: 30px;
+	background-color: #DC143C;
+}
+
+

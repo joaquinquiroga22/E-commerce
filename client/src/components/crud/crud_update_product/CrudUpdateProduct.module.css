@@ -1,12 +1,13 @@
 .form{
+	position: relative;
 	background-color: gray;
 	width: 1000px;
-	height: 550px;
-	margin-top:150px;
-	margin-left:40px;
-	margin-bottom: 90px;
+	height: 470px;
+	margin-left:auto;
+	margin-right:auto;
 	border: 1px solid black;
 	padding:20px 40px 0 0;
+	z-index:102;
 }
 .form h2{
 	margin:0px 0 20px 0;
@@ -63,10 +64,4 @@
 }
 .inputs textarea{
 	resize:none;
-}
-.buttons {
-	margin-top: 15px;
-	margin-bottom: 5px;
-	width: 150px;
-	justify-content: center;
 }
