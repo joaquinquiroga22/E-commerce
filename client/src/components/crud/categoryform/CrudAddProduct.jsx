@@ -7,15 +7,17 @@ import Button from '@material-ui/core/Button';
 import {useState} from 'react'
 
 
-export default function CrudAddProduct() {
+export default function AddC() {
   const [input, setInput] = useState({
-    name: ""
+    name: "",
+    description: ""
   })
 
   const handleInputChange = function(e){
     setInput({
       ...input,
       [e.target.name] : e.target.value  
+
     })
   }
 
@@ -24,14 +26,17 @@ export default function CrudAddProduct() {
 
     const data = {
       name: input.name,
-      description: "Julian Lu0"
+      description: input.description
     }
-    axios.post()
+
+    axios.post("http://localhost:3000/products/category", data ).then((res) => {
+      console.log(res.data)
+    })
   }
 
 
   return (
-    <form className={s.form}>
+    <form onSubmit={handleSubmit} className={s.form}>
       <div className={s.image}>
         <img src={testImagen} />
       </div>
@@ -44,6 +49,14 @@ export default function CrudAddProduct() {
           value={input.name}
           onChange={handleInputChange}
         />
+        <label htmlFor="description">Descripcion:</label>
+          <textarea
+            onChange={handleInputChange}
+            name="description"
+            rows="5"
+            placeholder="Describe la nueva categoria"
+          ></textarea>
+
         <label for="imagen">Imagen de la categoria: </label>
         <input type="file" name="imagen" />
         <input type="submit" value="Agregar Categoria" />
