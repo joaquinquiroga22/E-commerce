@@ -30,7 +30,7 @@
 }
 
 .searchInput input[type=submit]{
-	border:2px solid #ccc;
+	border:1px solid #ccc;
 	border-left: none;
 	border-radius: 0 10px 10px 0;
 	color: white;
