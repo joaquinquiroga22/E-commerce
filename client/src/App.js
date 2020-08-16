@@ -31,6 +31,7 @@ function App() {
 
         <Route exact path="/" component={Catalogue} />
         <Route exact path="/product/:id" component={Product} />
+        
       </div>
     </Router>
 
