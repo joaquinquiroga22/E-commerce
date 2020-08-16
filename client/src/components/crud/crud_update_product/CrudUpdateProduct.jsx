@@ -4,8 +4,8 @@ import Alert from "@material-ui/lab/Alert";
 import s from "./CrudUpdateProduct.module.css";
 import testImagen from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
-export default function CrudUpdateProduct() {
-  const [render, setRender] = useState(true);
+
+export default function CrudUpdateProduct(props) {
   const [success, setSuccess] = useState(false);
   const [input, setInput] = useState({
     name: "",
@@ -13,11 +13,10 @@ export default function CrudUpdateProduct() {
     description: "",
     stock: 0,
   });
-  const testID = 5;
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/products/${testID}`)
+      .get(`http://localhost:3000/products/${props.id}`)
       .then(function (response) {
         setInput({
           name: response.data.name,
@@ -48,79 +47,74 @@ export default function CrudUpdateProduct() {
     };
 
     //HARDCODEADO PELIGROO!
-    axios.put(`http://localhost:3000/products/${testID}`, data).then((res) => {
-      setSuccess(true);
-      setTimeout(function () {
-        setSuccess(false);
-      }, 4000);
-    });
+    axios
+      .put(`http://localhost:3000/products/${props.id}`, data)
+      .then((res) => {
+        setSuccess(true);
+        setTimeout(function () {
+          setSuccess(false);
+        }, 4000);
+      });
   };
-  //Agregar funcion closeView
-  const closeView = function () {
-    setRender(false);
-  };
-  if (render) {
-    return (
-      <form onSubmit={onSubmitHandle} className={s.form}>
-        <CloseBtn close={closeView} />
-        {success && (
-          <Alert severity="success">Producto actualizado correctamente.</Alert>
-        )}
-        <h2>Actualizar un producto</h2>
-        <div className={s.image}>
-          <img src={testImagen} />
-          <label htmlFor="imagen">Imagen del producto</label>
-          <input type="file" name="imagen" />
-        </div>
-        <div className={s.inputs}>
-          <label htmlFor="name">Nombre:</label>
+  return (
+    <form onSubmit={onSubmitHandle} className={s.form}>
+      <CloseBtn close={props.onClose} />
+      {success && (
+        <Alert severity="success">Producto actualizado correctamente.</Alert>
+      )}
+      <h2>Actualizar un producto</h2>
+      <div className={s.image}>
+        <img src={testImagen} />
+        <label htmlFor="imagen">Imagen del producto</label>
+        <input type="file" name="imagen" />
+      </div>
+      <div className={s.inputs}>
+        <label htmlFor="name">Nombre:</label>
+        <input
+          value={input.name}
+          type="text"
+          name="name"
+          onChange={handleInputChange}
+        />
+        <label htmlFor="description">Descripcion:</label>
+        <textarea
+          value={input.description}
+          name="description"
+          rows="5"
+          placeholder="Describe el producto"
+          onChange={handleInputChange}
+        ></textarea>
+        <div className={s.numbers}>
+          <label htmlFor="price">Precio $</label>
           <input
-            value={input.name}
-            type="text"
-            name="name"
+            value={input.price}
+            type="number"
+            name="price"
+            min="0"
+            step="any"
             onChange={handleInputChange}
           />
-          <label htmlFor="description">Descripcion:</label>
-          <textarea
-            value={input.description}
-            name="description"
-            rows="5"
-            placeholder="Describe el producto"
+          <label className={s.stock} htmlFor="stock">
+            Stock:
+          </label>
+          <input
+            value={input.stock}
+            type="number"
+            name="stock"
+            min="0"
+            step="1"
             onChange={handleInputChange}
-          ></textarea>
-          <div className={s.numbers}>
-            <label htmlFor="price">Precio $</label>
-            <input
-              value={input.price}
-              type="number"
-              name="price"
-              min="0"
-              step="any"
-              onChange={handleInputChange}
-            />
-            <label className={s.stock} htmlFor="stock">
-              Stock:
-            </label>
-            <input
-              value={input.stock}
-              type="number"
-              name="stock"
-              min="0"
-              step="1"
-              onChange={handleInputChange}
-            />
-          </div>
-          <fieldset>
-            <legend>Categorias</legend>
-            <label htmlFor="planta">Planta</label>
-            <input type="checkbox" value="planta" />
-            <label htmlFor="maceta">Maceta</label>
-            <input type="checkbox" value="maceta" />
-          </fieldset>
-          <input type="submit" value="Actualizar Producto" />
+          />
         </div>
-      </form>
-    );
-  }
-  return null;
+        <fieldset>
+          <legend>Categorias</legend>
+          <label htmlFor="planta">Planta</label>
+          <input type="checkbox" value="planta" />
+          <label htmlFor="maceta">Maceta</label>
+          <input type="checkbox" value="maceta" />
+        </fieldset>
+        <input type="submit" value="Actualizar Producto" />
+      </div>
+    </form>
+  );
 }

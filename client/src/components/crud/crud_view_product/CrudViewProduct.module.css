@@ -1,13 +1,12 @@
 .form{
-	height: auto;
-	width: 600px;
-	padding: 10px;
-	margin-left:auto;
-	margin-right:auto;
-	border: 1px solid black;
+	position: fixed;
 	background-color: gray;
-	position: relative;
-	z-index: 501;
+	width: 1000px;
+	height: 470px;
+	top:70px;
+	border: 1px solid black;
+	padding:20px 40px 0 0;
+	z-index:102;
 }
 .viewProduct{
 	display:flex;

@@ -15,7 +15,7 @@ export default function ProductCard(props) {
         </div>
       </Link>
       <div className={s.content}>
-        <Link to={`/product/${props.id}`}>
+        <Link className={s.link} to={`/product/${props.id}`}>
           <h2>{props.name}</h2>
         </Link>{" "}
         <p>{props.description}</p>

@@ -17,7 +17,7 @@ function App() {
     <Router>
       <div className="App">
         <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
-        <Route path="/admin" component={Crud} />
+        <Route exact path="/admin" component={Crud} />
         <Route exact path="/" component={Catalogue} />
         <Route exact path="/product/:id" component={Product} />
       </div>

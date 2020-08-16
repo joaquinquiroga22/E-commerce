@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Heading() {
+export default function CrudHead(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -165,25 +165,22 @@ export default function Heading() {
       <AppBar position="static">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            CRUD
+            Administracion de productos
           </Typography>
 
           <div className={classes.grow} />
           <div className={s.space}>
-            <Link to="/agregarCategoria">
-              {" "}
-              <Button className={s.space} variant="contained">
-                {" "}
-                Agregar Categoria{" "}
-              </Button>{" "}
-            </Link>
-            <Link to="/agregarProducto">
-              {" "}
-              <Button className={s.space} variant="contained" color="primary">
-                {" "}
-                Agregar Producto{" "}
-              </Button>{" "}
-            </Link>
+            <Button onClick={props.add} className={s.space} variant="contained">
+              Agregar Categoria{" "}
+            </Button>{" "}
+            <Button
+              onClick={() => props.onAddProduct(true)}
+              className={s.space}
+              variant="contained"
+              color="primary"
+            >
+              Agregar Producto{" "}
+            </Button>{" "}
           </div>
         </Toolbar>
       </AppBar>

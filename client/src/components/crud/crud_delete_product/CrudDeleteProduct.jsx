@@ -4,7 +4,7 @@ import testImage from "../../../img/default.jpg";
 import s from "./CrudDeleteProduct.module.css";
 import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
-export default function CrudDeleteProduct() {
+export default function CrudDeleteProduct({ onClose, id }) {
   const [product, setProduct] = useState({
     name: "",
     price: 0,
@@ -17,23 +17,21 @@ export default function CrudDeleteProduct() {
   const testID = 5;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/products/${testID}`)
-      .then(function (response) {
-        setProduct({
-          name: response.data.name,
-          price: response.data.price,
-          description: response.data.description,
-          stock: response.data.stock,
-        });
+    axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
+      setProduct({
+        name: response.data.name,
+        price: response.data.price,
+        description: response.data.description,
+        stock: response.data.stock,
       });
+    });
   }, []);
 
   const onSubmitHandle = function (event) {
     event.preventDefault();
 
     axios
-      .delete(`http://localhost:3000/products/${testID}`)
+      .delete(`http://localhost:3000/products/${id}`)
       .then(function (res) {
         console.log(res);
         setSuccess(true);
@@ -46,13 +44,10 @@ export default function CrudDeleteProduct() {
       });
   };
 
-  const closeView = function () {
-    setRender(false);
-  };
   if (render) {
     return (
       <form className={s.form} onSubmit={onSubmitHandle}>
-        <CloseBtn close={closeView} />
+        <CloseBtn close={onClose} />
         <div className={s.viewProduct}>
           <div className={s.image}>
             <img src={testImage} />
@@ -79,7 +74,11 @@ export default function CrudDeleteProduct() {
         {!success && (
           <div>
             <input className={s.deleteBtn} type="submit" value="Eliminar" />
-            <input onClick={closeView} type="button" value="Cancelar" />
+            <input
+              onClick={() => onClose(false)}
+              type="button"
+              value="Cancelar"
+            />
           </div>
         )}
       </form>

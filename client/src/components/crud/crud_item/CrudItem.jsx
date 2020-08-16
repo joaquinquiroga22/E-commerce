@@ -19,28 +19,36 @@ const props = {
   category: "Flores",
 };
 
-export default function Home() {
+export default function CrudListItem({
+  product,
+  onEditProduct,
+  onDeleteProduct,
+}) {
   return (
     <div className={s.component}>
-      <div className={s.div}> {props.id} </div>
-      <div className={s.div}> {props.name} </div>
-      <div className={s.div}> {props.price} </div>
-      <div className={s.div}> {props.category} </div>
+      <div className={s.div}> {product.id} </div>
+      <div className={s.div}> {product.name} </div>
+      <div className={s.div}> {"$ " + product.price} </div>
+      <div className={s.div}> {product.category} </div>
 
       <div className={s.buttons}>
-        <Link to="/edit">
-          {" "}
-          <Button variant="contained" color="primary" className={s.button}>
-            {" "}
-            Editar{" "}
-          </Button>{" "}
-        </Link>
-        <Button variant="contained" color="secondary" className={s.button}>
-          {" "}
-          Eliminar{" "}
+        <Button
+          onClick={() => onEditProduct(true, product.id)}
+          variant="contained"
+          color="primary"
+          className={s.button}
+        >
+          Editar
+        </Button>
+        <Button
+          onClick={() => onDeleteProduct(true, product.id)}
+          variant="contained"
+          color="secondary"
+          className={s.button}
+        >
+          Eliminar
         </Button>
       </div>
     </div>
   );
 }
-

@@ -20,6 +20,7 @@ export default function SearchInput({ onSearch }) {
       res
     ) {
       onSearch(res.data);
+      console.log(res.data);
     });
   };
 
