@@ -6,12 +6,25 @@ const { Sequelize } = require("sequelize");
 server.post("/", (req, res) => {
   const { name, description } = req.body;
   if (name && description) {
-    Category.create({ name, description }).then((category) => {
-      res.status(201);
-      res.send(category.dataValues);
-    });
-  } else {
-    res.sendStatus(400);
+    Category.create({ name, description })
+      .then((category) => {
+        res.status(201);
+        res.send(category.dataValues);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(400).send(error.parent.detail);
+      });
+  }
+  if (!name) {
+    var error = new Error(`Debe pasar un 'nombre'`);
+    error.status = 400;
+    throw error;
+  }
+  if (!description) {
+    var error = new Error(`Debe pasar una 'description'`);
+    error.status = 400;
+    throw error;
   }
 });
 server.delete("/:id", (req, res, next) => {
@@ -56,7 +69,7 @@ server.put("/:id", (req, res, next) => {
 });
 
 server.get("/:nameCategory", (req, res, next) => {
-  Category.findAll({
+  Category.findOne({
     where: {
       name: req.params.nameCategory,
     },
