@@ -33,9 +33,9 @@ module.exports = (sequelize) => {
       },
     },
     image: {
-      type: DataTypes.BLOB,
+      type: DataTypes.TEXT,
       allowNull: true,
-      //No se cual iria aca
+      
     },
     stock: {
       type: DataTypes.INTEGER,
