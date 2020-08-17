@@ -12,9 +12,6 @@ module.exports = (sequelize) => {
           msg: "Ingresar nombre producto",
         },
       },
-      //validate: {
-      // len: [5, 10]
-      //} Esto tambien puede ir, son caracteres.
     },
     description: {
       type: DataTypes.TEXT,
@@ -26,16 +23,15 @@ module.exports = (sequelize) => {
       },
     },
     price: {
-      type: DataTypes.DECIMAL(10,2),
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
       isFloat: {
         msg: "Solo Numeros",
       },
     },
     image: {
-      type: DataTypes.TEXT("tiny"),
+      type: DataTypes.TEXT,
       allowNull: true,
-      
     },
     stock: {
       type: DataTypes.INTEGER,

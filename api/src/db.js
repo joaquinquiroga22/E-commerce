@@ -42,8 +42,8 @@ const { Product, Category } = sequelize.models;
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
 
-Category.belongsToMany(Product, { through: "Category_Products" });
-Product.belongsToMany(Category, { through: "Category_Products" });
+Category.belongsToMany(Product, { through: "category_products" });
+Product.belongsToMany(Category, { through: "category_products" });
 
 //Hook para limpiar y pasar a lowercase
 
