@@ -7,6 +7,7 @@ import Axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudEditProduct from "./../../components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
+import CategoryForm from './../../components/crud/categoryform/CrudAddProduct.jsx';
 
 export default function Crud() {
   const [products, setProducts] = useState([]);
@@ -15,6 +16,7 @@ export default function Crud() {
   const [updateId, setUpdateId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
+  const [renderCat, setRenderCat] = useState(false);
 
   useEffect(() => {
     Axios.get(`http://localhost:3000/products`).then(function (response) {
@@ -35,6 +37,10 @@ export default function Crud() {
     setRenderDelete(value);
     setDeleteId(id);
   };
+  
+  const updateRenderCategory = function(value) {
+    setRenderCat(value)
+  }
 
   return (
     <div className={s.component}>
@@ -42,10 +48,11 @@ export default function Crud() {
       {renderEdit && (
         <CrudEditProduct id={updateId} onClose={updateRenderEdit} />
       )}
+      {renderCat && <CategoryForm onClose={updateRenderCategory} />}
       {renderDelete && (
         <CrudDeleteProduct id={deleteId} onClose={updateRenderDelete} />
       )}
-      <CrudHead onAddProduct={updateRenderAdd} />
+      <CrudHead onAddCategory={updateRenderCategory} onAddProduct={updateRenderAdd} />
       <CrudTitle />
       {products.map(function (product) {
         return (

@@ -5,9 +5,9 @@ import testImagen from "../../../img/default.jpg";
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import {useState} from 'react'
+import CloseBtn from '../../close_btn/CloseBtn.jsx'
 
-
-export default function AddC() {
+export default function AddC(props) {
   const [input, setInput] = useState({
     name: "",
     description: ""
@@ -37,6 +37,7 @@ export default function AddC() {
 
   return (
     <form onSubmit={handleSubmit} className={s.form}>
+      <CloseBtn close={props.onClose}/>
       <div className={s.image}>
         <img src={testImagen} />
       </div>
@@ -60,7 +61,7 @@ export default function AddC() {
         <label for="imagen">Imagen de la categoria: </label>
         <input type="file" name="imagen" />
         <input type="submit" value="Agregar Categoria" />
-        <Link to='/'> <input type="submit" value="Cancelar" />  </Link>
+        <input className={s.cancel} type="button" value="Cancelar" onClick={() => props.onClose(false)} />  
 
       </div>
     </form>

@@ -2,10 +2,13 @@
 	background-color: gray;
 	width: 1000px;
 	height: 500px;
-	margin-top:150px;
-	margin-left:40px;
 	border: 1px solid black;
 	padding:30px 40px 0 0;
+	z-index: 102;
+	position: fixed;
+	top: 70px;
+
+
 }
 
 .image{
@@ -51,4 +54,8 @@
 	font-size:18px;
 	padding:5px;
 	margin-top: 25px;
+}
+.cancel{
+	width: 490px;
+	height: 40px;
 }
