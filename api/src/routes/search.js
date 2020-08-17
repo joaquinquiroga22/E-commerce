@@ -15,14 +15,12 @@ server.get("/", (req, res, next) => {
   })
     .then((products) => {
       console.log(req.query);
-      if (!products[0]) {
-        var error = new Error(`error "${valor}" not found`);
-        error.status = 400;
-        throw error;
+      if (products.length === 0) {
+        return res.json({message: 'No se encontraron resultados'});
       }
       res.send(products);
     })
-    .catch(next);
+    .catch(error => next(error));
 });
 
 module.exports = server;

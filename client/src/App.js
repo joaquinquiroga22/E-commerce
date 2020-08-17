@@ -19,7 +19,7 @@ function App() {
         <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
         <Route exact path="/admin" component={Crud} />
         <Route exact path="/" component={Catalogue} />
-        <Route exact path="/product/:id" component={Product} />
+        <Route exact path="/product/:id" render={({match}) => <Product id={match.params.id}/>} />
         
       </div>
     </Router>
