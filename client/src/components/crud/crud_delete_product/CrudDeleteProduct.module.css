@@ -1,8 +1,8 @@
 .form{
 	position: fixed;
-	background-color: gray;
+	background-color: #47f07d;
 	width: 1000px;
-	height: 470px;
+	height: 550px;
 	top:70px;
 	border: 1px solid black;
 	padding:20px 40px 0 0;

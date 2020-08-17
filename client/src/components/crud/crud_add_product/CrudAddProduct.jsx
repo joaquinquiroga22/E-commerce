@@ -33,6 +33,7 @@ export default function CrudAddProduct(props) {
       price: input.price,
       description: input.description,
       stock: input.stock,
+    
     };
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);

@@ -38,9 +38,12 @@ export default function AddC(props) {
   return (
     <form onSubmit={handleSubmit} className={s.form}>
       <CloseBtn close={props.onClose}/>
+      <h2>Agregar una categoria </h2>
+      
       <div className={s.image}>
         <img src={testImagen} />
       </div>
+      
       <div className={s.inputs}>
         <label for="nombre" autocomplete="false">
           Nombre de la categoria: 
