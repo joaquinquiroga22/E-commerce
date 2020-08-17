@@ -1,29 +1,22 @@
 .form{
-	position: fixed;
 	background-color: #47f07d;
 	width: 1000px;
 	height: 550px;
-	top:70px;
 	border: 1px solid black;
-	padding:20px 40px 0 0;
-	z-index:102;
-}
-.form h2{
-	margin:0px 0 20px 0;
+	padding:30px 40px 0 0;
+	z-index: 102;
+	position: fixed;
+	top: 70px;
+
+
 }
 
 .image{
 	width: 30%;
 	display: inline-block;
 }
-.numbers{
-	margin:15px 0 10px 0;
-}
-.stock{
-	padding-left:30px;
-}
+
 .image img{
-	margin-top:30px;
 	width: 100%;
 }
 
@@ -35,13 +28,14 @@
 	width: 50%;
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 300px;
 }
 
 .inputs label{
 	font-size: 18px;
-	margin: 10px 0 0px 0;
+	margin: 10px 0 0 0;
 }
-.inputs input[type=text],input[type=number],textarea{
+.inputs input[type=text],input[type=number]{
 	color:black;
 	background: transparent;
 	border-top:none;
@@ -61,6 +55,7 @@
 	padding:5px;
 	margin-top: 25px;
 }
-.inputs textarea{
-	resize:none;
+.cancel{
+	width: 490px;
+	height: 40px;
 }
