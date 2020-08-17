@@ -8,12 +8,12 @@ import CloseBtn from "../../close_btn/CloseBtn.jsx";
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
-  const [baseImage, setBaseImage] = useState("");
   const [input, setInput] = useState({
     name: "",
     price: 0,
     description: "",
-    stock: 0
+    stock: 0,
+    image: ""
   });
 
 
@@ -50,8 +50,10 @@ export default function CrudAddProduct(props) {
   const uploadImg = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertBase64(file);
-    console.log(base64);
-    setBaseImage(base64);
+    setInput({
+      ...input,
+      image: base64,
+    });
   };
 
   const convertBase64 = (file) => {
@@ -78,7 +80,7 @@ export default function CrudAddProduct(props) {
       )}
       <h2>Agregar un producto</h2>
       <div className={s.image}>
-        <img src={baseImage} />
+        <img src={input.image} />
         <label htmlFor="imagen">Imagen del producto</label>
         <input type="file" name="imagen" onChange={(e) => {uploadImg(e)}}/>
       </div>
