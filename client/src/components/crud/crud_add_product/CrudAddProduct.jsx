@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
@@ -8,12 +8,14 @@ import CloseBtn from "../../close_btn/CloseBtn.jsx";
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
+  const [baseImage, setBaseImage] = useState("");
   const [input, setInput] = useState({
     name: "",
     price: 0,
     description: "",
-    stock: 0,
+    stock: 0
   });
+
 
   const handleInputChange = function (e) {
     setInput({
@@ -32,7 +34,7 @@ export default function CrudAddProduct(props) {
       name: input.name,
       price: input.price,
       description: input.description,
-      stock: input.stock,
+      stock: input.stock
     };
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
@@ -41,9 +43,33 @@ export default function CrudAddProduct(props) {
       }, 4000);
     });
   };
-  const closeView = function () {
-    console.log(false);
+
+
+  //Funcion para convertir imagen a base64 obtenida de:
+  //https://github.com/Rinlama/react-howtoseries
+  const uploadImg = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertBase64(file);
+    console.log(base64);
+    setBaseImage(base64);
   };
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
       <CloseBtn close={props.onClose} />
@@ -52,9 +78,9 @@ export default function CrudAddProduct(props) {
       )}
       <h2>Agregar un producto</h2>
       <div className={s.image}>
-        <img src={testImagen} />
+        <img src={baseImage} />
         <label htmlFor="imagen">Imagen del producto</label>
-        <input type="file" name="imagen" />
+        <input type="file" name="imagen" onChange={(e) => {uploadImg(e)}}/>
       </div>
       <div className={s.inputs}>
         <label htmlFor="name" autoComplete="off"></label>

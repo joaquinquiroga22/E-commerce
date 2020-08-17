@@ -3,11 +3,11 @@ import s from "./Crud.module.css";
 import CrudHead from "../../components/crud/crud_head/CrudHead.jsx";
 import CrudTitle from "../../components/crud/crud_list_title/CrudTitle.jsx";
 import CrudListItem from "../../components/crud/crud_item/CrudItem.jsx";
-import Axios from "axios";
+import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudEditProduct from "./../../components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import CategoryForm from './../../components/crud/categoryform/CrudAddProduct.jsx';
+import CategoryForm from '../../components/crud/categoryform/AddCategory.jsx';
 
 export default function Crud() {
   const [products, setProducts] = useState([]);
@@ -17,15 +17,20 @@ export default function Crud() {
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [renderCat, setRenderCat] = useState(false);
+  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    Axios.get(`http://localhost:3000/products`).then(function (response) {
-      setProducts(response.data);
-    }, []);
-  });
-
+  // useEffect(() => {
+  //   axios.get(`http://localhost:3000/products`).then(function (response) {
+  //     setProducts(response.data);
+  //   }, []);
+  // });
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
+    if (value) {
+      axios.get(`http://localhost:3000/products/category`).then(function (response) {
+        setCategories(response.data);
+      });
+    }
   };
 
   const updateRenderEdit = function (value, id) {
@@ -37,9 +42,10 @@ export default function Crud() {
     setRenderDelete(value);
     setDeleteId(id);
   };
-  
-  const updateRenderCategory = function(value) {
+
+  const updateRenderCategory = function (value) {
     setRenderCat(value)
+
   }
 
   return (

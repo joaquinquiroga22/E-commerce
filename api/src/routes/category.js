@@ -68,6 +68,12 @@ server.put("/:id", (req, res, next) => {
     .catch(next);
 });
 
+server.get("/", (req, res, next) => {
+  Category.findAll()
+    .then((category) => {console.log(category);res.send(category)})
+    .catch(next);
+});
+
 server.get("/:nameCategory", (req, res, next) => {
   Category.findOne({
     where: {
