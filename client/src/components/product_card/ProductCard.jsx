@@ -11,7 +11,7 @@ export default function ProductCard(props) {
     <div className={s.card}>
       <Link to={`/product/${props.id}`}>
         <div className={s.image}>
-          <img src={defaultImg} />
+          <img src={props.image} />
         </div>
       </Link>
       <div className={s.content}>

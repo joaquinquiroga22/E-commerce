@@ -10,6 +10,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
     price: 0,
     description: "",
     stock: 0,
+    image: ""
   });
   const [render, setRender] = useState(true);
   const [success, setSuccess] = useState(false);
@@ -23,7 +24,9 @@ export default function CrudDeleteProduct({ onClose, id }) {
         price: response.data.price,
         description: response.data.description,
         stock: response.data.stock,
+        image: response.data.image
       });
+      console.log(response)
     });
   }, []);
 
@@ -50,7 +53,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
         <CloseBtn close={onClose} />
         <div className={s.viewProduct}>
           <div className={s.image}>
-            <img src={testImage} />
+            <img src={product.image} />
           </div>
           <div className={s.info}>
             <h2>{product.name}</h2>

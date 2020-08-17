@@ -10,6 +10,7 @@ export default function CrudDeleteProduct() {
     price: 0,
     description: "",
     stock: 0,
+    image:''
   });
   const testID = 9;
 
@@ -22,6 +23,7 @@ export default function CrudDeleteProduct() {
           price: response.data.price,
           description: response.data.description,
           stock: response.data.stock,
+          image: image: response.data.image
         });
       });
   }, []);

@@ -19,11 +19,11 @@ export default function Crud() {
   const [renderCat, setRenderCat] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  // useEffect(() => {
-  //   axios.get(`http://localhost:3000/products`).then(function (response) {
-  //     setProducts(response.data);
-  //   }, []);
-  // });
+  useEffect(() => {
+    axios.get(`http://localhost:3000/products`).then(function (response) {
+      setProducts(response.data);
+    }, []);
+  });
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
     if (value) {

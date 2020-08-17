@@ -13,7 +13,7 @@ export default function CrudAddProduct(props) {
     price: 0,
     description: "",
     stock: 0,
-    image: ""
+    image: "",
   });
 
 
@@ -34,8 +34,10 @@ export default function CrudAddProduct(props) {
       name: input.name,
       price: input.price,
       description: input.description,
-      stock: input.stock
+      stock: input.stock,
+      image: input.image
     };
+    
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
       setTimeout(function () {
