@@ -12,6 +12,7 @@ export default function CrudUpdateProduct(props) {
     price: 0,
     description: "",
     stock: 0,
+    image: ''
   });
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function CrudUpdateProduct(props) {
           price: response.data.price,
           description: response.data.description,
           stock: response.data.stock,
+          image: response.data.image
         });
       });
   }, []);
@@ -64,7 +66,7 @@ export default function CrudUpdateProduct(props) {
       )}
       <h2>Actualizar un producto</h2>
       <div className={s.image}>
-        <img src={testImagen} />
+        <img src={input.image} />
         <label htmlFor="imagen">Imagen del producto</label>
         <input type="file" name="imagen" />
       </div>

@@ -27,6 +27,7 @@ export default function Catalogue() {
                 name={product.name}
                 price={product.price}
                 description={product.description}
+                image={product.image}
               />
             );
           })}
