@@ -170,7 +170,7 @@ export default function CrudHead(props) {
 
           <div className={classes.grow} />
           <div className={s.space}>
-            <Button onClick={props.add} className={s.space} variant="contained">
+            <Button onClick={() => props.onAddCategory(true)} className={s.space} variant="contained">
               Agregar Categoria{" "}
             </Button>{" "}
             <Button
