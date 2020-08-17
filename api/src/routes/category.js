@@ -4,7 +4,7 @@ const { Category } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 server.post("/", (req, res) => {
-  const { name, description } = req.body;
+  let { name, description } = req.body;
 
   name = name.trim();
   description = description.trim();
@@ -51,7 +51,7 @@ server.delete("/:id", (req, res, next) => {
 });
 
 server.put("/:id", (req, res, next) => {
-  const { name, description } = req.body;
+  let { name, description } = req.body;
   if (!name || !description) {
     var error = new Error(`Parametros: {name, description} missing`);
     error.status = 400;
