@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
-import testImagen from "../../../img/default.jpg";
+import defaultImage from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 
 export default function CrudAddProduct(props) {
@@ -15,7 +15,6 @@ export default function CrudAddProduct(props) {
     stock: 0,
     image: "",
   });
-
 
   const handleInputChange = function (e) {
     setInput({
@@ -35,9 +34,8 @@ export default function CrudAddProduct(props) {
       price: input.price,
       description: input.description,
       stock: input.stock,
-      image: input.image
+      image: input.image,
     };
-    
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
       setTimeout(function () {
@@ -45,7 +43,6 @@ export default function CrudAddProduct(props) {
       }, 4000);
     });
   };
-
 
   //Funcion para convertir imagen a base64 obtenida de:
   //https://github.com/Rinlama/react-howtoseries
@@ -73,7 +70,6 @@ export default function CrudAddProduct(props) {
     });
   };
 
-
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
       <CloseBtn close={props.onClose} />
@@ -82,9 +78,15 @@ export default function CrudAddProduct(props) {
       )}
       <h2>Agregar un producto</h2>
       <div className={s.image}>
-        <img src={input.image} />
+        <img src={input.image !== "" ? input.image : defaultImage} />
         <label htmlFor="imagen">Imagen del producto</label>
-        <input type="file" name="imagen" onChange={(e) => {uploadImg(e)}}/>
+        <input
+          type="file"
+          name="imagen"
+          onChange={(e) => {
+            uploadImg(e);
+          }}
+        />
       </div>
       <div className={s.inputs}>
         <label htmlFor="name" autoComplete="off"></label>

@@ -19,18 +19,22 @@ export default function Catalogue() {
       <div className={s.filters}> Aca iran los filtros</div>
       <div className={s.products}>
         <div className={s.listproducts}>
-          {products.map(function (product) {
-            return (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                description={product.description}
-                image={product.image}
-              />
-            );
-          })}
+          {products.length > 0 ? (
+            products.map(function (product) {
+              return (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  description={product.description}
+                  image={product.image}
+                />
+              );
+            })
+          ) : (
+            <h1>No hay productos para mostrar</h1>
+          )}
         </div>
       </div>
     </div>

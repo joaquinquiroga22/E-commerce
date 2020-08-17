@@ -7,7 +7,7 @@ import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudEditProduct from "./../../components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import CategoryForm from '../../components/crud/categoryform/AddCategory.jsx';
+import CategoryForm from "../../components/crud/categoryform/AddCategory.jsx";
 
 export default function Crud() {
   const [products, setProducts] = useState([]);
@@ -19,17 +19,19 @@ export default function Crud() {
   const [renderCat, setRenderCat] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    axios.get(`http://localhost:3000/products`).then(function (response) {
-      setProducts(response.data);
-    }, []);
-  });
+  //  useEffect(() => {
+  //    axios.get(`http://localhost:3000/products`).then(function (response) {
+  //      setProducts(response.data);
+  //    }, []);
+  //  });
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
     if (value) {
-      axios.get(`http://localhost:3000/products/category`).then(function (response) {
-        setCategories(response.data);
-      });
+      axios
+        .get(`http://localhost:3000/products/category`)
+        .then(function (response) {
+          setCategories(response.data);
+        });
     }
   };
 
@@ -44,9 +46,8 @@ export default function Crud() {
   };
 
   const updateRenderCategory = function (value) {
-    setRenderCat(value)
-
-  }
+    setRenderCat(value);
+  };
 
   return (
     <div className={s.component}>
@@ -58,7 +59,10 @@ export default function Crud() {
       {renderDelete && (
         <CrudDeleteProduct id={deleteId} onClose={updateRenderDelete} />
       )}
-      <CrudHead onAddCategory={updateRenderCategory} onAddProduct={updateRenderAdd} />
+      <CrudHead
+        onAddCategory={updateRenderCategory}
+        onAddProduct={updateRenderAdd}
+      />
       <CrudTitle />
       {products.map(function (product) {
         return (
