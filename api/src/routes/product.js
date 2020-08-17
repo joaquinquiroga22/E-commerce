@@ -6,48 +6,46 @@ const { Category_Products } = require("../db.js");
 server.get("/", (req, res, next) => {
   Product.findAll()
     .then((products) => res.send(products))
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
-
 
 server.post("/", (req, res, next) => {
   let { name, description, price, stock, idCategoria } = req.body;
-  
+
   //Validamos que price y stock sean numeros y positivos
-  const price = isNaN(parseInt(price));
-  const numeroStock = isNaN(parseInt(stock));
+  let numeroPrice = isNaN(parseInt(price));
+  let numeroStock = isNaN(parseInt(stock));
   name = name.trim();
   description = description.trim();
   if (parseInt(stock) < 0 || numeroStock) {
-    return res.status(400).json({ message: 'El stock debe ser un Entero positivo' });
+    return res
+      .status(400)
+      .json({ message: "El stock debe ser un Entero positivo" });
   }
-  
-  if (parseInt(price) < 0 || price) {
+
+  if (parseInt(price) < 0 || numeroPrice) {
     return res.status(400).send("El precio debe ser un numero positivo");
   }
   //Validamos que name y description no esten vacios (despues de trim)
-  if(name === '' || description === '' ){
+  if (name === "" || description === "") {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
   if (name && description && price && stock) {
     Product.create({ name, description, price, stock })
       .then((product) => {
-        product.addCategories(idCategoria);
-        res.status(201).send(product.dataValues);        
+        product.addCategory(idCategoria);
+        console.log(product.addCategory(idCategoria));
+        res.status(201).send(product.dataValues);
       })
 
-      .catch(error => next(error));
-
+      .catch((error) => next(error));
   } else {
-    res.sendStatus(400).json({message: 'Missing information'});
+    res.sendStatus(400).json({ message: "Missing information" });
   }
-
 });
 
 server.delete("/:id", (req, res, next) => {
-  
- 
   Product.destroy({
     where: {
       id: req.params.id,
@@ -56,12 +54,11 @@ server.delete("/:id", (req, res, next) => {
     .then(function (deleted) {
       if (deleted > 0) {
         res.status(200).json({ message: "Borrado Satisfactoriamente" });
-
       } else {
         res.status(400).json({ message: "No se elimino el producto" });
       }
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
 server.put("/:id", (req, res, next) => {
@@ -71,19 +68,23 @@ server.put("/:id", (req, res, next) => {
   description = description.trim();
 
   //Validamos que price y stock sean numeros y positivos
-  const price = isNaN(parseInt(price));
+  const numeroPrice = isNaN(parseInt(price));
   const numeroStock = isNaN(parseInt(stock));
   if (parseInt(stock) < 0 || numeroStock) {
-    return res.status(400).json({ message: 'El stock debe ser un Entero positivo' });
+    return res
+      .status(400)
+      .json({ message: "El stock debe ser un Entero positivo" });
   }
-  if (parseInt(price) < 0 || price) {
-    return res.status(400).json({ message: "El precio debe ser un numero positivo" });
+  if (parseInt(price) < 0 || numeroPrice) {
+    return res
+      .status(400)
+      .json({ message: "El precio debe ser un numero positivo" });
   }
 
-  if(name === '' || description === '' ){
+  if (name === "" || description === "") {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
-  
+
   Product.update(
     { name, description, price, stock },
     { where: { id: req.params.id }, returning: true }
@@ -94,19 +95,18 @@ server.put("/:id", (req, res, next) => {
       }
       res.send(products[1][0].dataValues);
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
 server.get("/:id", (req, res, next) => {
   Product.findAll({ where: { id: req.params.id }, returning: true })
     .then((products) => {
-      
       if (products.length === 0) {
         return res.status(400).json({ message: "No se encontro el producto" });
       }
       res.send(products[0]);
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
 server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
@@ -120,7 +120,7 @@ server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
     .then((prodcat) => {
       res.status(201).send(prodcat[0]);
     })
-    .catch(error => {
+    .catch((error) => {
       next(error);
     });
 });
@@ -134,7 +134,7 @@ server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
     },
   })
     .then(res.send("Categoria eliminada del producto"))
-    .catch(error => {
+    .catch((error) => {
       next(error);
     });
 });
