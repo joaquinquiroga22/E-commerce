@@ -10,6 +10,7 @@ body{
 .filters{
 	width: 18%;
 	min-height: 600px;
+	background-color: red;
 	float:left;
 	border-right: 1px solid black;
 }
