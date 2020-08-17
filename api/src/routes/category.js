@@ -4,68 +4,80 @@ const { Category } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 server.post("/", (req, res) => {
-  const { name, description } = req.body;
-  if (name && description) {
-    Category.create({ name, description })
-      .then((category) => {
+  let { name, description } = req.body;
+
+  name = name.trim();
+  description = description.trim();
+  
+  if (!name || !description) {
+    var error = new Error(`Parametros: {name, description} missing`);
+    error.status = 400;
+    next(error);
+  }
+  
+  if(name === '' || description === '' ){
+    return res.status(400).send("Nombre y descripcion no pueden estar vacios");
+  }
+
+  // FALTA VALIDAR SI LA CATEGORIA YA EXISTE O USAR findOrCreate
+  Category.create({ name, description })
+    .then((category) => {
         res.status(201);
         res.send(category.dataValues);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(400).send(error.parent.detail);
-      });
-  }
-  if (!name) {
-    var error = new Error(`Debe pasar un 'nombre'`);
-    error.status = 400;
-    throw error;
-  }
-  if (!description) {
-    var error = new Error(`Debe pasar una 'description'`);
-    error.status = 400;
-    throw error;
-  }
+    })
+    .catch(error => {
+        next(error);
+    }); 
 });
+
+
 server.delete("/:id", (req, res, next) => {
   Category.destroy({
     where: {
       id: req.params.id,
     },
-  })
+  }) 
+  // Devuelve cantidad de rows eliminadas
     .then(function (deleted) {
-      if (deleted === 1) {
+      if (deleted > 0) {
         res
           .status(200)
           .json({ message: "Categoria borrada Satisfactoriamente" });
       } else {
-        var error = new Error(
-          `No se pudo eliminar la categoria con id: ${req.params.id}`
-        );
-        error.status = 400;
-        throw error;
+        res.status(400).json({ message: "No se elimino categoria" });
       }
     })
-    .catch(next);
+    .catch(error => next(error));
 });
 
 server.put("/:id", (req, res, next) => {
-  const { name, description } = req.body;
+  let { name, description } = req.body;
+  if (!name || !description) {
+    var error = new Error(`Parametros: {name, description} missing`);
+    error.status = 400;
+    next(error);
+  }
+
+  name = name.trim();
+  description = description.trim();
+
+  if(name === '' || description === '' ){
+    return res.status(400).send("Nombre y descripcion no pueden estar vacios");
+  }
+
   Category.update(
     { name, description },
     { where: { id: req.params.id }, returning: true }
-  )
+  ) 
+  // Devuelve un arreglo: [cant.rowsupdated, actual row]
     .then((categories) => {
       if (categories[0] === 0) {
-        var error = new Error(
-          `No se pudo actualizar la categoria con id: ${req.params.id}`
-        );
-        error.status = 400;
-        throw error;
-      }
-      res.send(categories[1][0].dataValues);
+        res.status(400).json({ message: "No se actualizo la categoria" });
+      }else{
+        res.send(categories[1][0].dataValues);
+      }      
     })
-    .catch(next);
+    .catch(error => next(error));
 });
 
 server.get("/", (req, res, next) => {
@@ -83,7 +95,7 @@ server.get("/:nameCategory", (req, res, next) => {
     .then((category) => {
       res.send(category);
     })
-    .catch(next);
+    .catch(error => next(error));
 });
 
 module.exports = server;
