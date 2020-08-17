@@ -7,7 +7,7 @@ import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudEditProduct from "./../../components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import CategoryForm from "../../components/crud/categoryform/AddCategory.jsx";
+import CategoryForm from "../../components/crud/categoryform/CrudAddProduct.jsx";
 
 export default function Crud() {
   const [products, setProducts] = useState([]);

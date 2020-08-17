@@ -46,8 +46,8 @@ export default function Product({id}) {
           <div className={s.izquierda}>
             <h2 className={s.title}> {info.name} </h2> 
             <p className={s.e}> {info.description} </p>
-            <h5> {info.stock}</h5>
-            <h3 className={s.num}> {info.price} </h3>
+            <h5> Quedan: {info.stock}</h5>
+            <h3 className={s.num}> ${info.price} </h3>
             <div className={s.rating}> 
                 <Box display="flex" flexDirection="row" component="fieldset" mb={3} borderColor="transparent">
                 <Typography component="legend"> Opinion: </Typography>

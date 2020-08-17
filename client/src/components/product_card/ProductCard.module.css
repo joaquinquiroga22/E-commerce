@@ -1,6 +1,6 @@
 .card{
 	width: 800px;
-	height: 100px;
+	height: 150px;
 	margin: 5px 0 5px 0;
 	background-color: #eee;
 	border-radius: 15px;
@@ -26,6 +26,7 @@
 .content{
 	width: 550px;
 	text-align:left;
+
 }
 
 .content h3,p{
