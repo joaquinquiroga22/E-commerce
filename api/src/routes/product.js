@@ -11,13 +11,13 @@ server.get("/", (req, res, next) => {
 
 
 server.post("/", (req, res, next) => {
-  const { name, description, price, stock, idCategoria } = req.body;
+  let { name, description, price, stock, idCategoria } = req.body;
   
   //Validamos que price y stock sean numeros y positivos
   const price = isNaN(parseInt(price));
   const numeroStock = isNaN(parseInt(stock));
   name = name.trim();
-  price = price.trim();
+  description = description.trim();
   if (parseInt(stock) < 0 || numeroStock) {
     return res.status(400).json({ message: 'El stock debe ser un Entero positivo' });
   }
@@ -65,10 +65,10 @@ server.delete("/:id", (req, res, next) => {
 });
 
 server.put("/:id", (req, res, next) => {
-  const { name, description, price, stock } = req.body;
+  let { name, description, price, stock } = req.body;
 
   name = name.trim();
-  price = price.trim();
+  description = description.trim();
 
   //Validamos que price y stock sean numeros y positivos
   const price = isNaN(parseInt(price));
