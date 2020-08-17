@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: "Please enter your name",
+          msg: "Ingresar nombre producto",
         },
       },
       //validate: {
@@ -21,12 +21,12 @@ module.exports = (sequelize) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: "Please enter your name",
+          msg: "Ingresar descripcion",
         },
       },
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(10,2),
       allowNull: false,
       isFloat: {
         msg: "Solo Numeros",

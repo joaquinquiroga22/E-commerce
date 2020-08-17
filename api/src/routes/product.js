@@ -11,7 +11,7 @@ server.get("/", (req, res, next) => {
 
 
 server.post("/", (req, res, next) => {
-  const { name, description, price, stock } = req.body;
+  const { name, description, price, stock, idCategoria } = req.body;
   
   //Validamos que price y stock sean numeros y positivos
   const price = isNaN(parseInt(price));
@@ -33,9 +33,10 @@ server.post("/", (req, res, next) => {
   if (name && description && price && stock) {
     Product.create({ name, description, price, stock })
       .then((product) => {
-        res.status(201);
-        res.send(product.dataValues);
+        product.addCategories(idCategoria);
+        res.status(201).send(product.dataValues);        
       })
+
       .catch(error => next(error));
 
   } else {

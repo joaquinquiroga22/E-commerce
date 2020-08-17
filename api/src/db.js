@@ -40,6 +40,33 @@ const { Product, Category } = sequelize.models;
 Category.belongsToMany(Product, { through: "Category_Products" });
 Product.belongsToMany(Category, { through: "Category_Products" });
 
+//Hook para limpiar y pasar a lowercase
+
+Product.addHook("beforeValidate", (product, options) => {
+    if (product.name) {
+      product.name = product.name.toLowerCase().replace(/\W/g, " ").trim();
+    }
+    if (product.description) {
+      product.description = product.description
+        .toLowerCase()
+        .replace(/\W/g, " ")
+        .trim();
+    }
+  });
+
+  Category.addHook("beforeValidate", (category, options) => {
+    if (category.name) {
+      category.name = category.name.toLowerCase().replace(/\W/g, " ").trim();
+    }
+    if (category.description) {
+      category.description = category.description
+        .toLowerCase()
+        .replace(/\W/g, " ")
+        .trim();
+    }
+  });
+
+
 
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
