@@ -10,9 +10,33 @@ body{
 .filters{
 	width: 18%;
 	min-height: 600px;
-	background-color: red;
 	float:left;
 	border-right: 1px solid black;
+}
+.filters div{
+	height: 55px;
+	position:relative ;
+	border-bottom:1px solid #ccc;
+}
+.filters input[type=radio]{
+	display:none;
+}
+.filters input[type=radio],label{
+	cursor:pointer;
+}
+
+.filters input[type=radio]:checked + label{
+	background-color: #122D12;
+}
+.filters label{
+	display:inline-block;
+	background-color: #1E501E;
+	height: 100%;
+	width: 100%;
+}
+.filters label h2{
+	color:white;
+	font-size: 20px;
 }
 .products{
 	width: 80%;
