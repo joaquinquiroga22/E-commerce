@@ -17,22 +17,17 @@ export default function Crud() {
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [renderCat, setRenderCat] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [fillTable, setFillTable] = useState(true);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/products`).then(function (response) {
       setProducts(response.data);
-    }, []);
-  });
+    });
+  }, [fillTable]);
+
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    if (value) {
-      axios
-        .get(`http://localhost:3000/products/category`)
-        .then(function (response) {
-          setCategories(response.data);
-        });
-    }
+    setFillTable(!fillTable);
   };
 
   const updateRenderEdit = function (value, id) {

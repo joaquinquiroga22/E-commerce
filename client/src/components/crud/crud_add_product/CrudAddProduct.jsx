@@ -4,18 +4,27 @@ import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
 import defaultImage from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
+import CategoryItem from "../../category_item/CategoryItem.jsx";
 
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
+  const [loadedCategories, setLoadedCategories] = useState([]);
   const [input, setInput] = useState({
     name: "",
     price: 0,
     description: "",
     stock: 0,
     image: "",
-    categories: [1],
+    categories: [],
   });
+  //Obteniendo todas las categorias cargadas en la DB
+  useEffect(() => {
+    axios.get("http://localhost:3000/products/category").then((res) => {
+      //Guardando las categorias en el estado loadedCategories
+      setLoadedCategories(res.data);
+    });
+  }, []);
 
   const handleInputChange = function (e) {
     setInput({
@@ -29,14 +38,13 @@ export default function CrudAddProduct(props) {
 
   const onSubmitHandle = function (event) {
     event.preventDefault();
-
     const data = {
       name: input.name,
       price: input.price,
       description: input.description,
       stock: input.stock,
       image: input.image,
-      categories: input.categories,
+      idCategoria: input.categories,
     };
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
@@ -71,6 +79,20 @@ export default function CrudAddProduct(props) {
       };
     });
   };
+  const onCategoryChange = function (e) {
+    let newArray = input.categories;
+    let newCategory = Number(e.target.id);
+    if (newArray.includes(newCategory)) {
+      newArray = input.categories.filter(
+        (category) => category !== newCategory
+      );
+      return setInput({ ...input, categories: newArray });
+    }
+    setInput({
+      ...input,
+      categories: [...input.categories, newCategory],
+    });
+  };
 
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
@@ -93,6 +115,7 @@ export default function CrudAddProduct(props) {
       <div className={s.inputs}>
         <label htmlFor="name" autoComplete="off"></label>
         <input onChange={handleInputChange} type="text" name="name" />
+
         <label htmlFor="description">Descripcion:</label>
         <textarea
           onChange={handleInputChange}
@@ -122,10 +145,19 @@ export default function CrudAddProduct(props) {
         </div>
         <fieldset>
           <legend>Categorias</legend>
-          <label htmlFor="planta">Planta</label>
-          <input type="checkbox" value="planta" />
-          <label htmlFor="maceta">Maceta</label>
-          <input type="checkbox" value="maceta" />
+          {loadedCategories.length > 0 ? (
+            loadedCategories.map(function (category) {
+              return (
+                <CategoryItem
+                  id={category.id}
+                  name={category.name}
+                  onCheck={onCategoryChange}
+                />
+              );
+            })
+          ) : (
+            <p>No hay ninguna categoria creada</p>
+          )}
         </fieldset>
         <input type="submit" value="Agregar Producto" />
       </div>
