@@ -4,7 +4,8 @@ const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
 server.get("/", (req, res, next) => {
-  Product.findAll()
+
+  Product.findAll({ include: Category })
     .then((products) => res.send(products))
     .catch((error) => next(error));
 });
@@ -103,7 +104,11 @@ server.put("/:id", (req, res, next) => {
 });
 
 server.get("/:id", (req, res, next) => {
-  Product.findAll({ where: { id: req.params.id }, returning: true })
+  Product.findAll({
+    where: { id: req.params.id },
+    returning: true,
+    include: Category,
+  })
     .then((products) => {
       if (products.length === 0) {
         return res.status(400).json({ message: "No se encontro el producto" });
