@@ -2,20 +2,29 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
-import testImagen from "../../../img/default.jpg";
+import defaultImage from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
+import CategoryItem from "../../category_item/CategoryItem.jsx";
 
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
+  const [loadedCategories, setLoadedCategories] = useState([]);
   const [input, setInput] = useState({
     name: "",
     price: 0,
     description: "",
     stock: 0,
     image: "",
+    categories: [],
   });
-
+  //Obteniendo todas las categorias cargadas en la DB
+  useEffect(() => {
+    axios.get("http://localhost:3000/products/category").then((res) => {
+      //Guardando las categorias en el estado loadedCategories
+      setLoadedCategories(res.data);
+    });
+  }, []);
 
   const handleInputChange = function (e) {
     setInput({
@@ -29,15 +38,14 @@ export default function CrudAddProduct(props) {
 
   const onSubmitHandle = function (event) {
     event.preventDefault();
-
     const data = {
       name: input.name,
       price: input.price,
       description: input.description,
       stock: input.stock,
-      image: input.image
+      image: input.image,
+      idCategoria: input.categories,
     };
-    
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
       setTimeout(function () {
@@ -45,7 +53,6 @@ export default function CrudAddProduct(props) {
       }, 4000);
     });
   };
-
 
   //Funcion para convertir imagen a base64 obtenida de:
   //https://github.com/Rinlama/react-howtoseries
@@ -72,7 +79,20 @@ export default function CrudAddProduct(props) {
       };
     });
   };
-
+  const onCategoryChange = function (e) {
+    let newArray = input.categories;
+    let newCategory = Number(e.target.id);
+    if (newArray.includes(newCategory)) {
+      newArray = input.categories.filter(
+        (category) => category !== newCategory
+      );
+      return setInput({ ...input, categories: newArray });
+    }
+    setInput({
+      ...input,
+      categories: [...input.categories, newCategory],
+    });
+  };
 
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
@@ -82,13 +102,20 @@ export default function CrudAddProduct(props) {
       )}
       <h2>Agregar un producto</h2>
       <div className={s.image}>
-        <img src={input.image} />
+        <img src={input.image !== "" ? input.image : defaultImage} />
         <label htmlFor="imagen">Imagen del producto</label>
-        <input type="file" name="imagen" onChange={(e) => {uploadImg(e)}}/>
+        <input
+          type="file"
+          name="imagen"
+          onChange={(e) => {
+            uploadImg(e);
+          }}
+        />
       </div>
       <div className={s.inputs}>
         <label htmlFor="name" autoComplete="off"></label>
         <input onChange={handleInputChange} type="text" name="name" />
+
         <label htmlFor="description">Descripcion:</label>
         <textarea
           onChange={handleInputChange}
@@ -118,10 +145,19 @@ export default function CrudAddProduct(props) {
         </div>
         <fieldset>
           <legend>Categorias</legend>
-          <label htmlFor="planta">Planta</label>
-          <input type="checkbox" value="planta" />
-          <label htmlFor="maceta">Maceta</label>
-          <input type="checkbox" value="maceta" />
+          {loadedCategories.length > 0 ? (
+            loadedCategories.map(function (category) {
+              return (
+                <CategoryItem
+                  id={category.id}
+                  name={category.name}
+                  onCheck={onCategoryChange}
+                />
+              );
+            })
+          ) : (
+            <p>No hay ninguna categoria creada</p>
+          )}
         </fieldset>
         <input type="submit" value="Agregar Producto" />
       </div>

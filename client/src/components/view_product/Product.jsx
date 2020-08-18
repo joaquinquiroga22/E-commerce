@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
@@ -55,26 +55,22 @@ export default function Product({id}) {
                 name="simple-controlled"
                 value={value}
                 onChange={(event, newValue) => {
-                setValue(newValue);
+                  setValue(newValue);
                 }}
-                />
-                </Box>
-            </div>
+              />
+            </Box>
           </div>
-            
-          <div className={s.buttoms}>
-            <Button variant="contained"> Comprar ya</Button>
-            <Button variant="contained" color="primary"> Carrito </Button> 
-          </div>
-                  
-                
+        </div>
 
-            
-            
-         </div>
-
-        
-    </div> 
-
-)
+        <div className={s.buttoms}>
+          <Button variant="contained"> Comprar ya</Button>
+          <Button variant="contained" color="primary">
+            {" "}
+            Carrito{" "}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
+

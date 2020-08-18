@@ -80,22 +80,6 @@ server.put("/:id", (req, res, next) => {
 });
 
 server.get("/", (req, res, next) => {
-  let { idCategoria } = req.query;
-
-  // Devuelve Productos en Categorias(array)
-  if (idCategoria && idCategoria.length > 0) {
-    Category.findAll({
-      where: { id: idCategoria },
-      include: Product,
-    })
-      .then((productos) => {
-        return res.send(productos);
-      })
-      .catch((error) => {
-        next(error);
-      });
-  }
-
   //Devuelve el listado de categorias
   Category.findAll()
     .then((category) => {

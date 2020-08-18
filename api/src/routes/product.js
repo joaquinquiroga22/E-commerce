@@ -37,6 +37,7 @@ server.post("/", (req, res, next) => {
   }
 
   if (name && description && price && stock) {
+    console.log(image);
     Product.create({ name, description, price, image, stock })
       .then((product) => {
         product.setCategories(idCategoria);
@@ -66,7 +67,7 @@ server.delete("/:id", (req, res, next) => {
 });
 
 server.put("/:id", (req, res, next) => {
-  let { name, description, price, stock } = req.body;
+  let { name, description, price, image, stock } = req.body;
 
   name = name.trim();
   description = description.trim();
@@ -90,7 +91,7 @@ server.put("/:id", (req, res, next) => {
   }
 
   Product.update(
-    { name, description, price, stock },
+    { name, description, price, image, stock },
     { where: { id: req.params.id }, returning: true }
   )
     .then((products) => {
