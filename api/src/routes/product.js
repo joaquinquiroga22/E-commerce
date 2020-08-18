@@ -3,14 +3,21 @@ const { Product } = require("../db.js");
 const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
+
+//Hacemos un get a / products
+
 server.get("/", (req, res, next) => {
-  Product.findAll({ include: Category })
+  Product.findAll({ include: Category }) // Traemos todos los productos con sus categorias asociadas
     .then((products) => res.send(products))
     .catch((error) => next(error));
 });
 
-server.post("/", (req, res, next) => {
-  let { name, description, price, stock, idCategoria, image } = req.body;
+
+//Hcemos un post a / products
+
+server.post("/", (req, res, next) => { 
+  //Tomamos las props del body y hacemos un destructuring
+  let { name, description, price, stock, idCategoria, image } = req.body; 
 
   //Validamos que price y stock sean numeros y positivos
   let numeroPrice = isNaN(parseInt(price));
@@ -49,6 +56,8 @@ server.post("/", (req, res, next) => {
   }
 });
 
+//Hacemos un delete a / products/:id pasandole un id de productos
+
 server.delete("/:id", (req, res, next) => {
   Product.destroy({
     where: {
@@ -65,17 +74,19 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+//Hacemos un put / product/:id pasandole un id a producto de modificar
+
 server.put("/:id", (req, res, next) => {
   let { name, description, price, image, stock, idCategoria } = req.body;
   if (name) {
     name = name.trim();
   }
   if (description) {
-    description = description.trim();
+    description = description.trim(); //Saca los espacios del string principio y final
   }
 
-  //Validamos que price y stock sean numeros y positivos
-  if (stock) {
+  //Validamos que price y stock existan y sean numeros y positivos.
+  if (stock) {//existencia
     const numeroStock = isNaN(parseInt(stock));
     if (parseInt(stock) < 0 || numeroStock) {
       return res
@@ -83,7 +94,7 @@ server.put("/:id", (req, res, next) => {
         .json({ message: "El stock debe ser un Entero positivo" });
     }
   }
-  if (price) {
+  if (price) {//existencia
     const numeroPrice = isNaN(parseInt(price));
     if ((price && parseInt(price) < 0) || numeroPrice) {
       return res
@@ -96,7 +107,7 @@ server.put("/:id", (req, res, next) => {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
-  if (idCategoria && idCategoria.length > 0) {
+  if (idCategoria && idCategoria.length > 0) {//
     Product.findOne({ where: { id: req.params.id } })
       .then((products) => {
         products.setCategories(idCategoria);
@@ -121,6 +132,8 @@ server.put("/:id", (req, res, next) => {
       .catch((error) => next(error));
   }
 });
+
+//Hacemos un get a / products/:id para traer un producto por su id
 
 server.get("/:id", (req, res, next) => {
   Product.findAll({
