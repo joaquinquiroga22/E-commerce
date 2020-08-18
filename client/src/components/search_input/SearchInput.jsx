@@ -4,7 +4,6 @@ import Axios from "axios";
 import Grid from "@material-ui/core/Grid";
 //Estilos personalizados
 import s from "./SearchInput.module.css";
-
 //debe recibir una funcion por props
 export default function SearchInput({ onSearch }) {
   const [search, setSearch] = useState("");

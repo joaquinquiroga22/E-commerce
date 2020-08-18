@@ -1,18 +1,39 @@
 .nav{
-	background-color:#71a733;
-	height: 60px;
+	background-color:#8e44ad;
+	height:100px;
 	width: 100%;
 	position: fixed;
 	top:0;
 	left:0;
-	margin:0;
+	z-index: 500;
+}
+
+.nav a{
+	text-decoration: none;
+}
+.topnav{
+	padding: 10px 0;
+	margin: 0;
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	z-index: 500;
+	border-bottom:1px solid #badc58;
 }
-.nav a{
+.navigation{
+	padding: 10px 0;
+}
+
+.navigation a{
 	text-decoration: none;
+	color: #212121;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 0 5px 0 5px;
+}
+
+.navigation a:visited{
+	color: #212121;
 }
 
 .logo{
