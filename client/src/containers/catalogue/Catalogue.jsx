@@ -1,26 +1,62 @@
 import React, { useState, useEffect } from "react";
 import s from "./Catalogue.module.css";
-import Axios from "axios";
-import CategoriesItem from "../../components/categories_item/CategoriesItem.jsx";
+import axios from "axios";
+import FilterItem from "../../components/filter_item/FilterItem.jsx";
 
 //componentes
 import ProductCard from "../../components/product_card/ProductCard.jsx";
 
 export default function Catalogue() {
   const [products, setProducts] = useState([]);
+  const [showedProducts, setShowedProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
-    Axios.get("http://localhost:3000/products").then((res) =>
-      setProducts(res.data)
-    );
-  });
+    axios.get("http://localhost:3000/products").then((res) => {
+      setProducts(res.data);
+      setShowedProducts(res.data);
+    });
+    axios.get("http://localhost:3000/products/category").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
+
+  const getFilter = function (e) {
+    let filterId = e.target.id;
+    if (filterId !== "all") {
+      axios
+        .get(`http://localhost:3000/products/category?category=${filterId}`)
+        .then((res) => {
+          setShowedProducts(res.data[0].products);
+        });
+      return;
+    }
+    setShowedProducts(products);
+  };
 
   return (
     <div className={s.catalogue}>
-      <div className={s.filters}></div>
+      <div
+        id="filters"
+        className={s.filters}
+        onChange={(e) => {
+          getFilter(e);
+        }}
+      >
+        <div>
+          <input type="radio" name="filter" value="all" id="all" />
+          <label htmlFor="all">
+            <h2>Todos los productos</h2>
+          </label>
+        </div>
+        {categories.map(function (category) {
+          return <FilterItem name={category.name} id={category.id} />;
+        })}
+      </div>
       <div className={s.products}>
         <div className={s.listproducts}>
-          {products.length > 0 ? (
-            products.map(function (product) {
+          {showedProducts.length > 0 ? (
+            showedProducts.map(function (product) {
               return (
                 <ProductCard
                   key={product.id}
