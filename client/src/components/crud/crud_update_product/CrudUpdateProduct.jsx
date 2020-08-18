@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import s from "./CrudUpdateProduct.module.css";
-import testImagen from "../../../img/default.jpg";
+import defaultImage from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 
 export default function CrudUpdateProduct(props) {
@@ -12,7 +12,7 @@ export default function CrudUpdateProduct(props) {
     price: 0,
     description: "",
     stock: 0,
-    image: ''
+    image: "",
   });
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function CrudUpdateProduct(props) {
           price: response.data.price,
           description: response.data.description,
           stock: response.data.stock,
-          image: response.data.image
+          image: response.data.image,
         });
       });
   }, []);
@@ -46,9 +46,9 @@ export default function CrudUpdateProduct(props) {
       price: input.price,
       description: input.description,
       stock: input.stock,
+      image: input.image,
     };
 
-    //HARDCODEADO PELIGROO!
     axios
       .put(`http://localhost:3000/products/${props.id}`, data)
       .then((res) => {
@@ -58,6 +58,33 @@ export default function CrudUpdateProduct(props) {
         }, 4000);
       });
   };
+
+  //Funcion para convertir imagen a base64 obtenida de:
+  //https://github.com/Rinlama/react-howtoseries
+  const uploadImg = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertBase64(file);
+    setInput({
+      ...input,
+      image: base64,
+    });
+  };
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
   return (
     <form onSubmit={onSubmitHandle} className={s.form}>
       <CloseBtn close={props.onClose} />
@@ -66,9 +93,15 @@ export default function CrudUpdateProduct(props) {
       )}
       <h2>Actualizar un producto</h2>
       <div className={s.image}>
-        <img src={input.image} />
+        <img src={input.image !== "" ? input.image : defaultImage} />
         <label htmlFor="imagen">Imagen del producto</label>
-        <input type="file" name="imagen" />
+        <input
+          type="file"
+          name="image"
+          onChange={(e) => {
+            uploadImg(e);
+          }}
+        />
       </div>
       <div className={s.inputs}>
         <label htmlFor="name">Nombre:</label>

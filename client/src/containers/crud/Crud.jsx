@@ -7,7 +7,7 @@ import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudEditProduct from "./../../components/crud/crud_update_product/CrudUpdateProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import CategoryForm from "../../components/crud/categoryform/CrudAddProduct.jsx";
+import CategoryForm from "../../components/crud/categoryform/AddCategory.jsx";
 
 export default function Crud() {
   const [products, setProducts] = useState([]);
@@ -17,22 +17,17 @@ export default function Crud() {
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [renderCat, setRenderCat] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [fillTable, setFillTable] = useState(true);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/products`).then(function (response) {
       setProducts(response.data);
-    }, []);
-  });
+    });
+  }, [fillTable]);
+
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    if (value) {
-      axios
-        .get(`http://localhost:3000/products/category`)
-        .then(function (response) {
-          setCategories(response.data);
-        });
-    }
+    setFillTable(!fillTable);
   };
 
   const updateRenderEdit = function (value, id) {

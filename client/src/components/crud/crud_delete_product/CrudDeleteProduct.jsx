@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import testImage from "../../../img/default.jpg";
+import defaultImage from "../../../img/default.jpg";
 import s from "./CrudDeleteProduct.module.css";
 import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
@@ -10,7 +10,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
     price: 0,
     description: "",
     stock: 0,
-    image: ""
+    image: "",
   });
   const [render, setRender] = useState(true);
   const [success, setSuccess] = useState(false);
@@ -24,9 +24,9 @@ export default function CrudDeleteProduct({ onClose, id }) {
         price: response.data.price,
         description: response.data.description,
         stock: response.data.stock,
-        image: response.data.image
+        image: response.data.image,
       });
-      console.log(response)
+      console.log(response);
     });
   }, []);
 
@@ -53,7 +53,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
         <CloseBtn close={onClose} />
         <div className={s.viewProduct}>
           <div className={s.image}>
-            <img src={product.image} />
+            <img src={product.image !== "" ? product.img : defaultImage} />
           </div>
           <div className={s.info}>
             <h2>{product.name}</h2>
