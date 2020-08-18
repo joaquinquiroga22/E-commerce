@@ -42,11 +42,6 @@ export default function Catalogue() {
       categories: [3],
     },
   ];
-  const onCategoryChange = function (checkStatus, id) {
-    if (checkStatus === true) {
-      setSelectedCategories([...selectedCategories, id]);
-    }
-  };
 
   //  useEffect(() => {
   //    Axios.get("http://localhost:3000/products").then((res) =>
@@ -63,7 +58,6 @@ export default function Catalogue() {
               key={category.id}
               id={category.id}
               name={category.name}
-              setSelectCategory={onCategoryChange}
             />
           );
         })}

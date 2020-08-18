@@ -31,15 +31,12 @@ server.post("/", (req, res, next) => {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
   //validamos que se seleccionaron categorias para el producto
-  if(!idCategoria || idCategoria.length === 0){
+  if (!idCategoria || idCategoria.length === 0) {
     return res.status(400).send("Category missing");
   }
 
   if (name && description && price && stock) {
-<<<<<<< HEAD
     console.log(image);
-=======
->>>>>>> master
     Product.create({ name, description, price, image, stock })
       .then((product) => {
         product.setCategories(idCategoria);
