@@ -11,6 +11,7 @@ export default function Navbar({ onSearch }) {
         <h3 className={s.logo}>Vivero E-commerce</h3>
       </Link>
       <SearchInput onSearch={onSearch} />
+      <Link to="/admin">Administrar</Link>
     </div>
   );
 }

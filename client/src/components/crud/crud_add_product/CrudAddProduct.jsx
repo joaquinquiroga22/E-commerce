@@ -14,6 +14,7 @@ export default function CrudAddProduct(props) {
     description: "",
     stock: 0,
     image: "",
+    categories: [1],
   });
 
   const handleInputChange = function (e) {
@@ -35,6 +36,7 @@ export default function CrudAddProduct(props) {
       description: input.description,
       stock: input.stock,
       image: input.image,
+      categories: input.categories,
     };
     axios.post("http://localhost:3000/products", data).then((res) => {
       setSuccess(true);
