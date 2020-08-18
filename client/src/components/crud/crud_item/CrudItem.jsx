@@ -23,13 +23,17 @@ export default function CrudListItem({
   product,
   onEditProduct,
   onDeleteProduct,
-}) {
+  
+}) 
+
+{ 
+  
   return (
     <div className={s.component}>
       <div className={s.div}> {product.id} </div>
       <div className={s.div}> {product.name} </div>
       <div className={s.div}> {"$ " + product.price} </div>
-      <div className={s.div}> {product.category} </div>
+      <div className={s.div}> {product.categories[0].name} </div>
 
       <div className={s.buttons}>
         <Button

@@ -38,6 +38,7 @@ export default function AddC(props) {
   return (
     <form onSubmit={handleSubmit} className={s.form}>
       <CloseBtn close={props.onClose}/>
+      <h2>Agregar Categoria </h2>
       <div className={s.image}>
         <img src={testImagen} />
       </div>

@@ -23,7 +23,7 @@ export default function CrudDeleteProduct() {
           price: response.data.price,
           description: response.data.description,
           stock: response.data.stock,
-          image: image: response.data.image
+          image: response.data.image
         });
       });
   }, []);
