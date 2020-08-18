@@ -7,6 +7,8 @@ const cors = require('cors');
 require('./db.js');
 
 const server = express();
+//Middlewares
+//Usamos el modulo cors para las politics cors
 server.use(cors())
 server.name = 'API';
 

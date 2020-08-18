@@ -3,8 +3,10 @@ const { Product } = require("../db.js");
 const { Category } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
+//Hacemos un post a /products/category 
+
 server.post("/", (req, res, next) => {
-  let { name, description } = req.body;
+  let { name, description } = req.body;//Requerimos los params
 
   name = name.trim();
   description = description.trim();
@@ -19,7 +21,6 @@ server.post("/", (req, res, next) => {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
-  // FALTA VALIDAR SI LA CATEGORIA YA EXISTE O USAR findOrCreate
   Category.create({ name, description })
     .then((category) => {
       res.status(201);
@@ -79,10 +80,11 @@ server.put("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+//Hacemos un get a /category/products y nos traemos el arreglo de categorias
+//Ademas le pasamos un query con el id de la categoria que estamos buscando.
 server.get("/", (req, res, next) => {
   const key = Object.keys(req.query);
-  let idCategoria = req.query[key];
-  console.log(idCategoria);
+  let idCategoria = req.query[key];//req.query.value = 1
   // Devuelve Productos en Categorias(array)
   if (idCategoria && idCategoria.length > 0) {
     Category.findAll({
@@ -105,6 +107,8 @@ server.get("/", (req, res, next) => {
       .catch((error) => next(error));
   }
 });
+
+//Hacemos un get a /products/category/:nameCategory para buscar por name de categoria.
 
 server.get("/:nameCategory", (req, res, next) => {
   Category.findOne({
