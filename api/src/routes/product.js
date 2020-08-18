@@ -4,7 +4,6 @@ const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
 server.get("/", (req, res, next) => {
-
   Product.findAll({ include: Category })
     .then((products) => res.send(products))
     .catch((error) => next(error));
@@ -37,7 +36,7 @@ server.post("/", (req, res, next) => {
   }
 
   if (name && description && price && stock) {
-    console.log(image);
+    // console.log(image);
     Product.create({ name, description, price, image, stock })
       .then((product) => {
         product.setCategories(idCategoria);
@@ -67,40 +66,60 @@ server.delete("/:id", (req, res, next) => {
 });
 
 server.put("/:id", (req, res, next) => {
-  let { name, description, price, image, stock } = req.body;
-
-  name = name.trim();
-  description = description.trim();
+  let { name, description, price, image, stock, idCategoria } = req.body;
+  if (name) {
+    name = name.trim();
+  }
+  if (description) {
+    description = description.trim();
+  }
 
   //Validamos que price y stock sean numeros y positivos
-  const numeroPrice = isNaN(parseInt(price));
-  const numeroStock = isNaN(parseInt(stock));
-  if (parseInt(stock) < 0 || numeroStock) {
-    return res
-      .status(400)
-      .json({ message: "El stock debe ser un Entero positivo" });
+  if (stock) {
+    const numeroStock = isNaN(parseInt(stock));
+    if (parseInt(stock) < 0 || numeroStock) {
+      return res
+        .status(400)
+        .json({ message: "El stock debe ser un Entero positivo" });
+    }
   }
-  if (parseInt(price) < 0 || numeroPrice) {
-    return res
-      .status(400)
-      .json({ message: "El precio debe ser un numero positivo" });
+  if (price) {
+    const numeroPrice = isNaN(parseInt(price));
+    if ((price && parseInt(price) < 0) || numeroPrice) {
+      return res
+        .status(400)
+        .json({ message: "El precio debe ser un numero positivo" });
+    }
   }
 
   if (name === "" || description === "") {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
-  Product.update(
-    { name, description, price, image, stock },
-    { where: { id: req.params.id }, returning: true }
-  )
-    .then((products) => {
-      if (products[0] === 0) {
-        return res.status(400).json({ message: "No se modifico el producto" });
-      }
-      res.send(products[1][0].dataValues);
-    })
-    .catch((error) => next(error));
+  if (idCategoria && idCategoria.length > 0) {
+    Product.findOne({ where: { id: req.params.id } })
+      .then((products) => {
+        products.setCategories(idCategoria);
+        res.send(products.dataValues);
+      })
+      .catch((error) => next(error));
+  }
+
+  if (name || description || price || image || stock) {
+    Product.update(
+      { name, description, price, image, stock },
+      { where: { id: req.params.id }, returning: true }
+    )
+      .then((products) => {
+        if (products[0] === 0) {
+          return res
+            .status(400)
+            .json({ message: "No se modifico el producto" });
+        }
+        return res.send(products[1][0].dataValues);
+      })
+      .catch((error) => next(error));
+  }
 });
 
 server.get("/:id", (req, res, next) => {
