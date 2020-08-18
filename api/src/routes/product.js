@@ -4,7 +4,7 @@ const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
 server.get("/", (req, res, next) => {
-  Product.findAll()
+  Product.findAll({include: Category})
     .then((products) => res.send(products))
     .catch((error) => next(error));
 });
