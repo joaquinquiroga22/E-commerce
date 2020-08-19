@@ -5,8 +5,8 @@ const { Order } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 server.post("/", (req, res, next) => {
-  let { state } = req.body;
-  Order.create({ state })
+  let { state , address } = req.body;
+  Order.create({ state , address})
     .then((users) => {
       res.status(201);
       res.send(users.dataValues);
@@ -17,3 +17,4 @@ server.post("/", (req, res, next) => {
 });
 
 module.exports = server;
+

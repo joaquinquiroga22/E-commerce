@@ -40,7 +40,7 @@ server.post("/", (req, res, next) => {
     return res.status(400).send("Category missing");
   }
 
-  if (name && description && price && stock) {
+  if (name && descriptin && price && stock) {
     // console.log(image);
     Product.create({ name, description, price, image, stock })
       .then((product) => {
@@ -51,7 +51,7 @@ server.post("/", (req, res, next) => {
       .catch((error) => next(error));
   } else {
     res.sendStatus(400).json({ message: "Missing information" });
-  }
+  }n
 });
 
 //Hacemos un delete a / products/:id pasandole un id de productos
