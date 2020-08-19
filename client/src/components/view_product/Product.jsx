@@ -10,6 +10,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { getProducts } from "../../actions/products";
+
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,14 +26,16 @@ export default function Product({ id }) {
   const [value, setValue] = React.useState(2);
   const [info, setInfo] = useState({});
   const classes = useStyles();
-
+  const products = useSelector((state) => state.products);
   useEffect(() => {
-    axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
-      setInfo(response.data);
-      console.log(response);
-    });
-  }, []);
+    // axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
+    //   setInfo(response.data);
+    //   console.log(response);
+    // });
 
+    getProducts();
+  }, [getProducts]);
+  console.log(products);
   return (
     <div className={s.container}>
       <div className={s.img}>
