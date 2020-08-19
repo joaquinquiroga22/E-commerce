@@ -18,21 +18,12 @@ function App() {
     setSearch(valor);
   };
   return (
-<<<<<<< HEAD
-    <Provider store={store}>
-=======
     < Provider store={store} >
->>>>>>> master
       <Router>
         <div className="App">
           <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
           <Route exact path="/admin" component={Crud} />
-<<<<<<< HEAD
-          <Route exact path="/u" component={OrderUsers} />
-          <Route exact path="/" component={Catalogue} />
-=======
           <Route exact path="/catalogo" component={Catalogue} />
->>>>>>> master
           <Route
             exact
             path="/product/:id"
