@@ -1,5 +1,8 @@
+body {
+  background-color: #fff;
+}
 .App {
-  margin-top:60px;
+  margin-top: 60px;
   text-align: center;
 }
 

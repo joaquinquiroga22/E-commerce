@@ -1,36 +1,71 @@
-.card{
-	width: 800px;
-	height: 150px;
-	margin: 5px 0 5px 0;
-	background-color: #eee;
-	border-radius: 15px;
-	overflow: hidden;
-	padding: 15px;
-}
-.card a{
-	text-decoration: none;
-}
-.link{
-	display: block;
-}
-.image{
-	background-color: white;
-	height: 100%;
-	width: 200px;
-	float:left;
-	overflow: hidden;
-}
-.image img{
-	height: 100%;
-}
-.content{
-	width: 550px;
-	text-align:left;
-
+.card {
+  margin: 10px 10px;
+  background-color: #e3e3e3;
+  width: 600px;
+  height: 250px;
+  border-radius: 10px;
+  overflow: hidden;
+  -webkit-box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
 }
 
-.content h3,p{
-	display: inline-block;
-	width: 60%;
-	margin: 5px 0 5px 20px;
+.image {
+  width: 250px;
+  height: 240px;
+  padding: 5px 0px 5px 5px;
+  overflow: hidden;
+  float: left;
+}
+.image img {
+  height: 100%;
+}
+
+.content {
+  float: right;
+  height: 230px;
+  width: 320px;
+  padding: 10px;
+  color: black;
+}
+.above {
+  height: 175px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.above a {
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #050c42;
+}
+.above a,
+p {
+  text-align: left;
+  margin: 0 0 10px 0;
+  word-break: break-word;
+}
+.above p {
+  font-size: 17px;
+}
+
+.buy {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  background-color: green;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 20px;
+}
+.buy:hover {
+  background-color: #006602;
+}
+.icon {
+  position: relative;
+  top: 4px;
+  right: 2px;
 }
