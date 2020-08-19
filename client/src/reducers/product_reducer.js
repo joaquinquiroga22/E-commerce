@@ -1,7 +1,8 @@
-import { GET_PRODUCTS } from "../actions/products";
+import { GET_PRODUCTS, GET_PRODUCT_CATEGORY } from "../actions/products";
 
 const initialState = {
   products: [],
+  productsCategory: [],
 };
 
 export default (state = initialState, action) => {
@@ -10,7 +11,12 @@ export default (state = initialState, action) => {
       return {
         products: [...state.products],
       };
-  }
 
-  return initialState;
+    case GET_PRODUCT_CATEGORY:
+      return {
+        productsCategory: [...state.product],
+      };
+    default:
+      return initialState;
+  }
 };
