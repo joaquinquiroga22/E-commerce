@@ -14,6 +14,7 @@ function App() {
     setSearch(valor);
   };
   return (
+
     <Router>
       <div className="App">
         <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
