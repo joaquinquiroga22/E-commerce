@@ -1,7 +1,7 @@
 const server = require("express").Router();
 const { Product } = require("../db.js");
 const { Category } = require("../db.js");
-const { User } = require("../db.js");
+const { User , Order , Products_Order } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 server.post("/", (req, res, next) => {
@@ -27,7 +27,7 @@ server.put("/:id", (req, res, next) => {
 })
 
 server.get("/", (req, res, next) => {
-  User.findAll()
+  User.findAll({include : Order})
   .then((users) => {
   res.send(users)
   }).catch(error => next(error))
@@ -47,5 +47,30 @@ server.delete("/:id", (req, res, next) => {
     }).catch(error => next(error))
 })
 
+server.post("/:idUser/order", (req, res, next) => {
+  // let { idOrder } = req.body
+  let { state , address } = req.body;
+  var idOrders
+  Order.create({ state , address})
+    .then((orders) => {
+      idOrders = orders.dataValues.id
+      return User.findOne({where: {id : req.params.idUser}})
+    })
+  .then(user => {
+    return user.setOrders(idOrders);
+  }).then( user => {
+    return User.findOne( {include : Order})
+  }).then(user => {
+    res.status(201).send(user)
+  })
+  .catch(error => next(error))
+})
+
 module.exports = server;
+
+
+
+
+
+
 
