@@ -8,7 +8,7 @@ export const getCategories = () => {
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/category`).then((categories) => {
       dispatch({
-        type: GET_PRODUCTS,
+        type: GET_CATEGORY,
         categories,
       });
     });
@@ -17,11 +17,13 @@ export const getCategories = () => {
 
 export const getCategoryProduct = (id) => {
   return (dispatch) => {
-    axios.get(`http://localhost:3000/products/${id}`).then((product) => {
-      dispatch({
-        type: GET_PRODUCT_CATEGORY,
-        product,
+    axios
+      .get(`http://localhost:3000/products/category/?id${id}`)
+      .then((product) => {
+        dispatch({
+          type: GET_CATEGORY_PRODUCT,
+          product,
+        });
       });
-    });
   };
 };
