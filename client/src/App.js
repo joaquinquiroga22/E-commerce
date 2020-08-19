@@ -9,7 +9,7 @@ import Crud from "./containers/crud/Crud.jsx";
 
 //React-Redux
 import { Provider } from "react-redux";
-import store from "./store/main";
+import store from "./store/main.js";
 
 function App() {
   const [search, setSearch] = useState([]);
@@ -18,13 +18,12 @@ function App() {
     setSearch(valor);
   };
   return (
- reduxIntento
-    <Provider store={store}>
+    < Provider store={store} >
       <Router>
         <div className="App">
           <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
           <Route exact path="/admin" component={Crud} />
-          <Route exact path="/" component={Catalogue} />
+          <Route exact path="/catalogo" component={Catalogue} />
           <Route
             exact
             path="/product/:id"
@@ -32,7 +31,7 @@ function App() {
           />
         </div>
       </Router>
-    </Provider>
+    </Provider >
   );
 }
 
