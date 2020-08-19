@@ -3,9 +3,8 @@ const router = Router();
 const categoryRouter = require("./category.js");
 const productRouter = require("./product.js");
 const searchRouter = require("./search.js");
-const userRouter = require("./user.js")
-const { Product } = require("../db.js");
-const { Sequelize } = require("sequelize");
+const userRouter = require("./user.js");
+const ordersRouter = require("./orders.js");
 
 // load each router on a route
 // i.e: router.use('/auth', authRouter);
@@ -13,6 +12,7 @@ const { Sequelize } = require("sequelize");
 router.use("/products/category", categoryRouter);
 router.use("/products", productRouter);
 router.use("/search", searchRouter);
-router.use("/user", userRouter);
+router.use("/users", userRouter);
+router.use("/orders", ordersRouter);
 
 module.exports = router;

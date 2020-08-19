@@ -3,10 +3,10 @@ const { Product } = require("../db.js");
 const { Category } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
-//Hacemos un post a /products/category 
+//Hacemos un post a /products/category
 
 server.post("/", (req, res, next) => {
-  let { name, description } = req.body;//Requerimos los params
+  let { name, description } = req.body; //Requerimos los params
 
   name = name.trim();
   description = description.trim();
@@ -84,7 +84,7 @@ server.put("/:id", (req, res, next) => {
 //Ademas le pasamos un query con el id de la categoria que estamos buscando.
 server.get("/", (req, res, next) => {
   const key = Object.keys(req.query);
-  let idCategoria = req.query[key];//req.query.value = 1
+  let idCategoria = req.query[key]; //req.query.value = 1
   // Devuelve Productos en Categorias(array)
   if (idCategoria && idCategoria.length > 0) {
     Category.findAll({
