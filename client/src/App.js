@@ -8,12 +8,8 @@ import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import Crud from "./containers/crud/Crud.jsx";
 
 //React-Redux
-import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import thunkMiddleware from "redux-thunk";
-import rootReducer from "./reducers";
-
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+import store from "./store/main";
 
 function App() {
   const [search, setSearch] = useState([]);

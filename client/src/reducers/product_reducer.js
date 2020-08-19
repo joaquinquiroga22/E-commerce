@@ -1,14 +1,16 @@
-import {
-  GET_PRODUCTS,
-  ADD_PRODUCT,
-  DELETE_PRODUCT,
-  UPDATE_PRODUCT,
-} from "../action_creators/products";
+import { GET_PRODUCTS } from "../actions/products";
 
 const initialState = {
   products: [],
 };
 
 export default (state = initialState, action) => {
+  switch (action.type) {
+    case GET_PRODUCTS:
+      return {
+        products: [...state.products],
+      };
+  }
+
   return initialState;
 };
