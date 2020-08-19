@@ -10,9 +10,13 @@ import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudD
 import CategoryForm from "../../components/crud/categoryform/AddCategory.jsx";
 
 export default function Crud() {
+  //obtiene la lista de productos
   const [products, setProducts] = useState([]);
+  //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
+  //Gestiona si se renderiza el componente CrudEditProduct  
   const [renderEdit, setRenderEdit] = useState(false);
+    //Gestiona si se renderiza el componente CrudUpdate
   const [updateId, setUpdateId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
@@ -23,7 +27,7 @@ export default function Crud() {
     axios.get(`http://localhost:3000/products`).then(function (response) {
       setProducts(response.data);
     });
-  }, [fillTable]);
+  },[]);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
@@ -47,9 +51,11 @@ export default function Crud() {
   return (
     <div className={s.component}>
       {renderAdd && <CrudAddProduct onClose={updateRenderAdd} />}
+
       {renderEdit && (
         <CrudEditProduct id={updateId} onClose={updateRenderEdit} />
       )}
+
       {renderCat && <CategoryForm onClose={updateRenderCategory} />}
       {renderDelete && (
         <CrudDeleteProduct id={deleteId} onClose={updateRenderDelete} />

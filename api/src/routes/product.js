@@ -3,7 +3,6 @@ const { Product } = require("../db.js");
 const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
-
 //Hacemos un get a / products
 
 server.get("/", (req, res, next) => {
@@ -12,12 +11,11 @@ server.get("/", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-
 //Hcemos un post a / products
 
-server.post("/", (req, res, next) => { 
+server.post("/", (req, res, next) => {
   //Tomamos las props del body y hacemos un destructuring
-  let { name, description, price, stock, idCategoria, image } = req.body; 
+  let { name, description, price, stock, idCategoria, image } = req.body;
 
   //Validamos que price y stock sean numeros y positivos
   let numeroPrice = isNaN(parseInt(price));
@@ -42,7 +40,7 @@ server.post("/", (req, res, next) => {
     return res.status(400).send("Category missing");
   }
 
-  if (name && description && price && stock) {
+  if (name && descriptin && price && stock) {
     // console.log(image);
     Product.create({ name, description, price, image, stock })
       .then((product) => {
@@ -53,7 +51,7 @@ server.post("/", (req, res, next) => {
       .catch((error) => next(error));
   } else {
     res.sendStatus(400).json({ message: "Missing information" });
-  }
+  }n
 });
 
 //Hacemos un delete a / products/:id pasandole un id de productos
@@ -86,7 +84,8 @@ server.put("/:id", (req, res, next) => {
   }
 
   //Validamos que price y stock existan y sean numeros y positivos.
-  if (stock) {//existencia
+  if (stock) {
+    //existencia
     const numeroStock = isNaN(parseInt(stock));
     if (parseInt(stock) < 0 || numeroStock) {
       return res
@@ -94,7 +93,8 @@ server.put("/:id", (req, res, next) => {
         .json({ message: "El stock debe ser un Entero positivo" });
     }
   }
-  if (price) {//existencia
+  if (price) {
+    //existencia
     const numeroPrice = isNaN(parseInt(price));
     if ((price && parseInt(price) < 0) || numeroPrice) {
       return res
@@ -107,7 +107,8 @@ server.put("/:id", (req, res, next) => {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
-  if (idCategoria && idCategoria.length > 0) {//
+  if (idCategoria && idCategoria.length > 0) {
+    //
     Product.findOne({ where: { id: req.params.id } })
       .then((products) => {
         products.setCategories(idCategoria);

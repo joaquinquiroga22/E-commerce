@@ -15,6 +15,7 @@ const basename = path.basename(__filename);
 
 const modelDefiners = [];
 
+//ATENCIOOOON, definir bien el modelo.
 // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, "/models"))
   .filter(
@@ -26,7 +27,10 @@ fs.readdirSync(path.join(__dirname, "/models"))
   });
 
 // Injectamos la conexion (sequelize) a todos los modelos
-modelDefiners.forEach((model) => model(sequelize));
+modelDefiners.forEach((model) => {
+  model(sequelize);
+});
+
 // Capitalizamos los nombres de los modelos ie: product => Product
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
@@ -37,7 +41,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category } = sequelize.models;
+const { Product, Category, User, Order } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -45,7 +49,13 @@ const { Product, Category } = sequelize.models;
 Category.belongsToMany(Product, { through: "category_products" });
 Product.belongsToMany(Category, { through: "category_products" });
 
-//Hook para limpiar y pasar a lowercase
+Order.belongsToMany(Product, { through: "productsorder" });
+Product.belongsToMany(Order, { through: "productsorder" });
+
+User.hasMany(Order);
+Order.belongsTo(User);
+
+//Hooks para limpiar y pasar a lowercase name y description de Product y Category
 
 Product.addHook("beforeValidate", (product, options) => {
   if (product.name) {

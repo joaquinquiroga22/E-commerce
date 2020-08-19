@@ -18,6 +18,7 @@ function App() {
     setSearch(valor);
   };
   return (
+ reduxIntento
     <Provider store={store}>
       <Router>
         <div className="App">
