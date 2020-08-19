@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Axios from "axios";
-//imports de material iu
-import Grid from "@material-ui/core/Grid";
 //Estilos personalizados
 import s from "./SearchInput.module.css";
+import SearchIcon from "@material-ui/icons/Search";
 //debe recibir una funcion por props
 export default function SearchInput({ onSearch }) {
   const [search, setSearch] = useState("");
@@ -23,20 +22,13 @@ export default function SearchInput({ onSearch }) {
     });
   };
 
+  //<input type="submit" value="Buscar" />
   return (
     <form className={s.searchInput} onSubmit={onSubmitHandle}>
-      <Grid container>
-        <Grid item>
-          <input
-            type="text"
-            placeholder="Buscar..."
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item>
-          <input type="submit" value="Buscar" />
-        </Grid>
-      </Grid>
+      <input type="text" placeholder="Buscar..." onChange={handleInputChange} />
+      <button type="submit">
+        <SearchIcon />
+      </button>
     </form>
   );
 }

@@ -1,54 +1,53 @@
-.catalogue{
-	width: 100%;
-	height: 100%;
-	position: relative;
-	color:#212121;
+.catalogue {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  color: #212121;
 }
 
-.filters{
-	width: 18%;
-	position: fixed;
-	height: 100%;
-	float:left;
-	background-color: #fff;
+.filters {
+  width: 18%;
+  position: relative;
+  height: 100%;
+  float: left;
+  background-color: #fff;
 }
-.filters div{
-	height: 55px;
-	position:relative ;
-	border-bottom:1px solid #BDBDBD;
+.filters div {
+  height: 55px;
+  position: relative;
+  border-bottom: 1px solid #bdbdbd;
 }
-.filters input[type=radio]{
-	display:none;
+.filters input[type="radio"] {
+  display: none;
 }
-.filters input[type=radio],label{
-	cursor:pointer;
+.filters input[type="radio"],
+label {
+  cursor: pointer;
 }
 
-.filters input[type=radio]:checked + label{
-	background-color: #e3e3e3;
+.filters input[type="radio"]:checked + label {
+  background-color: #e3e3e3;
 }
-.filters input[type=radio]:hover + label{
-	background-color: #c17ddd;
+.filters input[type="radio"]:hover + label {
+  background-color: #c3c3c3;
 }
-.filters label{
-	display:inline-block;
-	background-color: #fff;
-	height: 100%;
-	width: 100%;
+.filters label {
+  display: inline-block;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
 }
-.filters label h2{
-	color:#2c3e50;
-	font-size: 20px;
+.filters label h2 {
+  color: #3d3d3d;
+  font-size: 20px;
 }
-.products{
-	width: 80%;
-	min-height: 600px;
-	float:right;
+.products {
+  width: 80%;
+  min-height: 600px;
+  float: right;
 }
-.listproducts{
-	margin-left:80px;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: center;
+.listproducts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
