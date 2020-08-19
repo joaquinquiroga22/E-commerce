@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true, // ===> Preguntar bien a Ger si esta bien esta validacion.
+        isEmail: true, 
       },
     },
     name: {
