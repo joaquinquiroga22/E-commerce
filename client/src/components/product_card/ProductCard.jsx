@@ -6,6 +6,20 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import defaultImg from "../../img/default.jpg";
 import s from "./ProductCard.module.css";
 
+const shortText = function (text) {
+  var newText = text.substring(0, 200);
+
+  if (text.length > 200) {
+    return newText + "...";
+  }
+  return text;
+};
+
+const replaceChars = function (text) {
+  var newText = text.split("_").join(" ");
+  return newText;
+};
+
 export default function ProductCard(props) {
   return (
     <div className={s.card}>
@@ -17,9 +31,9 @@ export default function ProductCard(props) {
       <div className={s.content}>
         <div className={s.above}>
           <Link className={s.link} to={`/product/${props.id}`}>
-            {props.name}
+            {replaceChars(props.name)}
           </Link>
-          <p>{props.description}</p>
+          <p>{shortText(props.description)}</p>
         </div>
         <Link to={`/product/${props.id}`} className={s.buy}>
           <ShoppingCartIcon className={s.icon} />
