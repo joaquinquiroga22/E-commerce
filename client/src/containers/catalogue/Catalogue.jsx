@@ -50,23 +50,28 @@ export default function Catalogue() {
           </label>
         </div>
         {categories.map(function (category) {
-          return <FilterItem name={category.name} id={category.id} />;
+           return <FilterItem name={category.name} id={category.id} />;
         })}
       </div>
       <div className={s.products}>
         <div className={s.listproducts}>
           {showedProducts.length > 0 ? (
             showedProducts.map(function (product) {
-              return (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  price={product.price}
-                  description={product.description}
-                  image={product.image}
-                />
-              );
+               if (product.stock <= 0) {
+                 return "EL PRODUCTO NO ESTA DISPONIBLE"
+               }else{
+                 return (
+                   <ProductCard
+                     key={product.id}
+                     id={product.id}
+                     name={product.name}
+                     stock={product.stock}
+                     price={product.price}
+                     description={product.description}
+                     image={product.image}
+                   />
+                 );
+               }
             })
           ) : (
             <h1>No hay productos para mostrar</h1>
