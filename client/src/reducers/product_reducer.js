@@ -8,11 +8,15 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_PRODUCTS:
-      return { ...state, products: action.products }
+      return {
+        ...state,
+        products: action.products,
+      };
 
     case GET_PRODUCT_CATEGORY:
       return {
-        productsCategory: [...state.product],
+        ...state,
+        productsCategory: state.product,
       };
     default:
       return initialState;
