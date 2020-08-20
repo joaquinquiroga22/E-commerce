@@ -1,8 +1,5 @@
 const server = require("express").Router();
-const { Product } = require("../db.js");
-const { Category } = require("../db.js");
-const { User , Order , Products_Order } = require("../db.js");
-const { Sequelize } = require("sequelize");
+const { User, Order, Productsorder, Product } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
@@ -20,57 +17,68 @@ server.put("/:id", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
   User.update(
     { email, name, lastname, password, role },
-    { where: {id: req.params.id}, returning: true}
-  ).then((users) => {
-    res.send(users[1][0].dataValues)
-  }).catch(error => next(error)) 
-})
+    { where: { id: req.params.id }, returning: true }
+  )
+    .then((users) => {
+      res.send(users[1][0].dataValues);
+    })
+    .catch((error) => next(error));
+});
 
 server.get("/", (req, res, next) => {
-  User.findAll({include : Order})
-  .then((users) => {
-  res.send(users)
-  }).catch(error => next(error))
-})
+  User.findAll({ include: Order })
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((error) => next(error));
+});
 
 server.delete("/:id", (req, res, next) => {
-  User.destroy(
-    { where: {id: req.params.id}}
-  ).then((users) => {
-    if(users > 0 ){
-      res.status(200).json({message : "Su Usuario se ha borrado satisfactoriamente."})
-    }else {
-      res.status(400).json({message : "No hay ningun producto con ese id."})
-    }
-    console.log(users)
-    res.send(users)
-    }).catch(error => next(error))
-})
-
-server.post("/:idUser/order", (req, res, next) => {
-  // let { idOrder } = req.body
-  let { state , address } = req.body;
-  var idOrders
-  Order.create({ state , address})
-    .then((orders) => {
-      idOrders = orders.dataValues.id
-      return User.findOne({where: {id : req.params.idUser}})
+  User.destroy({ where: { id: req.params.id } })
+    .then((users) => {
+      if (users > 0) {
+        res
+          .status(200)
+          .json({ message: "El Usuario se ha borrado satisfactoriamente." });
+      } else {
+        res.status(400).json({ message: "No hay ningun producto con ese id." });
+      }
+      res.send(users);
     })
-  .then(user => {
-    return user.setOrders(idOrders);
-  }).then( user => {
-    return User.findOne( {include : Order})
-  }).then(user => {
-    res.status(201).send(user)
-  })
-  .catch(error => next(error))
-})
+    .catch((error) => next(error));
+});
+
+server.post("/:idUser/cart", (req, res, next) => {
+  const idUser = req.params.idUser;
+  const { idProduct, state, address, quantity } = req.body;
+  const promiseProduct = Product.findByPk(idProduct);
+  const promiseOrder = Order.findOrCreate({
+    where: { userId: idUser, state: state, address: address },
+  });
+  var price;
+  var orderId;
+  Promise.all([promiseProduct, promiseOrder])
+    .then((values) => {
+      orderId = values[1][0].dataValues.id;
+      price = values[0].dataValues.price;
+      let stock = values[0].dataValues.stock;
+      if (quantity > stock) {
+        return res.status(400).json({ message: "Sin stock disponible" });
+      }
+      let cart = values[1][0];
+      let product = values[0];
+      return product.setOrders(cart);
+    })
+    .then((values) => {
+      return Productsorder.update(
+        { price, quantity },
+        { where: { productId: idProduct, orderId: orderId }, returning: true }
+      );
+    })
+    .then((values) => {
+      res.send(values[1][0]);
+    })
+    .catch((error) => next(error));
+});
 
 module.exports = server;
-
-
-
-
-
-
-
