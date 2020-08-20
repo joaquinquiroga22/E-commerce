@@ -3,30 +3,24 @@ import testImage from "../../../img/default.jpg";
 import s from "./CrudViewProduct.module.css";
 import axios from "axios";
 
+//Importamos de redux para poder conectar al estado y poder dispatchear actions
+import { useSelector, useDispatch } from "react-redux";
+//importamos la funcion a dispatchear
+import { getProductCategory } from "../../actions/products.js";
+
 export default function CrudDeleteProduct() {
   const [render, setRender] = useState(true);
-  const [product, setProduct] = useState({
-    name: "",
-    price: 0,
-    description: "",
-    stock: 0,
-    image:''
-  });
-  const testID = 9;
+  // const [product, setProduct] = useState({
+  //   name: "",
+  //   price: 0,
+  //   description: "",
+  //   stock: 0,
+  //   image:''
+  // });
+  const dispatch = useDispatch();
+  const { productsCategory } = useSelector((state) => state.productsCategory);
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/products/${testID}`)
-      .then(function (response) {
-        setProduct({
-          name: response.data.name,
-          price: response.data.price,
-          description: response.data.description,
-          stock: response.data.stock,
-          image: response.data.image
-        });
-      });
-  }, []);
+  useEffect(() => {}, []);
 
   const closeView = function () {
     setRender(false);

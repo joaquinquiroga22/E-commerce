@@ -9,16 +9,19 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case GET_CATEGORY: {
       return {
-        categories: [...state.categories],
+        ...state,
+        categories: action.categories,
       };
     }
 
     case GET_CATEGORY_PRODUCT: {
       return {
-        categoryProducts: [...state.categoryProducts],
+        ...state,
+        categoryProducts: action.categoriesProducts,
       };
     }
-  }
 
-  return initialState;
+    default:
+      return initialState;
+  }
 };
