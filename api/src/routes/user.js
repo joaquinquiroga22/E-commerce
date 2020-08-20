@@ -81,4 +81,23 @@ server.post("/:idUser/cart", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+server.get("/:idUser/cart", (req, res, next) => {
+  var orderId;
+  Order.findAll({
+    where: { userId: req.params.idUser },
+    include: User,
+  })
+    .then((orders) => {
+      orderId = orders[0].dataValues.id;
+      return Productsorder.findAll({
+        where: { orderId: orderId },
+      });
+    })
+    .then((products) => {
+      console.log(products);
+      res.send(products);
+    })
+    .catch((error) => next(error));
+});
+
 module.exports = server;
