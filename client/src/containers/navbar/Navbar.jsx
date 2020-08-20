@@ -8,10 +8,14 @@ import s from "./Navbar.module.css";
 export default function Navbar({ onSearch }) {
   return (
     <div className={s.nav}>
+
       <Link to="/">
         <h2 className={s.logo}>Vivero E-commerce</h2>
       </Link>
       <div className={s.links}>
+        <Link to="/table">
+          <span>table</span>
+        </Link>
         <Link to="/">
           <span>
             <HomeIcon className={s.icon} />

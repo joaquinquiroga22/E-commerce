@@ -6,7 +6,7 @@ import Navbar from "./containers/navbar/Navbar.jsx";
 import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import Crud from "./containers/crud/Crud.jsx";
-
+import OrdersTable from './containers/orders_table/OrdersTable.jsx';
 
 
 import { useSelector, useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ function App() {
 
     <Router>
       <div className="App">
+        <Route path="/table" component={OrdersTable} />
         <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
         <Route exact path="/admin" component={Crud} />
         <Route exact path="/catalogo" component={Catalogue} />

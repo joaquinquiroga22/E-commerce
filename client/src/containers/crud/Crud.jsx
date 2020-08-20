@@ -16,7 +16,7 @@ export default function Crud() {
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct  
   const [renderEdit, setRenderEdit] = useState(false);
-    //Gestiona si se renderiza el componente CrudUpdate
+  //Gestiona si se renderiza el componente CrudUpdate
   const [updateId, setUpdateId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
@@ -27,7 +27,7 @@ export default function Crud() {
     axios.get(`http://localhost:3000/products`).then(function (response) {
       setProducts(response.data);
     });
-  },[]);
+  }, []);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
