@@ -62,7 +62,6 @@ server.post("/:idUser/cart", (req, res, next) => {
       orderId = values[1][0].dataValues.id;
       price = values[0].dataValues.price;
       let stock = values[0].dataValues.stock;
-      console.log("order: ----------------" + values[1][0].dataValues.id);
       if (quantity > stock) {
         return res.status(400).json({ message: "Sin stock disponible" });
       }
@@ -89,7 +88,6 @@ server.get("/:idUser/cart", (req, res, next) => {
     include: User,
   })
     .then((orders) => {
-      console.log(orders);
       orderId = orders[0].dataValues.id;
       return Productsorder.findAll({
         where: { orderId: orderId },
@@ -125,4 +123,26 @@ server.delete("/:idUser/cart/", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+server.put("/:idUser/cart", (req, res, next) => {
+  const { quantity, idProducto } = req.body;
+  var orderId;
+  Order.findAll({
+    where: { userId: req.params.idUser },
+    include: User,
+  }).then((orders) => {
+    console.log(orders);
+    console.log(orders[0].dataValues.id);
+    orderId = orders[0].dataValues.id;
+    return Productsorder.update(
+      { quantity },
+      { where: { productId: idProducto, orderId: orderId }, returning: true }
+      // { where: { orderId: orderId, productId: idProducto }, returning: true }
+    )
+      .then((productsorders) => {
+        console.log(productsorders);
+        res.send(productsorders[1][0]);
+      })
+      .catch((error) => next(error));
+  });
+});
 module.exports = server;
