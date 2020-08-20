@@ -18,11 +18,11 @@ export const getCategories = () => {
 export const getCategoryProduct = (id) => {
   return (dispatch) => {
     axios
-      .get(`http://localhost:3000/products/category/?id${id}`)
-      .then((product) => {
+      .get(`http://localhost:3000/products/category/?id=${id}`)
+      .then((categoriesProducts) => {
         dispatch({
           type: GET_CATEGORY_PRODUCT,
-          product,
+          categoriesProducts,
         });
       });
   };

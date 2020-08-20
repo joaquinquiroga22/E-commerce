@@ -10,9 +10,11 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { getProducts } from "../../actions/products.js";
 
+//Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
+//importamos la funcion a dispatchear
+import { getProducts } from "../../actions/products.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,8 +28,9 @@ export default function Product({ id }) {
   const [value, setValue] = React.useState(2);
   const [info, setInfo] = useState({});
   const classes = useStyles();
-  const dispatch = useDispatch()
 
+  //definimos las constantes para usar las funciones y almacenar el estado
+  const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   useEffect(() => {
     // axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
@@ -35,7 +38,7 @@ export default function Product({ id }) {
     //   console.log(response);
     // });
 
-    dispatch(getProducts())
+    dispatch(getProducts());
   }, [getProducts]);
   console.log(products);
   return (
