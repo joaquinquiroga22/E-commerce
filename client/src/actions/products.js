@@ -9,7 +9,7 @@ export const getProducts = () => {
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,
-        products,
+        products: products.data,
       });
     });
   };

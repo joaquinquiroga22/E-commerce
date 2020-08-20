@@ -8,9 +8,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_PRODUCTS:
-      return {
-        products: [...state.products],
-      };
+      return { ...state, products: action.products }
 
     case GET_PRODUCT_CATEGORY:
       return {
