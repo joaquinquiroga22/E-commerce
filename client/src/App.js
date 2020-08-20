@@ -10,6 +10,7 @@ import Crud from "./containers/crud/Crud.jsx";
 //React-Redux
 import { Provider } from "react-redux";
 import store from "./store/main.js";
+import OrderUser from "./components/trolley/OrderUser";
 
 function App() {
   const [search, setSearch] = useState([]);
@@ -23,6 +24,7 @@ function App() {
         <div className="App">
           <Route path="/" render={() => <Navbar onSearch={searchQuery} />} />
           <Route exact path="/admin" component={Crud} />
+          <Route exact path="/u" component={OrderUser} />
           <Route exact path="/catalogo" component={Catalogue} />
           <Route
             exact
