@@ -62,12 +62,13 @@ server.post("/:idUser/cart", (req, res, next) => {
       orderId = values[1][0].dataValues.id;
       price = values[0].dataValues.price;
       let stock = values[0].dataValues.stock;
+      console.log("order: ----------------" + values[1][0].dataValues.id);
       if (quantity > stock) {
         return res.status(400).json({ message: "Sin stock disponible" });
       }
       let cart = values[1][0];
       let product = values[0];
-      return product.setOrders(cart);
+      return cart.addProducts(product);
     })
     .then((values) => {
       return Productsorder.update(
@@ -88,14 +89,38 @@ server.get("/:idUser/cart", (req, res, next) => {
     include: User,
   })
     .then((orders) => {
+      console.log(orders);
       orderId = orders[0].dataValues.id;
       return Productsorder.findAll({
         where: { orderId: orderId },
       });
     })
     .then((products) => {
-      console.log(products);
       res.send(products);
+    })
+    .catch((error) => next(error));
+});
+
+server.delete("/:idUser/cart/", (req, res, next) => {
+  var orderId;
+  Order.findAll({
+    where: { userId: req.params.idUser },
+    include: User,
+  })
+    .then((orders) => {
+      orderId = orders[0].dataValues.id;
+      return Productsorder.destroy({
+        where: { orderId: orderId },
+      });
+    })
+    .then((orders) => {
+      if (orders > 0) {
+        res
+          .status(200)
+          .json({ message: "El Carrito se ha vaciado satisfactoriamente." });
+      } else {
+        res.status(400).json({ message: "No hay ninguna orden con ese id." });
+      }
     })
     .catch((error) => next(error));
 });
