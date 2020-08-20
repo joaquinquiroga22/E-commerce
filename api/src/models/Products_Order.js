@@ -6,14 +6,14 @@ module.exports = (sequelize) => {
   sequelize.define("productsorder", {
     price: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      // allowNull: false,
       isDecimal: {
         msg: "Solo Numeros",
       },
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      // allowNull: false,
       isInt: {
         msg: "No es un entero",
       },
