@@ -1,0 +1,23 @@
+.icon{
+	position: absolute;
+	left: 10px;
+	top:5px;
+}
+
+.cancelBtn{
+  outline: none;
+  position: relative;
+	cursor: pointer;
+	border: none;
+	font-weight: bold;
+	font-size: 16px;
+	border-radius: 10px;
+	padding: 10px 15px 10px 40px;
+	margin-bottom: 5px;
+	margin-right: 20px;
+	color:#fff;
+	background-color: #bf0d0d;
+}
+.cancelBtn:hover{
+	background-color: #9c0b0b;
+}

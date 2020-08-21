@@ -4,10 +4,10 @@ import s from "./AddCategory.module.css";
 import testImagen from "../../../img/default.jpg";
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
 import {useState} from 'react'
 import CloseBtn from '../../close_btn/CloseBtn.jsx'
+import CancelBtn from '../../cancel_btn/CancelBtn.jsx';
+import SuccessBtn from '../../success_btn/SuccessBtn.jsx';
 
 export default function AddC(props) {
   const [input, setInput] = useState({
@@ -50,8 +50,8 @@ export default function AddC(props) {
        <legend>Descripcion:</legend>
        <textarea className={s.input} onChange={handleInputChange} name="description" rows="5" placeholder="Describe la nueva categoria"></textarea>
     </fieldset>
-        <button className={s.succesBtn} type="submit"><DoneIcon className={s.icon}/>Crear</button>
-        <button className={s.cancelBtn} type="button" onClick={() => props.onClose(false)}><CloseIcon className={s.icon}/>Cancelar</button>
+        <SuccessBtn />
+        <CancelBtn close={props.onClose}/>
     </div>
     </form>
   );

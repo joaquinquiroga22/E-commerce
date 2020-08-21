@@ -14,7 +14,7 @@ export default function Crud() {
   const [products, setProducts] = useState([]);
   //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
-  //Gestiona si se renderiza el componente CrudEditProduct  
+  //Gestiona si se renderiza el componente CrudEditProduct
   const [renderEdit, setRenderEdit] = useState(false);
   //Gestiona si se renderiza el componente CrudUpdate
   const [updateId, setUpdateId] = useState();

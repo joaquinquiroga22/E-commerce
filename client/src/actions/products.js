@@ -6,6 +6,7 @@ export const GET_PRODUCT_CATEGORY = "GET_PRODUCT_CATEGORY";
 //Action Creators (thunk middleware nos permite ejecutar funciones como acciones en vez de objetos)
 export const getProducts = () => {
   return (dispatch) => {
+    console.log("hola")
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,
