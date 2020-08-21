@@ -28,13 +28,32 @@ server.get("/", (req, res, next) => {
 
 server.get("/:id", (req, res, next) => {
   Order.findAll({
-    where: { id: req.params.id, state: status },
+    where: { id: req.params.id },
     include: User,
   })
     .then((orders) => {
       res.send(orders);
     })
     .catch((error) => next(error));
+});
+
+server.put("/:id", (req, res, next) => {
+  const { status, address } = req.body;
+  if (status || address) {
+    Order.update(
+      { status, address },
+      { where: { id: req.params.id }, returning: true }
+    )
+      .then((orders) => {
+        console.log(orders);
+        res.send(orders[1][0].dataValues);
+      })
+      .catch((error) => next(error));
+  } else {
+    res
+      .status(400)
+      .json({ message: "Debe pasar un status o address para modificar" });
+  }
 });
 
 module.exports = server;
