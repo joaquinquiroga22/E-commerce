@@ -6,11 +6,11 @@ import Navbar from "./containers/navbar/Navbar.jsx";
 import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import Crud from "./containers/crud/Crud.jsx";
-import OrderUsers from "./components/trolley/OrderUser.jsx";
+import OrderUser from "./components/trolley/OrderUser.jsx";
+
 //React-Redux
 import { Provider } from "react-redux";
 import store from "./store/main.js";
-import OrderUser from "./components/trolley/OrderUser";
 
 function App() {
   const [search, setSearch] = useState([]);
