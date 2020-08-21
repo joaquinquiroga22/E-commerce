@@ -43,15 +43,15 @@ export default function AddC(props) {
       <CloseBtn close={props.onClose}/>
       <h3>Crear Categoria </h3>
       <fieldset>
-        <legend>Nombre de la categoria:</legend>
+        <legend>Nombre de la categoria</legend>
         <input className={s.input} placeholder="Nombre de la categoria" type="text" name="name" value={input.name} onChange={handleInputChange} autofocus/>
      </fieldset>
      <fieldset>
-       <legend>Descripcion:</legend>
+       <legend>Descripcion</legend>
        <textarea className={s.input} onChange={handleInputChange} name="description" rows="5" placeholder="Describe la nueva categoria"></textarea>
     </fieldset>
-        <SuccessBtn />
-        <CancelBtn close={props.onClose}/>
+        <SuccessBtn text="Crear Categoria" />
+        <CancelBtn text="Cancelar" close={props.onClose}/>
     </div>
     </form>
   );

@@ -1,8 +1,9 @@
 import React from "react";
+import s from './CategoryItem.module.css';
 
 export default function CategoryItem({ id, name, onCheck }) {
   return (
-    <div>
+    <div className={s.categoryItem}>
       <input
         type="checkbox"
         value={id}

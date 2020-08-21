@@ -4,6 +4,7 @@
 	top:5px;
 }
 .succesBtn{
+	outline: none;
   position: relative;
 	cursor: pointer;
 	border: none;
