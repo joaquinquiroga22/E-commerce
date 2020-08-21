@@ -4,6 +4,7 @@ export default function OrdersTable() {
 
     return (<div className={s.container}>
         <table className={s.orders}>
+            <caption>Gestion de ordenes</caption>
             <thead>
                 <tr>
                     <th>#</th>
