@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import {useState} from 'react'
 import CloseBtn from '../../close_btn/CloseBtn.jsx'
+import CancelBtn from '../../cancel_btn/CancelBtn.jsx';
+import SuccessBtn from '../../success_btn/SuccessBtn.jsx';
 
 export default function AddC(props) {
   const [input, setInput] = useState({
@@ -16,7 +18,7 @@ export default function AddC(props) {
   const handleInputChange = function(e){
     setInput({
       ...input,
-      [e.target.name] : e.target.value  
+      [e.target.name] : e.target.value
 
     })
   }
@@ -37,34 +39,20 @@ export default function AddC(props) {
 
   return (
     <form onSubmit={handleSubmit} className={s.form}>
+    <div className={s.content}>
       <CloseBtn close={props.onClose}/>
-      <h2>Agregar Categoria </h2>
-      <div className={s.image}>
-        <img src={testImagen} />
-      </div>
-      <div className={s.inputs}>
-        <label for="nombre" autocomplete="false">
-          Nombre de la categoria: 
-        </label>
-        <input type="text" 
-          name="name"
-          value={input.name}
-          onChange={handleInputChange}
-        />
-        <label htmlFor="description">Descripcion:</label>
-          <textarea
-            onChange={handleInputChange}
-            name="description"
-            rows="5"
-            placeholder="Describe la nueva categoria"
-          ></textarea>
-
-        <label for="imagen">Imagen de la categoria: </label>
-        <input type="file" name="imagen" />
-        <input type="submit" value="Agregar Categoria" />
-        <input className={s.cancel} type="button" value="Cancelar" onClick={() => props.onClose(false)} />  
-
-      </div>
+      <h3>Crear Categoria </h3>
+      <fieldset>
+        <legend>Nombre de la categoria:</legend>
+        <input className={s.input} placeholder="Nombre de la categoria" type="text" name="name" value={input.name} onChange={handleInputChange} autofocus/>
+     </fieldset>
+     <fieldset>
+       <legend>Descripcion:</legend>
+       <textarea className={s.input} onChange={handleInputChange} name="description" rows="5" placeholder="Describe la nueva categoria"></textarea>
+    </fieldset>
+        <SuccessBtn />
+        <CancelBtn close={props.onClose}/>
+    </div>
     </form>
   );
 }

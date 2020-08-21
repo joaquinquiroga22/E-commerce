@@ -10,6 +10,7 @@ export const EDIT_PRODUCT = "EDIT_PRODUCT";
 //Trae todos los products productos del back y se lo manda al reducer
 export const getProducts = () => {
   return (dispatch) => {
+    console.log("hola")
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,

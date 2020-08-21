@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import Button from "@material-ui/core/Button";
 //IMPORTS PROPIOS
 import defaultImg from "../../img/default.jpg";
 import s from "./ProductCard.module.css";
@@ -40,6 +41,12 @@ export default function ProductCard(props) {
           {"$ " + props.price}
         </Link>
       </div>
+      <div className={s.buttoms}>
+          <Button variant="contained" color="primary">
+            {" "}
+            Agregar al carrito{" "}
+          </Button>
+        </div>
     </div>
   );
 }

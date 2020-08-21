@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
+  toolbar:{
+    backgroundColor: "#362181",
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -163,7 +166,7 @@ export default function CrudHead(props) {
   return (
     <div className={classes.grow}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <Typography className={classes.title} variant="h6" noWrap>
             Administracion de productos
           </Typography>
