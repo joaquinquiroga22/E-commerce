@@ -5,6 +5,8 @@ import s from "./CrudAddProduct.module.css";
 import defaultImage from "../../../img/default.jpg";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CategoryItem from "../../category_item/CategoryItem.jsx";
+import CancelBtn from '../../cancel_btn/CancelBtn.jsx';
+import SuccessBtn from '../../success_btn/SuccessBtn.jsx';
 
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
@@ -96,11 +98,10 @@ export default function CrudAddProduct(props) {
 
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
+    <div className={s.content}>
       <CloseBtn close={props.onClose} />
-      {success && (
-        <Alert severity="success">Producto Agregado correctamente</Alert>
-      )}
-      <h2>Agregar un producto</h2>
+
+      <h3>Agregar un producto</h3>
       <div className={s.image}>
         <img src={input.image !== "" ? input.image : defaultImage} />
         <label htmlFor="imagen">Imagen del producto</label>
@@ -113,35 +114,24 @@ export default function CrudAddProduct(props) {
         />
       </div>
       <div className={s.inputs}>
-        <label htmlFor="name" autoComplete="off"></label>
-        <input onChange={handleInputChange} type="text" name="name" />
+        <fieldset>
+          <legend>Nombre del producto</legend>
+          <input className={s.input} onChange={handleInputChange} type="text" name="name" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Descripcion</legend>
+          <textarea className={s.input} onChange={handleInputChange} name="description" rows="5" placeholder="Describe el nuevo producto" required></textarea>
+        </fieldset>
 
-        <label htmlFor="description">Descripcion:</label>
-        <textarea
-          onChange={handleInputChange}
-          name="description"
-          rows="5"
-          placeholder="Describe el nuevo producto"
-        ></textarea>
         <div className={s.numbers}>
-          <label htmlFor="price">Precio $</label>
-          <input
-            onChange={handleInputChange}
-            type="number"
-            name="price"
-            min="0"
-            step="any"
-          />
-          <label className={s.stock} htmlFor="stock">
-            Stock:
-          </label>
-          <input
-            onChange={handleInputChange}
-            type="number"
-            name="stock"
-            min="0"
-            step="1"
-          />
+          <fieldset>
+            <legend>Precio</legend>
+            <input className={s.input} onChange={handleInputChange} type="number" name="price" min="0" step="any" required/>
+          </fieldset>
+          <fieldset>
+            <legend>Stock</legend>
+            <input className={s.input} onChange={handleInputChange} type="number" name="stock" min="0" step="1" required/>
+          </fieldset>
         </div>
         <fieldset>
           <legend>Categorias</legend>
@@ -159,7 +149,10 @@ export default function CrudAddProduct(props) {
             <p>No hay ninguna categoria creada</p>
           )}
         </fieldset>
-        <input type="submit" value="Agregar Producto" />
+        {success && (<Alert severity="success">Producto Agregado correctamente</Alert>)}
+        <SuccessBtn text="Agregar producto"/>
+        <CancelBtn text="Cancelar" close={props.onClose}/>
+      </div>
       </div>
     </form>
   );

@@ -12,21 +12,26 @@
 	margin-left:auto;
 	margin-right: auto;
 	margin-top:100px;
-	width: 400px;
+	width: 500px;
 	background-color:#eee;
-	border:2px solid #362181;
 	border-radius: 10px;
+	overflow: hidden;
 }
 .content h3{
 	color: #fff;
 	background: #362181;
-	padding: 10px;
+	padding: 10px 20px 10px 10px;
 	margin: 0 0 20px 0;
 }
 .content fieldset{
 	border: none;
 	font-weight: 500;
+	margin-left: auto;
+	margin-right: auto;
 	margin-bottom: 10px;
+	width: 400px;
+	border: 2px solid #362181;
+	border-radius: 10px;
 }
 .content legend{
 	color:black;
@@ -38,7 +43,6 @@
 	font-size: 16px;
 	background:transparent;
 	border: none;
-	border-bottom: 2px solid #362181;
 	outline: none;
 	outline-style: none;
 	width: 100%;
