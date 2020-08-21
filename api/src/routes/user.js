@@ -95,7 +95,6 @@ server.post("/:idUser/cart", (req, res, next) => {
     })
     .then((values) => {
       return Productsorder.update(
-        
         { price, quantity },
         { where: { productId: idProduct, orderId: orderId }, returning: true }
       );
@@ -110,10 +109,14 @@ server.post("/:idUser/cart", (req, res, next) => {
 server.get("/:idUser/cart", (req, res, next) => {
   var orderId;
   Order.findAll({
+    
     where: { userId: req.params.idUser },
     include: User,
   })
     .then((orders) => {
+      if(orders && orders.length === 0){
+       res.status(400).json({message: `No hay ningun usuario con el id: ${req.params.idUser}`})
+      }
       orderId = orders[0].dataValues.id;
       return Productsorder.findAll({
         where: { orderId: orderId },
@@ -132,6 +135,9 @@ server.delete("/:idUser/cart/", (req, res, next) => {
     include: User,
   })
     .then((orders) => {
+      if(orders && orders.length === 0){
+        res.status(400).json({message: `No hay ningun usuario con el id: ${req.params.idUser}`})
+       }
       orderId = orders[0].dataValues.id;
       return Productsorder.destroy({
         where: { orderId: orderId },
@@ -142,9 +148,7 @@ server.delete("/:idUser/cart/", (req, res, next) => {
         res
           .status(200)
           .json({ message: "El Carrito se ha vaciado satisfactoriamente." });
-      } else {
-        res.status(400).json({ message: "No hay ninguna orden con ese id." });
-      }
+      } 
     })
     .catch((error) => next(error));
 });
@@ -152,23 +156,32 @@ server.delete("/:idUser/cart/", (req, res, next) => {
 server.put("/:idUser/cart", (req, res, next) => {
   const { quantity, idProducto } = req.body;
   var orderId;
-  Order.findAll({
-    where: { userId: req.params.idUser },
-    include: User,
-  }).then((orders) => {
-    
-    orderId = orders[0].dataValues.id;
-    return Productsorder.update(
-      { quantity },
-      { where: { productId: idProducto, orderId: orderId }, returning: true }
-      
-    )
-      .then((productsorders) => {
+  if(quantity && idProducto){
+    Order.findAll({
+      where: { userId: req.params.idUser },
+      include: User,
+    }).then((orders) => {
+      if(orders && orders.length === 0){
+        res.status(400).json({message: `No hay ningun usuario con el id: ${req.params.idUser}`})
+       }
+      if(orders[0].dataValues.id !== idProducto){
+        res.status(400).json({message: `No hay ningun usuario con el id: ${idProducto}`})
+      }
+      orderId = orders[0].dataValues.id;
+        return Productsorder.update(
+          { quantity },
+          { where: { productId: idProducto, orderId: orderId }, returning: true })
+          .then((productsorders) => {
+            res.send(productsorders[1][0]);
+          })
+          .catch((error) => next(error));
         
-        res.send(productsorders[1][0]);
-      })
-      .catch((error) => next(error));
-  });
+      });
+  } else {
+    res.status(400).json({message: "Debe pasar los parametros necesarios"})
+  }
+   // Lo que le faltaria a este es que tire un mensaje cuando el idPrdocut que le pasas no coincide con ningun product.
+
 });
 
 server.get("/:idUser/orders", (req, res, next) => {
@@ -177,7 +190,9 @@ server.get("/:idUser/orders", (req, res, next) => {
     include: Order,
   })
     .then((orders) => {
-      console.log(orders);
+      if(orders && orders.length === 0){
+        res.status(400).json({message: `No hay ningun usuario con el id: ${req.params.idUser}`})
+       }
       res.send(orders);
     })
     .catch((error) => next(error));
