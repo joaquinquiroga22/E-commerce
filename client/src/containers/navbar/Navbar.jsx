@@ -37,12 +37,13 @@ export default function Navbar({ onSearch }) {
         <Link to="/admin">
           <span>Administrar</span>
         </Link>
-      </div>
       <Link to="/carrito">
           <span>
           <ShoppingCartOutlinedIcon  className={s.shopping} />
+           Mi Carrito
           </span>
         </Link> 
+      </div>
       <SearchInput onSearch={onSearch} />
     </div>
   );

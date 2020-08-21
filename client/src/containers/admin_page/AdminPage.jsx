@@ -38,7 +38,6 @@ export default function AdminPage() {
           <label htmlFor="manage_orders"><ReceiptIcon className={s.icon} />Lista de ordenes</label>
           <input type="radio" onChange={(e) => renderComponent(e)} id="manage_products" name="menu" value="products"/>
           <label htmlFor="manage_products"><StoreIcon className={s.icon} />Gestion de productos</label>
-          <label><ShoppingCartOutlinedIcon className={s.icon} />Mi Carrito</label>
         </div>
         <div className={s.main}>
           {component && component}

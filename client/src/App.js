@@ -10,6 +10,7 @@ import AdminPage from './containers/admin_page/AdminPage.jsx';
 import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
 import { getProducts } from "./actions/products.js";
+import TrolleyTable from "./components/trolley_table/TrolleyTable";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" component={Navbar}/>
         <Route exact path="/catalogo" component={Catalogue} />
         <Route exact path="/admin" component={AdminPage} />
+        <Route exact path="/carrito" component={TrolleyTable} />
         <Route exact path="/product/:id" render={({ match }) => <Product id={match.params.id} />}/>
       </div>
     </Router>
