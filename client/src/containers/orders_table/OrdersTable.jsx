@@ -17,7 +17,7 @@ export default function OrdersTable() {
 
                 </tr>
             </thead>
-
+            <tbody>
             <tr>
                 <td>304</td>
                 <td>3</td>
@@ -47,6 +47,7 @@ export default function OrdersTable() {
                 <td>Ver orden</td>
 
             </tr>
+            </tbody>
         </table>
     </div>)
 }
