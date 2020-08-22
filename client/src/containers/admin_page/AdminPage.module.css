@@ -1,9 +1,8 @@
-body{background-color: #CAD3C8}
 .admin{
     width: 100%;
     min-height: 500px;
     height: 100vh;
-    background-color: #CAD3C8;
+    background-color: #fff;
   }
 .aside{
   border-radius: 10px;
