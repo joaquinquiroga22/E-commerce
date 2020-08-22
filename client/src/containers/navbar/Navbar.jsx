@@ -17,11 +17,18 @@ export default function Navbar({ onSearch }) {
       </div>)
   }
   return (
-    <div className={s.nav}>
-      <Link to="/">
-        <h2 className={s.logo}>Vivero E-commerce</h2>
-      </Link>
-      <div className={s.links}>
+    <div className={s.navbar}>
+      <div className={s.top}>
+        <Link to="/" className={s.logo}>
+          <h2 >Vivero E-commerce</h2>
+        </Link>
+
+        <SearchInput onSearch={onSearch} />
+        <div className={s.buttons}>
+          <p>iconos</p>
+        </div>
+      </div>
+      <div className={s.nav}>
         <Link to="/">
           <span>
             <HomeIcon className={s.icon} />
@@ -34,17 +41,17 @@ export default function Navbar({ onSearch }) {
             Productos
           </span>
         </Link>
+        <Link to="/carrito">
+            <span>
+            <ShoppingCartOutlinedIcon  className={s.icon} />
+             Mi Carrito
+            </span>
+        </Link>
         <Link to="/admin">
           <span>Administrar</span>
         </Link>
-      <Link to="/carrito">
-          <span>
-          <ShoppingCartOutlinedIcon  className={s.shopping} />
-           Mi Carrito
-          </span>
-        </Link> 
+
       </div>
-      <SearchInput onSearch={onSearch} />
     </div>
   );
 }

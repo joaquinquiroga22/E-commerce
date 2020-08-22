@@ -6,14 +6,14 @@
 }
 
 .filters {
-  width: 18%;
+  width: 200px;
   position: relative;
   height: 100%;
   float: left;
   background-color: #e3e3e3;
 }
 .filters div {
-  height: 55px;
+  height: 35px;
   position: relative;
   border-bottom: 1px solid #bdbdbd;
 }
@@ -26,22 +26,26 @@ label {
 }
 
 .filters input[type="radio"]:checked + label {
-  background-color: #fff;
+  background-color: #5bcc35;
   border-right: none;
 }
 .filters input[type="radio"]:hover + label {
-  background-color: #c3c3c3;
+  background-color: rgba(91, 204, 53,.7);
+}
+.filters input[type="radio"]:checked + label h2{
+  color: white;
 }
 .filters label {
   display: inline-block;
   border-right: 1px solid #bdbdbd;
-  background-color: #e3e3e3;
+  background-color: #fff;
   height: 100%;
   width: 100%;
 }
 .filters label h2 {
+  margin: 8px 0;
   color: #3d3d3d;
-  font-size: 20px;
+  font-size: 14px;
 }
 .products {
   margin-top: 20px;
