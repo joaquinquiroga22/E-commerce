@@ -143,9 +143,9 @@ describe("Product model", () => {
           description: "hola",
           price: 5,
           image: "buffer",
-          stock: -300,
+          stock: -20,
         })
-          .then(() => done("No debería haberse creado, no hay precio negativo"))
+          .then(() => done("No debería haberse creado, no hay stock negativo"))
           .catch(() => done());
       });
       it("requiere un stock", () => {
@@ -169,17 +169,6 @@ describe("Product model", () => {
       });
       it("tiene la definición de schema esperado", () => {
         expect(Product.tableAttributes.image).to.be.an("object");
-      });
-      it("error con un image invalido", function (done) {
-        Product.create({
-          name: "hola",
-          description: "hola",
-          price: 5,
-          image: "",
-          stock: 300,
-        })
-          .then(() => done("No debería haberse creado, no hay precio negativo"))
-          .catch(() => done());
       });
       it("requiere un image", () => {
         const product = Product.build();
