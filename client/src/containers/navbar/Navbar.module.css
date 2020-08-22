@@ -50,6 +50,11 @@
   color: white;
   margin: 0 0 0 15px;
 }
+.shopping{
+  position: relative;
+  top: 4px;
+  right: 2px;
+}
 
 /* Estilos nav de admin */
 .adminNav {

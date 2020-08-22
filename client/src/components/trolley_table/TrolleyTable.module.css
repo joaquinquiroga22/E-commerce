@@ -1,0 +1,32 @@
+.table{
+    margin: 150px auto;
+    width: 600px;
+    min-height: 300px;
+}
+.title{
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: collapse;
+}
+.title caption{
+    background-color: #362181;
+    color: white;
+    font-weight: 200;
+    text-align: left;
+    padding:20px 0 20px 25px;
+    font-size: 20px;
+    border-top-style: solid;
+    border-top-width: 4px;
+}
+.title th{
+    color:black;
+    padding:15px 35px;
+    font-weight: bold;
+}
+.title td{
+    padding:15px;
+    color:#2f3640;
+}
+.title tr:nth-child(even){
+	background-color: aliceblue;
+}

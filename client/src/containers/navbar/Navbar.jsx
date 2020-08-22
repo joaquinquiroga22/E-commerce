@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import LocalMallIcon from "@material-ui/icons/LocalMall";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 import s from "./Navbar.module.css";
 
@@ -36,6 +37,12 @@ export default function Navbar({ onSearch }) {
         <Link to="/admin">
           <span>Administrar</span>
         </Link>
+      <Link to="/carrito">
+          <span>
+          <ShoppingCartOutlinedIcon  className={s.shopping} />
+           Mi Carrito
+          </span>
+        </Link> 
       </div>
       <SearchInput onSearch={onSearch} />
     </div>
