@@ -4,6 +4,10 @@ import defaultImage from "../../../img/default.jpg";
 import s from "./CrudDeleteProduct.module.css";
 import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
+import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
+import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
+
+
 export default function CrudDeleteProduct({ onClose, id }) {
   const [product, setProduct] = useState({
     name: "",
@@ -40,7 +44,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
         setSuccess(true);
         setTimeout(function () {
           setSuccess(false);
-        }, 3000);
+        }, 1500);
       })
       .catch(function (error) {
         console.log(error);
@@ -50,40 +54,19 @@ export default function CrudDeleteProduct({ onClose, id }) {
   if (render) {
     return (
       <form className={s.form} onSubmit={onSubmitHandle}>
-        <CloseBtn close={onClose} />
-        <div className={s.viewProduct}>
-          <div className={s.image}>
-            <img src={product.image !== "" ? product.img : defaultImage} />
-          </div>
+        <div className={s.content}>
+          <CloseBtn close={onClose} />
+          <h3>Eliminar producto</h3>
           <div className={s.info}>
-            <h2>{product.name}</h2>
-            <div>
-              <h4>Descripcion</h4>
-              <p>{product.description}</p>
-            </div>
-            <div>
-              <h4>Precio</h4>
-              <p>{product.price}</p>
-            </div>
-            <div>
-              <h4>Stock</h4>
-              <p>{product.stock}</p>
-            </div>
+          <p><span>Nombre: </span>{product.name}</p>
+          <p><span>Descripcion: </span>{product.name}</p>
           </div>
+          {success && (
+            <Alert severity="success">Producto eliminado correctamente</Alert>
+          )}
+          <SuccessBtn text="Eliminar producto"/>
+          <CancelBtn text="Cancelar" close={onClose}/>
         </div>
-        {success && (
-          <Alert severity="success">Producto eliminado correctamente</Alert>
-        )}
-        {!success && (
-          <div>
-            <input className={s.deleteBtn} type="submit" value="Eliminar" />
-            <input
-              onClick={() => onClose(false)}
-              type="button"
-              value="Cancelar"
-            />
-          </div>
-        )}
       </form>
     );
   }
