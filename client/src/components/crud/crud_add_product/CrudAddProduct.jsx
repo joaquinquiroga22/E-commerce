@@ -72,6 +72,7 @@ export default function CrudAddProduct(props) {
       image: input.image,
       idCategoria: input.categories,
     };
+
     if(props.type === "Add"){
       axios.post("http://localhost:3000/products", data).then((res) => {
         setSuccess(true);
