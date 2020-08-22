@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Navbar from "./containers/navbar/Navbar.jsx";
 import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
-import AdminPage from './containers/admin_page/AdminPage.jsx';
+import AdminPage from "./containers/admin_page/AdminPage.jsx";
+import AddUser from "./components/users/AddUser.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
@@ -20,17 +21,19 @@ function App() {
     dispatch(getProducts());
   }, [getProducts]);
   return (
-
     <Router>
       <div className="App">
-        <Route path="/" component={Navbar}/>
+        <Route path="/" component={Navbar} />
         <Route exact path="/catalogo" component={Catalogue} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/carrito" component={TrolleyTable} />
-        <Route exact path="/product/:id" render={({ match }) => <Product id={match.params.id} />}/>
+        <Route
+          exact
+          path="/product/:id"
+          render={({ match }) => <Product id={match.params.id} />}
+        />
       </div>
     </Router>
-
   );
 }
 
