@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import LocalMallIcon from "@material-ui/icons/LocalMall";
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 import s from "./Navbar.module.css";
+import FilterVintageIcon from '@material-ui/icons/FilterVintage';
 
 export default function Navbar({ onSearch }) {
   if(window.location.pathname === '/admin'){
@@ -37,7 +37,7 @@ export default function Navbar({ onSearch }) {
         </Link>
         <Link to="/catalogo">
           <span>
-            <LocalMallIcon className={s.icon} />
+            <FilterVintageIcon className={s.icon} />
             Productos
           </span>
         </Link>
