@@ -7,15 +7,23 @@ module.exports = (sequelize) => {
     price: {
       type: DataTypes.DECIMAL(10, 2),
       // allowNull: false,
-      isDecimal: {
-        msg: "Solo Numeros",
+      validate: {
+        min: 0,
       },
     },
     quantity: {
       type: DataTypes.INTEGER,
       // allowNull: false,
-      isInt: {
-        msg: "No es un entero",
+      validate: {
+        min: 0,
+        isInt: true,
+      },
+    },
+    description: {
+      type: DataTypes.TEXT,
+      // allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
   });
