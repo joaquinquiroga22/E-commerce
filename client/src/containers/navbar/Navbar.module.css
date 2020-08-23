@@ -58,16 +58,20 @@
   left:-25px;
 }
 .buttons{
+  color: slategray;
   width: 200px;
   height: 100%;
   margin-right: 10px;
   border-radius: 5px;
   border:1px solid black;
   height: 25px;
+  background-color: whitesmoke;
+  border-color: lightslategray; 
 }
 .buttons p{
   margin: 0;
 }
+
 /* Estilos nav de admin */
 .adminNav {
   font-family: "Poppins";
