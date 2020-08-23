@@ -6,8 +6,11 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 import s from "./Navbar.module.css";
 import FilterVintageIcon from '@material-ui/icons/FilterVintage';
+import { Button } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
 
-export default function Navbar({ onSearch }) {
+export default function Navbar({ onSearch, botonNav }) {
+  const [count, setCount] = React.useState(15);
   if(window.location.pathname === '/admin'){
     return (<div className={s.adminNav}>
         <Link to="/">
@@ -22,10 +25,10 @@ export default function Navbar({ onSearch }) {
         <Link to="/" className={s.logo}>
           <h2 >Vivero E-commerce</h2>
         </Link>
-
         <SearchInput onSearch={onSearch} />
+        
         <div className={s.buttons}>
-          <p>iconos</p>
+          <button onClick = {() => {botonNav(true)}}> Crear Cuenta/Usuario </button>
         </div>
       </div>
       <div className={s.nav}>
@@ -43,8 +46,12 @@ export default function Navbar({ onSearch }) {
         </Link>
         <Link to="/carrito">
             <span>
-            <ShoppingCartOutlinedIcon  className={s.icon} />
-             Mi Carrito
+            <Badge color="secondary" badgeContent={count}>
+          <ShoppingCartOutlinedIcon />
+        </Badge>
+            </span>
+            <span>
+              Mi Carrito
             </span>
         </Link>
         <Link to="/admin">

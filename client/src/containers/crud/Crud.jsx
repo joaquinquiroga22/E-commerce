@@ -23,7 +23,7 @@ export default function Crud() {
   const [fillTable, setFillTable] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/products`).then(function (response) {
+    axios.get("http://localhost:3000/products").then(function (response) {
       setProducts(response.data);
     });
   }, []);
@@ -46,7 +46,6 @@ export default function Crud() {
   const updateRenderCategory = function (value) {
     setRenderCat(value);
   };
-
   return (
     <div className={s.component}>
       {renderAdd && <CrudAddProduct type="Add" onClose={updateRenderAdd} />}
@@ -77,3 +76,4 @@ export default function Crud() {
     </div>
   );
 }
+
