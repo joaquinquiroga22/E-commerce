@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 //IMPORTS PROPIOS
 import defaultImg from "../../img/default.jpg";
 import s from "./ProductCard.module.css";
+import axios from "axios";
 
 const shortText = function (text) {
   var newText = text.substring(0, 50);
@@ -22,7 +23,6 @@ const replaceChars = function (text) {
   newText = newText.charAt(0).toUpperCase() + newText.slice(1)
   return newText;
 };
-
 //Boton buy
 // <Link to={`/product/${props.id}`} className={s.buy}>
 //   <ShoppingCartIcon className={s.icon} />
@@ -36,6 +36,11 @@ const replaceChars = function (text) {
 //     </Button>
 //   </div>
 export default function ProductCard(props) {
+  console.log(props.id)
+  const TrolleyItemAdd = function () {
+  const data = {idProduct : props.id, state: "cart" , address: "calle siempre viva 123 " , quantity: 5}
+  axios.post("http://localhost:3000/users/1/cart", data ).then((res) => {console.log(res.data)})
+  }
   return (
     <div className={s.card}>
       <div className={s.image}>
@@ -52,7 +57,7 @@ export default function ProductCard(props) {
       </div>
       <div className={s.actions}>
         <button>Ver Producto</button>
-        <button>Añadir al carrito</button>
+        <button onClick = {TrolleyItemAdd}>Añadir al carrito</button>
       </div>
     </div>
   );
