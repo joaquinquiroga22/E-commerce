@@ -7,7 +7,14 @@ const { Category_Products } = require("../db.js");
 
 server.get("/", (req, res, next) => {
   Product.findAll({ include: Category }) // Traemos todos los productos con sus categorias asociadas
-    .then((products) => res.send(products))
+    .then((products) => {
+      if (products.length === 0) {
+        return res
+          .status(404)
+          .send({ message: `Todavia no se ha creado ningun Producto` });
+      }
+      res.send(products);
+    })
     .catch((error) => next(error));
 });
 
@@ -22,13 +29,13 @@ server.post("/", (req, res, next) => {
   let numeroStock = isNaN(parseInt(stock));
   name = name.trim();
   description = description.trim();
-  if (parseInt(stock) < 0 || numeroStock) {
+  if (parseInt(stock) <= 0 || numeroStock) {
     return res
       .status(400)
       .json({ message: "El stock debe ser un Entero positivo" });
   }
 
-  if (parseInt(price) < 0 || numeroPrice) {
+  if (parseInt(price) <= 0 || numeroPrice) {
     return res.status(400).send("El precio debe ser un numero positivo");
   }
   //Validamos que name y description no esten vacios (despues de trim)
@@ -41,16 +48,23 @@ server.post("/", (req, res, next) => {
   }
 
   if (name && description && price && stock) {
-    // console.log(image);
-    Product.create({ name, description, price, image, stock })
+    Category.findAll({ where: { id: idCategoria } })
+      .then((categories) => {
+        if (categories.length !== idCategoria.length) {
+          return res
+            .status(400)
+            .send({ message: `Debe pasar un idCategoria valido` });
+        } else {
+          return Product.create({ name, description, price, image, stock });
+        }
+      })
       .then((product) => {
         product.setCategories(idCategoria);
         res.status(201).send(product.dataValues);
       })
-
       .catch((error) => next(error));
   } else {
-    res.sendStatus(400).json({ message: "Missing information" });
+    res.sendStatus(404).json({ message: "Missing information" });
   }
 });
 
@@ -64,7 +78,9 @@ server.delete("/:id", (req, res, next) => {
   })
     .then(function (deleted) {
       if (deleted > 0) {
-        res.status(200).json({ message: "Borrado Satisfactoriamente" });
+        res.status(200).json({
+          message: `Producto con id: ${req.params.id} Borrado Satisfactoriamente`,
+        });
       } else {
         res.status(400).json({ message: "No se elimino el producto" });
       }
@@ -72,7 +88,7 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-//Hacemos un put / product/:id pasandole un id a producto de modificar
+//Hacemos un put / product/:id pasandole un id de producto a modificar
 
 server.put("/:id", (req, res, next) => {
   let { name, description, price, image, stock, idCategoria } = req.body;
@@ -139,7 +155,6 @@ server.put("/:id", (req, res, next) => {
 server.get("/:id", (req, res, next) => {
   Product.findAll({
     where: { id: req.params.id },
-    returning: true,
     include: Category,
   })
     .then((products) => {
@@ -151,6 +166,8 @@ server.get("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+// Tasks 17
+// Agrega la categoria a un producto
 server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
   const { idProducto, idCategoria } = req.params;
   Category_Products.findOrCreate({
@@ -167,6 +184,7 @@ server.post("/:idProducto/category/:idCategoria", (req, res, next) => {
     });
 });
 
+// Elimina la categoria de un producto
 server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
   const { idProducto, idCategoria } = req.params;
   Category_Products.destroy({

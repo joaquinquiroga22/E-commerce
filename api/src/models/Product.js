@@ -8,25 +8,21 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: {
-          msg: "Ingresar nombre producto",
-        },
+        notEmpty: true,
       },
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        notNull: {
-          msg: "Ingresar descripcion",
-        },
+        notEmpty: true,
       },
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
-      isFloat: {
-        msg: "Solo Numeros",
+      validate: {
+        min: 0,
       },
     },
     image: {
@@ -36,8 +32,9 @@ module.exports = (sequelize) => {
     stock: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      isInt: {
-        msg: "No es un entero",
+      validate: {
+        min: 0,
+        isInt: true,
       },
     },
   });

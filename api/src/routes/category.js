@@ -18,7 +18,7 @@ server.post("/", (req, res, next) => {
   }
 
   if (name === "" || description === "") {
-    return res.status(400).send("Nombre y descripcion no pueden estar vacios");
+    return res.status(400).send("name y description no pueden estar vacios");
   }
 
   Category.create({ name, description })
@@ -40,9 +40,9 @@ server.delete("/:id", (req, res, next) => {
     // Devuelve cantidad de rows eliminadas
     .then(function (deleted) {
       if (deleted > 0) {
-        res
-          .status(200)
-          .json({ message: "Categoria borrada Satisfactoriamente" });
+        res.status(200).json({
+          message: `Categoria con id: ${req.params.id} borrada satisfactoriamente`,
+        });
       } else {
         res.status(400).json({ message: "No se elimino categoria" });
       }
@@ -80,7 +80,7 @@ server.put("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-//Hacemos un get a /category/products y nos traemos el arreglo de categorias
+//Hacemos un get a /products/category/ y nos traemos el arreglo de categorias
 //Ademas le pasamos un query con el id de la categoria que estamos buscando.
 server.get("/", (req, res, next) => {
   const key = Object.keys(req.query);
@@ -91,8 +91,8 @@ server.get("/", (req, res, next) => {
       where: { id: idCategoria },
       include: Product,
     })
-      .then((productos) => {
-        return res.send(productos);
+      .then((categories) => {
+        return res.send(categories);
       })
       .catch((error) => {
         next(error);
@@ -102,6 +102,11 @@ server.get("/", (req, res, next) => {
   else {
     Category.findAll()
       .then((category) => {
+        if (category.length === 0) {
+          return res
+            .status(404)
+            .send({ message: "No se ha creado ninguna categoria" });
+        }
         res.send(category);
       })
       .catch((error) => next(error));
@@ -115,9 +120,20 @@ server.get("/:nameCategory", (req, res, next) => {
     where: {
       name: req.params.nameCategory,
     },
+    include: Product,
   })
     .then((category) => {
-      res.send(category);
+      if (!category) {
+        return res.send({
+          message: `No existe la categoria: ${req.params.nameCategory}`,
+        });
+      }
+      if (category.products.length === 0) {
+        return res.send({
+          message: `La categoria: ${req.params.nameCategory} no tiene productos asociados`,
+        });
+      }
+      res.send(category.products);
     })
     .catch((error) => next(error));
 });
