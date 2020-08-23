@@ -26,9 +26,8 @@ export default function Navbar({ onSearch, botonNav }) {
           <h2 >Vivero E-commerce</h2>
         </Link>
         <SearchInput onSearch={onSearch} />
-        
-        <div className={s.buttons}>
-          <button onClick = {() => {botonNav(true)}}> Crear Cuenta/Usuario </button>
+        <div>
+        <button className={s.buttons} onClick = {() => {botonNav(true)}}> Crear Cuenta/Usuario </button>
         </div>
       </div>
       <div className={s.nav}>
