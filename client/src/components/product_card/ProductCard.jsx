@@ -36,9 +36,8 @@ const replaceChars = function (text) {
 //     </Button>
 //   </div>
 export default function ProductCard(props) {
-  console.log(props.id)
   const TrolleyItemAdd = function () {
-  const data = {idProduct : props.id, state: "cart" , address: "calle siempre viva 123 " , quantity: 5}
+  const data = {idProduct : props.id, state: "cart" , description: "dasda", address: "calle siempre viva 123 " , quantity: 5}
   axios.post("http://localhost:3000/users/1/cart", data ).then((res) => {console.log(res.data)})
   }
   return (

@@ -9,29 +9,16 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    "& > *": {
-      marginBottom: theme.spacing(2)
-    },
-    "& .MuiBadge-root": {
-      marginRight: theme.spacing(2)
-    }
-  }
-}));
+
 export default function TrolleyTable(){
-  const classes = useStyles();
-  const [count, setCount] = useState(1);
+ 
   const [products, setProducts] = useState([]);
   useEffect(() => {
-   axios.get("http://localhost:3000/users/1/cart").then((res) => {setProducts(res.data)})
+   axios.get("http://localhost:3000/users/1/cart").then((res) => {console.log(res.data)})
    
   },[])
     return ( <div className = {s.table}>
-      <div className={classes.root}>
-      </div>
+     
       <table className = {s.title}>
         <caption>Carrito</caption>
          <thead>
@@ -41,43 +28,22 @@ export default function TrolleyTable(){
                     <th>Precio Unitario</th>
                     <th>Precio Total</th>
                 </tr>
-        </thead>
-            <tr>
-              <td>
-        <ButtonGroup>
-          <Button
-            aria-label="reduce"
-            onClick={() => {
-              setCount(Math.max(count - 1, 0));
-            }}
-          >
-            <RemoveIcon fontSize="small" />
-          </Button>
-          <Button
-            aria-label="increase"
-            onClick={() => {
-              setCount(count + 1);
-            }}
-          >
-            <AddIcon fontSize="small" />
-          </Button>
-        </ButtonGroup>
-              </td>
-              <td>Orquideas</td>
-              <td>10</td>
-              <td>10</td>
-            </tr>  
+        </thead>  
+        <tr>
+          <td>hola</td>
+          <td>holsdsdasdaa</td>
+          <td>4342</td>
+        </tr>
             {products && products.map(producto => {
               return(
+                
               <tr>
-              <td>{producto.quantity}</td>
-              <td></td>
-              <td>{producto.price}</td>
-              <td>{producto.productId}</td>
+                <td>{producto.idProduct}</td>
+              <td>{producto.description}</td>
               </tr>
-              )
+            );
             })} 
-         </table>
-  </div>
+            </table>
+            </div>
   )
 }
