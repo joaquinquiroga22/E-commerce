@@ -48,6 +48,6 @@ export default (state = initialState, action) => {
         products: state.products.filter((product) => product.id !== action.id),
       };
     default:
-      return initialState;
+      return state;
   }
 };
