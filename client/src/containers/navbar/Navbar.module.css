@@ -67,7 +67,10 @@
   border:1px solid black;
   height: 25px;
   background-color: whitesmoke;
-  border-color: lightslategray; 
+  border-color: lightslategray;
+}
+.buttons:hover{
+  cursor: pointer;
 }
 .buttons p{
   margin: 0;

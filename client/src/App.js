@@ -24,7 +24,9 @@ function App() {
   const [renderAddUser, setRenderAddUser] = useState(false);
   useEffect(() => {
     dispatch(getProducts());
-  }, [getProducts]);
+  }, []);
+
+
   return (
     <Router>
       <div className="App">

@@ -1,33 +1,18 @@
-import React from "react";
+import React,{ useState, useEffect } from "react";
 import s from "./Product.module.css";
-import defaultImg from "../../img/default.jpg";
-import PaymentIcon from "@material-ui/icons/Payment";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import axios from "axios";
-import { useState, useEffect } from "react";
 
 //Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
 //importamos la funcion a dispatchear
 import { getProduct } from "../../actions/products.js";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 
 export default function Product({ id }) {
-  const [value, setValue] = React.useState(2);
-  const [info, setInfo] = useState({});
-  const classes = useStyles();
+  const [value, setValue] = useState(2);
 
   //definimos las constantes para usar las funciones y almacenar el estado
   const dispatch = useDispatch();
@@ -43,8 +28,8 @@ export default function Product({ id }) {
   console.log(product);
   return (
     <div className={s.container}>
-      <div className={s.img}>
-        <img className={s.imagen} src={product.image} />
+      <div className={s.img} >
+        <img className={s.imagen} alt={product.name} src={product.image} />
       </div>
 
       <div className={s.body}>
