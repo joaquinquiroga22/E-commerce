@@ -10,6 +10,7 @@ export const EDIT_PRODUCT = "EDIT_PRODUCT";
 //Trae todos los products productos del back y se lo manda al reducer
 export const getProducts = () => {
   return (dispatch) => {
+    console.log("hola");
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,
@@ -34,9 +35,9 @@ export const getProduct = (id) => {
 };
 
 //Agrega un producto al back y manda al reducer el mismo producto
-export const addProduct = (prod) => {
+export const addProduct = (data) => {
   return (dispatch) => {
-    axios.post("http://localhost:3000/products", prod).then((product) => {
+    axios.post("http://localhost:3000/products", data).then((product) => {
       dispatch({
         type: ADD_PRODUCT,
         product: product.data,
@@ -56,9 +57,9 @@ export const deleteProduct = (id) => {
   };
 };
 
-export const editProduct = (id, prod) => {
+export const editProduct = (id, data) => {
   return (dispatch) => {
-    axios.put(`http://localhost:3000/products/${id}`, prod).then((product) => {
+    axios.put(`http://localhost:3000/products/${id}`, data).then((product) => {
       dispatch({
         type: EDIT_PRODUCT,
         product: product.data,
