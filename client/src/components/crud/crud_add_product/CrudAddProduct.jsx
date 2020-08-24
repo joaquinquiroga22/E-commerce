@@ -28,12 +28,9 @@ export default function CrudAddProduct(props) {
   const { categories } = useSelector((state) => state.categories);
   //Obteniendo todas las categorias cargadas en la DB
   useEffect(() => {
-    // axios.get("http://localhost:3000/products/category").then((res) => {
-    //   //Guardando las categorias en el estado loadedCategories
-    //   setLoadedCategories(res.data);
-    // });
     dispatch(getCategories());
     if(props.type === "Edit"){
+      console.log("Edit")
       axios
         .get(`http://localhost:3000/products/${props.id}`)
         .then(function (response) {
