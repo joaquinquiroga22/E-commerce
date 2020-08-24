@@ -10,10 +10,11 @@ server.post("/", (req, res, next) => {
         res.send(users.dataValues);
       })
       .catch((error) => {
-        next(error);
+        res.send(error);
       });
+
   } else {
-    res.status(400).json({ message: "Debe pasar los parametros requeridos." });
+    return res.status(400).json({ message: "Debe pasar los parametros requeridos." });
   }
 });
 
