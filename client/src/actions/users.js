@@ -40,10 +40,12 @@ export const deleteUser = (id) => {
 };
 
 export const editUser = (id, data) => {
-  axios.put(`http://localhost:3000/users/${id}`, data).then((user) => {
-    dispatch({
-      type: EDIT_USER,
-      user: user.data,
+  return (dispatch) => {
+    axios.put(`http://localhost:3000/users/${id}`, data).then((user) => {
+      dispatch({
+        type: EDIT_USER,
+        user: user.data,
+      });
     });
-  });
+  };
 };

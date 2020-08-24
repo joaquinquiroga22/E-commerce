@@ -30,13 +30,12 @@ export const getCategoryProduct = (id) => {
 
 export const addCategory = (data) => {
   return (dispatch) => {
-    axions
+    axios
       .post(`http://localhost:3000/products/category`, data)
       .then((category) => {
         dispatch({
           type: ADD_CATEGORY,
           category: category.data,
-
         });
       });
   };
