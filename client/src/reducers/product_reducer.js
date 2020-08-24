@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         products: state.products.map((product) => {
-          return product.id === action.id ? action.product : product;
+          return product.id === action.product.id ? action.product : product;
         }),
       };
 
