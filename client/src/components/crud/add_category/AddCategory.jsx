@@ -1,6 +1,7 @@
 import React from "react";
 import s from "./AddCategory.module.css";
 import { useState } from "react";
+import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../../success_btn/SuccessBtn.jsx";

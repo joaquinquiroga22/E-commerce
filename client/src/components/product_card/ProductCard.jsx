@@ -45,6 +45,7 @@ export default function ProductCard(props) {
       </div>
       <div className={s.content}>
         <div className={s.title}>
+             <p>{replaceChars(props.name)}</p>
         </div>
         <p className={s.price}>{"$ "+props.price}</p>
         <p className={s.description}>{shortText(props.description)}</p>
