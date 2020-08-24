@@ -8,15 +8,43 @@ import SuccessBtn from "../success_btn/SuccessBtn.jsx";
 
 export default function AddUser(props) {
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState({
+    show: false,
+    type: "",
+    msg:""
+  });
 
   const [input, setInput] = useState({
     name: "",
     lastname: "",
     email: "",
     password: "",
+    confirmpassword: ""
   });
 
+  const checkMatch = function(e){
+    let password = document.getElementById("password");
+    let confirmpassword = document.getElementById("confirmpassword");
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+    if(e.target.value !== password.value || e.target.value !== confirmpassword.value){
+      return setInfo({
+        show: true,
+        type: "error",
+        msg:"Las contraseñas no coinciden"
+      })
+    }
+    setInfo({
+      show: false,
+      type: "",
+      msg:""
+    })
+  }
+
   const handleInputChange = function (e) {
+    var error = "";
     setInput({
       ...input,
       [e.target.name]: e.target.value,
@@ -32,19 +60,24 @@ export default function AddUser(props) {
       password: input.password,
       role: "admin",
     };
-    console.log("esto en onsubmit");
-    console.log(data);
     axios
       .post("http://localhost:3000/users", data)
       .then((res) => {
-        console.log(res);
-        setSuccess(true);
-        setTimeout(function () {
-          setSuccess(false);
-        }, 2500);
+        if(res.status === 201){
+          setInfo({show:true,type:"success",msg:"Cuenta creada con exito"})
+          setTimeout(function () {
+            setInfo({show:false,type:"",msg:""})
+          }, 1000);
+        }
+        else{
+          var error = res.data.original.detail;
+          error = error.replace("(email)=","");
+          error = error.replace("la llave","el email");
+          setInfo({show:true,type:"error",msg:error})
+        }
       })
       .catch((err) => {
-        console.log(err);
+        alert("Error del server");
       });
   };
 
@@ -96,17 +129,28 @@ export default function AddUser(props) {
             <input
               value={input.password}
               className={s.input}
-              onChange={handleInputChange}
+              onChange={checkMatch}
               type="password"
               name="password"
+              id="password"
               required
             ></input>
           </fieldset>
-          {success && (
-            <Alert severity="success">
-              {props.type === "Edit"
-                ? "Cuenta Actualizada correctamente"
-                : "Cuenta creada correctamente"}
+          <fieldset>
+            <legend>Confirmar password</legend>
+            <input
+              value={input.confirmpassword}
+              className={s.input}
+              onChange={checkMatch}
+              type="password"
+              name="confirmpassword"
+              id="confirmpassword"
+              required
+            ></input>
+          </fieldset>
+          {info.show && (
+            <Alert severity={info.type}>
+              {info.msg}
             </Alert>
           )}
           <SuccessBtn

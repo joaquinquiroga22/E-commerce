@@ -5,9 +5,12 @@ module.exports = (sequelize) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+                args: true,
+                message: 'Username must be unique.',
+            },
       validate: {
-        isEmail: true, 
+        isEmail: true,
       },
     },
     name: {
