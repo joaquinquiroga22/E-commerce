@@ -26,10 +26,11 @@ export default (state = initialState, action) => {
       };
 
     case EDIT_USER:
-        return {
-            ...state,
-            allUsers: state.allUsers.map((user) => {
-                return user.id === action.user.id ? action.user : user;
-        }  
+      return {
+        ...state,
+        allUsers: state.allUsers.map((user) => {
+          return user.id === action.user.id ? action.user : user;
+        }),
+      };
   }
 };
