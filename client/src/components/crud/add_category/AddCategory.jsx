@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { addCategory } from "../../../actions/categories";
 
 export default function AddC(props) {
+  const [success, setSuccess] = useState(false);
+
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     name: "",
@@ -34,6 +36,7 @@ export default function AddC(props) {
     //   console.log(res.data)
     // })
     dispatch(addCategory(data));
+    setSuccess(true);
   };
 
   return (
@@ -63,6 +66,13 @@ export default function AddC(props) {
             placeholder="Describe la nueva categoria"
           ></textarea>
         </fieldset>
+        {success && (
+          <Alert severity="success">
+            {props.type === "Edit"
+              ? "Categoria actualizada correctamente"
+              : "Categoria agregada correctamente"}
+          </Alert>
+        )}
         <SuccessBtn text="Crear Categoria" />
         <CancelBtn text="Cancelar" close={props.onClose} />
       </div>
