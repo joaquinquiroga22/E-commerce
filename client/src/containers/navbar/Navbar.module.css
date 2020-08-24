@@ -63,6 +63,7 @@
   height: 100%;
   margin-right: 10px;
   border-radius: 5px;
+  cursor:pointer;
   border:1px solid black;
   height: 25px;
   background-color: whitesmoke;

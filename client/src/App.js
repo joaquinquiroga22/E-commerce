@@ -10,10 +10,13 @@ import AddUser from "./components/users/AddUser.jsx";
 import Footer from './components/footer/Footer.jsx';
 
 
+
 import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
 import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
+import ProductCard from "./components/product_card/ProductCard";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -33,8 +36,8 @@ function App() {
         <Route exact path="/carrito" component={TrolleyTable} />
         <Route
           exact
-          path="/product/:id"
-          render={({ match }) => <Product id={match.params.id} />}
+          path="/product/:id" 
+          render={({ match }) => <Product id={match.params.id}/>}
         />
         {renderAddUser &&  <AddUser onClose = {setRenderAddUser} />}
         <Route path="/" component={Footer}/>

@@ -45,16 +45,15 @@ export default function ProductCard(props) {
       </div>
       <div className={s.content}>
         <div className={s.title}>
-          <Link className={s.title} to={`/product/${props.id}`}>
-            {replaceChars(props.name)}
-          </Link>
         </div>
         <p className={s.price}>{"$ "+props.price}</p>
         <p className={s.description}>{shortText(props.description)}</p>
       </div>
       <div className={s.actions}>
-        <button>Ver Producto</button>
-        <button onClick = {TrolleyItemAdd}>Añadir al carrito</button>
+        <Link className={s.title} to={`/product/${props.id}`}>
+           <button>Ver Producto</button>
+        </Link>
+        <button  onClick = {TrolleyItemAdd}>Añadir al carrito</button>
       </div>
     </div>
   );
