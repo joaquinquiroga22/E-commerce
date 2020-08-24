@@ -4,13 +4,12 @@ export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_CATEGORY_PRODUCT = "GET_CATEGORY_PRODUCT";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 
-//Action Creators (thunk middleware nos permite ejecutar funciones como acciones en vez de objetos)
 export const getCategories = () => {
   return (dispatch) => {
-    axios.get(`http://localhost:3000/products/category`).then((categories) => {
+    axios.get(`http://localhost:3000/products/category`).then((res) => {
       dispatch({
         type: GET_CATEGORY,
-        categories,
+        categories: res.data,
       });
     });
   };
@@ -20,10 +19,10 @@ export const getCategoryProduct = (id) => {
   return (dispatch) => {
     axios
       .get(`http://localhost:3000/products/category/?id=${id}`)
-      .then((categoriesProducts) => {
+      .then((res) => {
         dispatch({
           type: GET_CATEGORY_PRODUCT,
-          categoriesProducts,
+          categoriesProducts: res.data,
         });
       });
   };
@@ -37,6 +36,7 @@ export const addCategory = (data) => {
         dispatch({
           type: ADD_CATEGORY,
           category: category.data,
+
         });
       });
   };

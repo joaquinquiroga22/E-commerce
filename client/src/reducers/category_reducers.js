@@ -2,6 +2,7 @@ import {
   GET_CATEGORY,
   GET_CATEGORY_PRODUCT,
   ADD_CATEGORY,
+
 } from "../actions/categories";
 
 const initialState = {
@@ -29,6 +30,7 @@ export default (state = initialState, action) => {
     case ADD_CATEGORY: {
       return {
         ...state,
+
         category: action.category,
       };
     }

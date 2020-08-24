@@ -1,25 +1,23 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import { useHistory } from "react-router-dom";
 //Estilos personalizados
 import s from "./SearchInput.module.css";
 import SearchIcon from "@material-ui/icons/Search";
 //debe recibir una funcion por props
-export default function SearchInput({ onSearch }) {
+export default function SearchInput() {
+  let history = useHistory();
   const [search, setSearch] = useState("");
   //Agregar onSubmit a la funcion pasada por props
   ///search?valor=texto
   const handleInputChange = function (e) {
-    setSearch(e.target.value);
+    let input = e.target.value.split(" ").join("_");
+    setSearch(input);
   };
 
   const onSubmitHandle = function (e) {
     e.preventDefault();
-    Axios.get(`http://localhost:3000/search?valor=${search}`).then(function (
-      res
-    ) {
-      onSearch(res.data);
-      console.log(res.data);
-    });
+    history.push(`/catalogo?buscar=${search}`)
+    //window.location.replace(`/catalogo?buscar=${search}`);
   };
 
   //<input type="submit" value="Buscar" />
