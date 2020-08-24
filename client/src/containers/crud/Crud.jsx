@@ -20,27 +20,34 @@ export default function Crud() {
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [renderCat, setRenderCat] = useState(false);
-  const [fillTable, setFillTable] = useState(true);
+  const [updateTable,setUpdateTable] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/products").then(function (response) {
-      setProducts(response.data);
+    getProducts();
+  },[products]);
+
+  const getProducts = function(){
+    axios.get("http://localhost:3000/products").then(function (res) {
+      if(res.data.length !== products.length){
+        return setProducts(res.data);
+      }
     });
-  }, []);
+  }
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    setFillTable(!fillTable);
+    getProducts();
   };
 
   const updateRenderEdit = function (value, id) {
     setRenderEdit(value);
-    setUpdateId(id);
+    getProducts();
   };
 
   const updateRenderDelete = function (value, id) {
     setRenderDelete(value);
     setDeleteId(id);
+    getProducts();
   };
 
   const updateRenderCategory = function (value) {
@@ -63,7 +70,7 @@ export default function Crud() {
         onAddProduct={updateRenderAdd}
       />
       <CrudTitle />
-      {products.map(function (product) {
+      {products.length > 0 && products.map(function (product) {
         return (
           <CrudListItem
             onEditProduct={updateRenderEdit}
@@ -76,4 +83,3 @@ export default function Crud() {
     </div>
   );
 }
-

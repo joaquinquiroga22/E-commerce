@@ -2,9 +2,6 @@ import {
   GET_CATEGORY,
   GET_CATEGORY_PRODUCT,
   ADD_CATEGORY,
-  DELETE_CATEGORY,
-  EDIT_CATEGORY,
-  GET_CATEGORY_BY_NAME,
 } from "../actions/categories";
 
 const initialState = {
@@ -32,36 +29,12 @@ export default (state = initialState, action) => {
     case ADD_CATEGORY: {
       return {
         ...state,
-        categories: [...state.categories, action.category],
-      };
-    }
 
-    case DELETE_CATEGORY: {
-      return {
-        ...state,
-        categories: state.categories.filter(
-          (category) => category.id !== action.id
-        ),
-      };
-    }
-
-    case EDIT_CATEGORY: {
-      return {
-        ...state,
-        categories: state.categories.map((category) => {
-          return category.id === action.id ? action.data : category;
-        }),
-      };
-    }
-
-    case GET_CATEGORY_BY_NAME: {
-      return {
-        ...state,
         category: action.category,
       };
     }
 
     default:
-      return initialState;
+      return state;
   }
 };

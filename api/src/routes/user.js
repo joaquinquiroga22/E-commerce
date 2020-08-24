@@ -49,11 +49,11 @@ server.delete("/:id", (req, res, next) => {
   User.destroy({ where: { id: idUser } })
     .then((users) => {
       if (users > 0) {
-        res
+        return res
           .status(200)
           .json({ message: "El Usuario se ha borrado satisfactoriamente." });
       } else {
-        res.sendStatus(400, {
+        return res.sendStatus(400, {
           message: `No hay ningun usuario con el id: ${idUser}`,
         });
       }
@@ -94,7 +94,7 @@ server.post("/:idUser/cart", (req, res, next) => {
           .json({ message: "La cantidad debe ser mayor a 0" });
       }
       if (values[1][0] === null) {
-        res.status(400).json({ message: "No existe un usuario con ese id" });
+        return res.status(400).json({ message: "No existe un usuario con ese id" });
       }
       let cart = values[1][0];
       let product = values[0];
@@ -120,17 +120,19 @@ server.get("/:idUser/cart", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        res
+        return res
           .status(400)
           .json({
             message: `No hay ningun usuario con el id: ${req.params.idUser}`,
           });
       }
-      orderId = orders[0].dataValues.id;
-      return Productsorder.findAll({
-        where: { orderId: orderId },
-      });
-    })
+      else{
+        orderId = orders[0].dataValues.id;
+        return Productsorder.findAll({
+          where: { orderId: orderId },
+        });
+        }
+      })
     .then((products) => {
       res.send(products);
     })
