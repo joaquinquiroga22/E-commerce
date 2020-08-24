@@ -11,24 +11,40 @@ export default function Catalogue() {
   const [showedProducts, setShowedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const params = new URLSearchParams(window.location.search);
-  const query = params.get('buscar');
+  var query = params.get('buscar');
+
+
 
   useEffect(() => {
     axios.get("http://localhost:3000/products").then((res) => {
       setProducts(res.data);
-      setShowedProducts(res.data);
     });
+
     axios.get("http://localhost:3000/products/category").then((res) => {
       setCategories(res.data);
     });
 
     //obteniendo los querys
+
     if(query !== null){
       axios.get(`http://localhost:3000/search?valor=${query}`).then(function (res) {
           setShowedProducts(res.data);
+          query = "";
+      });
+    }
+    if(query === null){
+      axios.get("http://localhost:3000/products").then((res) => {
+        setProducts(res.data);
+        setShowedProducts(res.data);
       });
     }
   }, [query]);
+
+  const replaceChars = function (text) {
+    var newText = text.split("_").join(" ");
+    newText = newText.charAt(0).toUpperCase() + newText.slice(1)
+    return newText;
+  };
 
   const getFilter = function (e) {
     let filterId = e.target.id;
@@ -59,7 +75,7 @@ export default function Catalogue() {
           </label>
         </div>
         {categories.map(function (category) {
-           return <FilterItem key={category.id} name={category.name} id={category.id} />;
+           return <FilterItem key={category.id} name={replaceChars(category.name)} id={category.id} />;
         })}
       </div>
       <div className={s.products}>
@@ -83,7 +99,7 @@ export default function Catalogue() {
                }
             })
           ) : (
-            <h1>No hay productos para mostrar</h1>
+            <h2>No hay productos para mostrar</h2>
           )}
         </div>
       </div>
