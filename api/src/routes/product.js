@@ -10,12 +10,13 @@ server.get("/", (req, res, next) => {
     .then((products) => {
       if (products.length === 0) {
         return res
-          .status(404)
-          .send({ message: `Todavia no se ha creado ningun Producto` });
+          .status(200).send([]);
+          //.send({ message: `Todavia no se ha creado ningun Producto` });
       }
       res.send(products);
     })
-    .catch((error) => next(error));
+    .catch((error) => {
+      next(error)});
 });
 
 //Hcemos un post a / products

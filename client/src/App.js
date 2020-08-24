@@ -7,40 +7,40 @@ import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/users/AddUser.jsx";
-import Footer from './components/footer/Footer.jsx';
-
-
+import Footer from "./components/footer/Footer.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
 import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import ProductCard from "./components/product_card/ProductCard";
-
+import { getCategories } from "./actions/categories";
 
 function App() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.products);
+  const products = useSelector((state) => state.products.products);
+  const categories = useSelector((state) => state.categories.categories);
   const [renderAddUser, setRenderAddUser] = useState(false);
+
   useEffect(() => {
     dispatch(getProducts());
-  }, []);
-
+    dispatch(getCategories());
+  }, [getCategories, getProducts]);
 
   return (
     <Router>
       <div className="App">
-        <Route path="/" render={() => <Navbar botonNav = {setRenderAddUser} />} />
+        <Route path="/" render={() => <Navbar botonNav={setRenderAddUser} />} />
         <Route exact path="/catalogo" component={Catalogue} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/carrito" component={TrolleyTable} />
         <Route
           exact
-          path="/product/:id" 
-          render={({ match }) => <Product id={match.params.id}/>}
+          path="/product/:id"
+          render={({ match }) => <Product id={match.params.id} />}
         />
-        {renderAddUser &&  <AddUser onClose = {setRenderAddUser} />}
-        <Route path="/" component={Footer}/>
+        {renderAddUser && <AddUser onClose={setRenderAddUser} />}
+        <Route path="/" component={Footer} />
       </div>
     </Router>
   );

@@ -32,3 +32,9 @@
 .orders tr:nth-child(odd) {
     background-color: #f3f3f3;
   }
+.cart{
+  background-color: yellow;
+}
+.normal{
+  background:transparent;
+}
