@@ -2,7 +2,6 @@ import {
   GET_CATEGORY,
   GET_CATEGORY_PRODUCT,
   ADD_CATEGORY,
-
 } from "../actions/categories";
 
 const initialState = {
@@ -36,6 +35,6 @@ export default (state = initialState, action) => {
     }
 
     default:
-      return initialState;
+      return state;
   }
 };

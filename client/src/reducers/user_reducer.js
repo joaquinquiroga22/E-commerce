@@ -32,5 +32,7 @@ export default (state = initialState, action) => {
           return user.id === action.user.id ? action.user : user;
         }),
       };
+    default:
+      return state;
   }
 };
