@@ -1,5 +1,5 @@
 const server = require("express").Router();
-const { Product } = require("../db.js");
+const { Product, Reviews, User } = require("../db.js");
 const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
@@ -9,14 +9,14 @@ server.get("/", (req, res, next) => {
   Product.findAll({ include: Category }) // Traemos todos los productos con sus categorias asociadas
     .then((products) => {
       if (products.length === 0) {
-        return res
-          .status(200).send([]);
-          //.send({ message: `Todavia no se ha creado ningun Producto` });
+        return res.status(200).send([]);
+        //.send({ message: `Todavia no se ha creado ningun Producto` });
       }
       res.send(products);
     })
     .catch((error) => {
-      next(error)});
+      next(error);
+    });
 });
 
 //Hcemos un post a / products
@@ -198,6 +198,27 @@ server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+});
+
+server.post("/:id/review", (req, res, next) => {
+  const idProducto = req.params.id;
+  const { title, stars, description, idUser } = req.body;
+  const promiseProduct = Product.findByPk(idProducto);
+  const promiseReviews = Reviews.create({ title, stars, description });
+  const promiseUser = User.findByPk(idUser);
+  Promise.all([promiseProduct, promiseReviews, promiseUser])
+    .then((values) => {
+      const product = values[0];
+      const review = values[1].dataValues.id;
+      const users = values[2];
+      product.addReviews(review);
+      return users.addReviews(review);
+    })
+    .then((values) => {
+      console.log(values);
+      res.send(values);
+    })
+    .catch((error) => next(error));
 });
 
 module.exports = server;

@@ -30,3 +30,11 @@
 .title tr:nth-child(even){
 	background-color: aliceblue;
 }
+.total{
+    font-weight: bold;
+    margin-right: 10px;
+}
+.totalspan{
+    font-size: 18px;
+    text-align: right;
+}

@@ -4,10 +4,10 @@ import axios from 'axios';
 
 
 export default function TrolleyTable(){
-
+var total = 0;
   const [products, setProducts] = useState([]);
   useEffect(() => {
-   axios.get("http://localhost:3000/users/1/cart").then((res) => {setProducts(res.data)})
+   axios.get("http://localhost:3000/users/6/cart").then((res) => {setProducts(res.data)})
    
   },[])
     return ( <div className = {s.table}>
@@ -19,25 +19,28 @@ export default function TrolleyTable(){
                     <th>Cantidad</th>
                     <th>Descripcion</th>
                     <th>Precio Unitario</th>
-                    <th>Precio Total</th>
+                    <th>SubTotal</th>
                 </tr>
         </thead>  
-        <tr>
-          <td>hola</td>
-          <td>holsdsdasdaa</td>
-          <td>4342</td>
-        </tr>
             {products && products.map(producto => {
-            
+               total += (producto.price * producto.quantity)
               return(
-              <tr>
+                <tr>
               <td>{producto.quantity}</td>
               <td>{producto.description}</td>
               <td>{producto.price}</td>
-              
+              <td>{producto.price * producto.quantity}</td>
               </tr>
             );
-            })} 
+          })} 
+            <tr>
+              <td></td>
+              <td></td>
+              <td className = {s.totalspan} colspan = "2">
+                <span className = {s.total}>Total:</span>
+                {total}
+              </td>
+            </tr>
             </table>
             </div>
   )
