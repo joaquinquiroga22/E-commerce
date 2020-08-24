@@ -4,7 +4,7 @@ import { useState } from "react";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
-
+import Alert from "@material-ui/lab/Alert"
 import { useDispatch } from "react-redux";
 import { addCategory } from "../../../actions/categories";
 
