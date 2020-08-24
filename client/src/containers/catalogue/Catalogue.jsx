@@ -10,6 +10,8 @@ export default function Catalogue() {
   const [products, setProducts] = useState([]);
   const [showedProducts, setShowedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get('buscar');
 
   useEffect(() => {
     axios.get("http://localhost:3000/products").then((res) => {
@@ -19,7 +21,14 @@ export default function Catalogue() {
     axios.get("http://localhost:3000/products/category").then((res) => {
       setCategories(res.data);
     });
-  }, []);
+
+    //obteniendo los querys
+    if(query !== null){
+      axios.get(`http://localhost:3000/search?valor=${query}`).then(function (res) {
+          setShowedProducts(res.data);
+      });
+    }
+  }, [query]);
 
   const getFilter = function (e) {
     let filterId = e.target.id;
@@ -50,7 +59,7 @@ export default function Catalogue() {
           </label>
         </div>
         {categories.map(function (category) {
-           return <FilterItem name={category.name} id={category.id} />;
+           return <FilterItem key={category.id} name={category.name} id={category.id} />;
         })}
       </div>
       <div className={s.products}>

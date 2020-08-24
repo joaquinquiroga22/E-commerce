@@ -1,10 +1,5 @@
 import React from "react";
-import axios from "axios";
 import s from "./AddCategory.module.css";
-import Alert from "@material-ui/lab/Alert";
-import testImagen from "../../../img/default.jpg";
-import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import { useState } from "react";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CancelBtn from "../../cancel_btn/CancelBtn.jsx";

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import defaultImage from "../../../img/default.jpg";
 import s from "./CrudDeleteProduct.module.css";
 import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
@@ -16,10 +15,8 @@ export default function CrudDeleteProduct({ onClose, id }) {
     stock: 0,
     image: "",
   });
-  const [render, setRender] = useState(true);
   const [success, setSuccess] = useState(false);
 
-  const testID = 5;
 
   useEffect(() => {
     axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
@@ -51,7 +48,6 @@ export default function CrudDeleteProduct({ onClose, id }) {
       });
   };
 
-  if (render) {
     return (
       <form className={s.form} onSubmit={onSubmitHandle}>
         <div className={s.content}>
@@ -69,6 +65,4 @@ export default function CrudDeleteProduct({ onClose, id }) {
         </div>
       </form>
     );
-  }
-  return null;
 }

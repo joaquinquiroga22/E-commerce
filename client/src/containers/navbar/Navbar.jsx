@@ -6,7 +6,6 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 import s from "./Navbar.module.css";
 import FilterVintageIcon from '@material-ui/icons/FilterVintage';
-import { Button } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 
 export default function Navbar({ onSearch, botonNav }) {

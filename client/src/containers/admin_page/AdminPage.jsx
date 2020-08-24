@@ -1,12 +1,10 @@
 import React,{useEffect, useState} from 'react';
-import { Link } from "react-router-dom";
 import s from './AdminPage.module.css';
 import Crud from '../crud/Crud.jsx';
 import OrdersTable from '../orders_table/OrdersTable.jsx';
 //material ui
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import StoreIcon from '@material-ui/icons/Store';
-import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 export default function AdminPage() {
   const [component, setComponent] = useState();
