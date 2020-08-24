@@ -27,7 +27,6 @@ export default function CrudDeleteProduct({ onClose, id }) {
         stock: response.data.stock,
         image: response.data.image,
       });
-      console.log(response);
     });
   }, []);
 
@@ -37,15 +36,12 @@ export default function CrudDeleteProduct({ onClose, id }) {
     axios
       .delete(`http://localhost:3000/products/${id}`)
       .then(function (res) {
-        console.log(res);
         setSuccess(true);
         setTimeout(function () {
           setSuccess(false);
-        }, 1500);
+          onClose(false);
+        }, 500);
       })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
     return (

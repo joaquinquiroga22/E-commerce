@@ -21,21 +21,10 @@ const replaceChars = function (text) {
   newText = newText.charAt(0).toUpperCase() + newText.slice(1)
   return newText;
 };
-//Boton buy
-// <Link to={`/product/${props.id}`} className={s.buy}>
-//   <ShoppingCartIcon className={s.icon} />
-//   {"$ " + props.price}
-// </Link>
-//Boton agregar al carrito
-// <div className={s.buttoms}>
-//     <Button variant="contained" color="primary">
-//       {" "}
-//       Agregar al carrito{" "}
-//     </Button>
-//   </div>
+
 export default function ProductCard(props) {
   const TrolleyItemAdd = function () {
-  const data = {idProduct : props.id, state: "cart" , description: "hola", address: "calle siempre viva 123 " , quantity: 5}
+  const data = {idProduct : props.id, state: "cart" , description: props.description, address: "calle siempre viva 123 " , quantity: 5}
   axios.post("http://localhost:3000/users/1/cart", data ).then((res) => {console.log(res.data)})
   }
   return (

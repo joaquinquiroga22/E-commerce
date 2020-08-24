@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { getCategories } from "../../../actions/categories";
 
 export default function CrudAddProduct(props) {
-  console.log(props.type)
   //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
   //const [loadedCategories, setLoadedCategories] = useState([]);
@@ -38,9 +37,8 @@ export default function CrudAddProduct(props) {
       axios
         .get(`http://localhost:3000/products/${props.id}`)
         .then(function (response) {
-          console.log(response.data)
           setInput({
-            name: response.data.name,
+            name: replaceChars(response.data.name),
             price: response.data.price,
             description: response.data.description,
             stock: response.data.stock,
@@ -50,7 +48,11 @@ export default function CrudAddProduct(props) {
         });
     }
   }, []);
-
+  const replaceChars = function (text) {
+    var newText = text.split("_").join(" ");
+    newText = newText.charAt(0).toUpperCase() + newText.slice(1)
+    return newText;
+  };
 
   const handleInputChange = function (e) {
     setInput({
@@ -132,7 +134,6 @@ export default function CrudAddProduct(props) {
       categories: [...input.categories, newCategory],
     });
   };
-  console.log(props.id)
 
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
