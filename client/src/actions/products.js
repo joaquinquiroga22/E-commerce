@@ -5,12 +5,13 @@ export const GET_PRODUCT = "GET_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const EDIT_PRODUCT = "EDIT_PRODUCT";
+export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
+
 //Action Creators (thunk middleware nos permite ejecutar funciones como acciones en vez de objetos)
 
 //Trae todos los products productos del back y se lo manda al reducer
 export const getProducts = () => {
   return (dispatch) => {
-    console.log("hola");
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,
@@ -65,5 +66,18 @@ export const editProduct = (id, data) => {
         product: product.data,
       });
     });
+  };
+};
+
+export const searchProduct = (query) => {
+  return (dispatch) => {
+    axios
+      .get(`http://localhost:3000/search?valor=${query}`)
+      .then((products) => {
+        dispatch({
+          type: SEARCH_PRODUCT,
+          founds: products.data,
+        });
+      });
   };
 };

@@ -10,6 +10,7 @@ import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCategories } from "../../../actions/categories";
+import { getProduct, addProduct, editProduct } from "../../../actions/products";
 
 export default function CrudAddProduct(props) {
   //nombre, descripcion, precio, imagen, stock
@@ -26,6 +27,8 @@ export default function CrudAddProduct(props) {
 
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
+
+  const { product } = useSelector((state) => state.products);
   //Obteniendo todas las categorias cargadas en la DB
   useEffect(() => {
     // axios.get("http://localhost:3000/products/category").then((res) => {
@@ -33,24 +36,37 @@ export default function CrudAddProduct(props) {
     //   setLoadedCategories(res.data);
     // });
     dispatch(getCategories());
-    if(props.type === "Edit"){
-      axios
-        .get(`http://localhost:3000/products/${props.id}`)
-        .then(function (response) {
-          setInput({
-            name: replaceChars(response.data.name),
-            price: response.data.price,
-            description: response.data.description,
-            stock: response.data.stock,
-            image: response.data.image,
-            categories:[]
-          });
-        });
+    if (props.type === "Edit") {
+      // axios
+      //   .get(`http://localhost:3000/products/${props.id}`)
+      //   .then(function (response) {
+      //     setInput({
+      //       name: replaceChars(response.data.name),
+      //       price: response.data.price,
+      //       description: response.data.description,
+      //       stock: response.data.stock,
+      //       image: response.data.image,
+      //       categories:[]
+      //     });
+      //   });
+      dispatch(getProduct(props.id));
+      console.log(props.product);
+      if (product) {
+        setInput({ ...product });
+      }
+      setInput({
+        name: replaceChars(product.name),
+        price: product.price,
+        description: product.description,
+        stock: product.stock,
+        image: product.image,
+        categories: [],
+      });
     }
-  }, []);
+  }, [product]);
   const replaceChars = function (text) {
-    var newText = text.split("_").join(" ");
-    newText = newText.charAt(0).toUpperCase() + newText.slice(1)
+    var newText = text && text.split("_").join(" ");
+    newText = newText && newText.charAt(0).toUpperCase() + newText.slice(1);
     return newText;
   };
 
@@ -75,24 +91,28 @@ export default function CrudAddProduct(props) {
       idCategoria: input.categories,
     };
 
-    if(props.type === "Add"){
-      axios.post("http://localhost:3000/products", data).then((res) => {
-        setSuccess(true);
-        setTimeout(function () {
-          setSuccess(false);
-        }, 1500);
-      });
-  }
-  if(props.type === "Edit"){
-    axios
-      .put(`http://localhost:3000/products/${props.id}`, data)
-      .then((res) => {
-        setSuccess(true);
-        setTimeout(function () {
-          setSuccess(false);
-        }, 1500);
-      });
-  }
+    if (props.type === "Add") {
+      // axios.post("http://localhost:3000/products", data).then((res) => {
+      //   setSuccess(true);
+      //   setTimeout(function () {
+      //     setSuccess(false);
+      //   }, 1500);
+      // });
+
+      dispatch(addProduct(data));
+    }
+    if (props.type === "Edit") {
+      // axios
+      //   .put(`http://localhost:3000/products/${props.id}`, data)
+      //   .then((res) => {
+      //     setSuccess(true);
+      //     setTimeout(function () {
+      //       setSuccess(false);
+      //     }, 1500);
+      //   });
+
+      dispatch(editProduct(props.id, data));
+    }
   };
 
   //Funcion para convertir imagen a base64 obtenida de:
@@ -134,13 +154,17 @@ export default function CrudAddProduct(props) {
       categories: [...input.categories, newCategory],
     });
   };
-
+  console.log("product ==", product);
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
       <div className={s.content}>
         <CloseBtn close={props.onClose} />
 
-        <h3>{props.type === "Edit" ? "Actualizar un producto" : "Agregar un producto"}</h3>
+        <h3>
+          {props.type === "Edit"
+            ? "Actualizar un producto"
+            : "Agregar un producto"}
+        </h3>
         <div className={s.image}>
           <img src={input.image !== "" ? input.image : defaultImage} />
           <label htmlFor="imagen">Imagen del producto</label>
@@ -155,7 +179,8 @@ export default function CrudAddProduct(props) {
         <div className={s.inputs}>
           <fieldset>
             <legend>Nombre del producto</legend>
-            <input value={input.name}
+            <input
+              value={product.name && input.name}
               className={s.input}
               onChange={handleInputChange}
               type="text"
@@ -166,7 +191,7 @@ export default function CrudAddProduct(props) {
           <fieldset>
             <legend>Descripcion</legend>
             <textarea
-            value={input.description}
+              value={input.description}
               className={s.input}
               onChange={handleInputChange}
               name="description"
@@ -179,7 +204,8 @@ export default function CrudAddProduct(props) {
           <div className={s.numbers}>
             <fieldset>
               <legend>Precio</legend>
-              <input value={input.price}
+              <input
+                value={input.price}
                 className={s.input}
                 onChange={handleInputChange}
                 type="number"
@@ -191,7 +217,8 @@ export default function CrudAddProduct(props) {
             </fieldset>
             <fieldset>
               <legend>Stock</legend>
-              <input value={input.stock}
+              <input
+                value={input.stock}
                 className={s.input}
                 onChange={handleInputChange}
                 type="number"
@@ -207,7 +234,8 @@ export default function CrudAddProduct(props) {
             {categories.length > 0 ? (
               categories.map(function (category) {
                 return (
-                  <CategoryItem key={category.id}
+                  <CategoryItem
+                    key={category.id}
                     id={category.id}
                     name={category.name}
                     onCheck={onCategoryChange}
@@ -219,9 +247,17 @@ export default function CrudAddProduct(props) {
             )}
           </fieldset>
           {success && (
-            <Alert severity="success">{props.type === "Edit" ? "Producto actualizado correctamente" : "Producto agregado correctamente"}</Alert>
+            <Alert severity="success">
+              {props.type === "Edit"
+                ? "Producto actualizado correctamente"
+                : "Producto agregado correctamente"}
+            </Alert>
           )}
-          <SuccessBtn text={props.type === "Edit" ? "Actualizar producto" : "Agregar producto"} />
+          <SuccessBtn
+            text={
+              props.type === "Edit" ? "Actualizar producto" : "Agregar producto"
+            }
+          />
           <CancelBtn text="Cancelar" close={props.onClose} />
         </div>
       </div>

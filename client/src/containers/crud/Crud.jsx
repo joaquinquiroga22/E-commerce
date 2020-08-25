@@ -8,9 +8,16 @@ import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProd
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
 import AddCategory from "../../components/crud/add_category/AddCategory.jsx";
 
+import { useSelector, useDispatch } from "react-redux";
+import { getProducts, searchProduct, getProduct } from "../../actions/products";
+import { getCategories, getCategoryProduct } from "../../actions/categories";
+
 export default function Crud() {
   //obtiene la lista de productos
-  const [products, setProducts] = useState([]);
+
+  const { products, product } = useSelector((state) => state.products);
+  //const [products, setProducts] = useState([]);
+
   //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct
@@ -20,34 +27,37 @@ export default function Crud() {
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [renderCat, setRenderCat] = useState(false);
-  const [updateTable,setUpdateTable] = useState(false);
+  const [updateTable, setUpdateTable] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getProducts();
-  },[products]);
+    dispatch(getProducts());
+  }, [products]);
 
-  const getProducts = function(){
-    axios.get("http://localhost:3000/products").then(function (res) {
-      if(res.data.length !== products.length){
-        return setProducts(res.data);
-      }
-    });
-  }
+  // const getProducts = function(){
+  //   axios.get("http://localhost:3000/products").then(function (res) {
+  //     if(res.data.length !== products.length){
+  //       return setProducts(res.data);
+  //     }
+  //   });
+  // }
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    getProducts();
+    dispatch(getProducts());
   };
 
   const updateRenderEdit = function (value, id) {
+    dispatch(getProduct(id));
     setRenderEdit(value);
-    getProducts();
+    dispatch(getProducts());
   };
 
   const updateRenderDelete = function (value, id) {
     setRenderDelete(value);
     setDeleteId(id);
-    getProducts();
+    dispatch(getProducts());
   };
 
   const updateRenderCategory = function (value) {
@@ -58,7 +68,12 @@ export default function Crud() {
       {renderAdd && <CrudAddProduct type="Add" onClose={updateRenderAdd} />}
 
       {renderEdit && (
-        <CrudAddProduct id={updateId} type="Edit" onClose={updateRenderEdit} />
+        <CrudAddProduct
+          id={updateId}
+          product={product}
+          type="Edit"
+          onClose={updateRenderEdit}
+        />
       )}
 
       {renderCat && <AddCategory onClose={updateRenderCategory} />}
@@ -70,16 +85,17 @@ export default function Crud() {
         onAddProduct={updateRenderAdd}
       />
       <CrudTitle />
-      {products.length > 0 && products.map(function (product) {
-        return (
-          <CrudListItem
-            onEditProduct={updateRenderEdit}
-            onDeleteProduct={updateRenderDelete}
-            key={product.id}
-            product={product}
-          />
-        );
-      })}
+      {products.length > 0 &&
+        products.map(function (product) {
+          return (
+            <CrudListItem
+              onEditProduct={updateRenderEdit}
+              onDeleteProduct={updateRenderDelete}
+              key={product.id}
+              product={product}
+            />
+          );
+        })}
     </div>
   );
 }

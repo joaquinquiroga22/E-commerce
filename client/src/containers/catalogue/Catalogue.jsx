@@ -2,63 +2,74 @@ import React, { useState, useEffect } from "react";
 import s from "./Catalogue.module.css";
 import axios from "axios";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
+import { useSelector, useDispatch } from "react-redux";
+
+//Actions para dispatcehar
+import { getProducts, searchProduct } from "../../actions/products";
+import { getCategories, getCategoryProduct } from "../../actions/categories";
 
 //componentes
 import ProductCard from "../../components/product_card/ProductCard.jsx";
 
 export default function Catalogue() {
-  const [products, setProducts] = useState([]);
-  const [showedProducts, setShowedProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // Redux - Store:
+  //State de products
+  const products = useSelector((state) => state.products.products);
+
+  //State de producos en x Categoria
+  const categoryProducts = useSelector(
+    (state) => state.categories.categoryProducts
+  );
+
+  //State con Categorias
+  const categories = useSelector((state) => state.categories.categories);
+
+  //State que tiene resultados de la busqueda
+  const prodSearch = useSelector((state) => state.products.prodSearch);
+
+  //State para saber que state mapear para renderizar productCard
+  const [dataToRender, setDataToRender] = useState(products);
+
   const params = new URLSearchParams(window.location.search);
-  var query = params.get('buscar');
+  var query = params.get("buscar");
 
-
+  //Para Dispatchear las Acciones
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get("http://localhost:3000/products").then((res) => {
-      setProducts(res.data);
-    });
+    //Actions para traer todos los productos y categorias
+    dispatch(getProducts());
+    dispatch(getCategories());
 
-    axios.get("http://localhost:3000/products/category").then((res) => {
-      setCategories(res.data);
-    });
-
-    //obteniendo los querys
-
-    if(query !== null){
-      axios.get(`http://localhost:3000/search?valor=${query}`).then(function (res) {
-          setShowedProducts(res.data);
-          query = "";
-      });
+    if (query !== null) {
+      dispatch(searchProduct(query));
+      setDataToRender(prodSearch);
     }
-    if(query === null){
-      axios.get("http://localhost:3000/products").then((res) => {
-        setProducts(res.data);
-        setShowedProducts(res.data);
-      });
+
+    if (query === null) {
+      setDataToRender(products);
     }
-  }, [query]);
+  }, [query, getCategories, getProducts, searchProduct]);
 
   const replaceChars = function (text) {
     var newText = text.split("_").join(" ");
-    newText = newText.charAt(0).toUpperCase() + newText.slice(1)
+    newText = newText.charAt(0).toUpperCase() + newText.slice(1);
     return newText;
   };
 
+  //Filtra Productos de acuerdo a la Categoria Seleccionada
   const getFilter = function (e) {
     let filterId = e.target.id;
     if (filterId !== "all") {
-      axios
-        .get(`http://localhost:3000/products/category?category=${filterId}`)
-        .then((res) => {
-          setShowedProducts(res.data[0].products);
-        });
-      return;
+      dispatch(getCategoryProduct(filterId));
+      setDataToRender(categoryProducts);
     }
-    setShowedProducts(products);
+    if (filterId === "all") {
+      setDataToRender(products);
+    }
   };
 
+  console.log(dataToRender);
   return (
     <div className={s.catalogue}>
       <div
@@ -75,28 +86,34 @@ export default function Catalogue() {
           </label>
         </div>
         {categories.map(function (category) {
-           return <FilterItem key={category.id} name={replaceChars(category.name)} id={category.id} />;
+          return (
+            <FilterItem
+              key={category.id}
+              name={replaceChars(category.name)}
+              id={category.id}
+            />
+          );
         })}
       </div>
       <div className={s.products}>
         <div className={s.listproducts}>
-          {showedProducts.length > 0 ? (
-            showedProducts.map(function (product) {
-               if (product.stock <= 0) {
-                 return "EL PRODUCTO NO ESTA DISPONIBLE"
-               }else{
-                 return (
-                   <ProductCard
-                     key={product.id}
-                     id={product.id}
-                     name={product.name}
-                     stock={product.stock}
-                     price={product.price}
-                     description={product.description}
-                     image={product.image}
-                   />
-                 );
-               }
+          {dataToRender.length > 0 ? (
+            dataToRender.map(function (product) {
+              if (product.stock <= 0) {
+                return "EL PRODUCTO NO ESTA DISPONIBLE";
+              } else {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    stock={product.stock}
+                    price={product.price}
+                    description={product.description}
+                    image={product.image}
+                  />
+                );
+              }
             })
           ) : (
             <h2>No hay productos para mostrar</h2>
