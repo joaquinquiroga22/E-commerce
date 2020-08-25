@@ -20,8 +20,10 @@
 }
 .title th{
     color:black;
-    padding:15px 35px;
     font-weight: bold;
+}
+.header{
+  padding: 10px 25px;
 }
 .title td{
     padding:15px;
@@ -33,6 +35,11 @@
 .total{
     font-weight: bold;
     margin-right: 10px;
+}
+.quantity input[type="number"]{
+  width: 50px;
+  border:1px solid gray;
+  font-size: 16px;
 }
 .totalspan{
     font-size: 18px;
