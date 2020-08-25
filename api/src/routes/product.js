@@ -258,5 +258,16 @@ server.put("/:id/review/:idReview", (req,res,next) =>{
       })
       .catch((error) => next(error));
 });
-
+server.delete("/:id/review/:idReview", (req,res,next) =>{
+  const {idReview} = req.params;
+  Reviews.destroy({
+    where: {
+      id: idReview,
+    },
+  })
+    .then(res.send("Review eliminada del producto"))
+    .catch((error) => {
+      next(error);
+    });
+})
 module.exports = server;
