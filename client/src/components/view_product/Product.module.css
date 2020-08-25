@@ -1,5 +1,5 @@
 .container {
-    display: flex; 
+    display: flex;
     flex-direction: row;
     height: 403px;
     width: 830px;
@@ -13,12 +13,12 @@
     width: 400px;
 }
 
-.img{ 
+.img{
     border: solid 1px grey;
     height: 460px;
     width: 400px;
-    
-   
+
+
 }
 
 .left {
@@ -50,12 +50,12 @@ color: black;
     font-size: 26px;
     font-weight: 600;
     font-family: Proxima Nova;
-    
+
 }
 
 .rating {
     flex-direction: row ;
-    
+
 }
 .buttoms {
     display: flex;
