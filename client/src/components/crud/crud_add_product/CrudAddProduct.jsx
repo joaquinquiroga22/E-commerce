@@ -35,6 +35,7 @@ export default function CrudAddProduct(props) {
     //   //Guardando las categorias en el estado loadedCategories
     //   setLoadedCategories(res.data);
     // });
+
     dispatch(getCategories());
     if (props.type === "Edit") {
       // axios

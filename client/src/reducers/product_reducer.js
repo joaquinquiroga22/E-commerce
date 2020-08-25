@@ -6,6 +6,7 @@ import {
   DELETE_PRODUCT,
   SEARCH_PRODUCT,
 } from "../actions/products";
+import { GET_CART } from "../actions/cart";
 
 const initialState = {
   products: [],
