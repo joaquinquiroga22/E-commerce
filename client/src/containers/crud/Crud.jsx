@@ -41,6 +41,7 @@ export default function Crud() {
 
   const updateRenderEdit = function (value, id) {
     setRenderEdit(value);
+    setUpdateId(id);
     getProducts();
   };
 

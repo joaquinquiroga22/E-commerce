@@ -1,5 +1,5 @@
 const server = require("express").Router();
-const { Product } = require("../db.js");
+const { Product, Reviews, User } = require("../db.js");
 const { Category } = require("../db.js");
 const { Category_Products } = require("../db.js");
 
@@ -9,14 +9,14 @@ server.get("/", (req, res, next) => {
   Product.findAll({ include: Category }) // Traemos todos los productos con sus categorias asociadas
     .then((products) => {
       if (products.length === 0) {
-        return res
-          .status(200).send([]);
-          //.send({ message: `Todavia no se ha creado ningun Producto` });
+        return res.status(200).send([]);
+        //.send({ message: `Todavia no se ha creado ningun Producto` });
       }
       res.send(products);
     })
     .catch((error) => {
-      next(error)});
+      next(error);
+    });
 });
 
 //Hcemos un post a / products
@@ -156,7 +156,7 @@ server.put("/:id", (req, res, next) => {
 server.get("/:id", (req, res, next) => {
   Product.findAll({
     where: { id: req.params.id },
-    include: Category,
+    include: [Category,Reviews]//Anda!!
   })
     .then((products) => {
       if (products.length === 0) {
@@ -198,6 +198,65 @@ server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+});
+
+
+//Review
+server.post("/:id/review", (req, res, next) => {
+  const idProducto = req.params.id;
+  const { title, stars, description, idUser } = req.body;
+  const promiseProduct = Product.findByPk(idProducto);
+  const promiseReviews = Reviews.create({ title, stars, description });
+  const promiseUser = User.findByPk(idUser);
+  var users;
+  var review;
+  Promise.all([promiseProduct, promiseReviews, promiseUser])
+    .then((values) => {
+      const product = values[0];
+      review = values[1].dataValues.id;
+      users = values[2];
+      //var userId = values[2].dataValues.id;//Validaciones
+      //var productId = values[0].dataValues.id;//Validaciones
+      return product.addReviews(review);
+    })
+    .then((s) => {
+      return users.addReviews(review);
+    })
+    .then(() =>{
+      User.findByPk(idUser, {include: Reviews})
+      return Product.findByPk(idProducto, {include: Reviews})
+    })
+    .then((values) =>{
+      res.send(values);
+
+    })
+    .catch((error) => next(error));
+});
+server.put("/:id/review/:idReview", (req,res,next) =>{
+  //console.log(req.params)
+   let {title, stars, description} = req.body;
+   //const {id,idReview} = req.params;
+   //const id = req.params;
+   const idReview = req.params.idReview;
+   Reviews.findAll({where: {id:idReview}})
+   .then((values)=>{
+    //console.log(values)
+     //res.send(values)
+    return Reviews.update(
+       {title , stars, description},
+       { where: { id: idReview}, returning: true })
+   })
+     .then((values) => {
+       console.log(values[1][0]);
+       if (values[0] === 0) {
+         return res
+         .status(400)
+         .json({ message: "No se modifico la Review" });
+        }
+        return res.send(values[1][0].dataValues);
+        
+      })
+      .catch((error) => next(error));
 });
 
 module.exports = server;

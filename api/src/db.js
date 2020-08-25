@@ -41,7 +41,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category, User, Order } = sequelize.models;
+const { Product, Category, User, Order, Reviews } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -54,6 +54,12 @@ Product.belongsToMany(Order, { through: "productsorder" });
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+Product.hasMany(Reviews);
+Reviews.belongsTo(Product);
+
+User.hasMany(Reviews);
+Reviews.belongsTo(User);
 
 //Hooks para limpiar y pasar a lowercase name y description de Product y Category
 

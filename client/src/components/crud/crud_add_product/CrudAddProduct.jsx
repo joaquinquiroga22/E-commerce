@@ -35,6 +35,7 @@ export default function CrudAddProduct(props) {
     
     dispatch(getCategories());
     if(props.type === "Edit"){
+      console.log("Edit")
       axios
         .get(`http://localhost:3000/products/${props.id}`)
         .then(function (response) {
