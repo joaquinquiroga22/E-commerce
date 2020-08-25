@@ -41,6 +41,9 @@ export default function Catalogue() {
     dispatch(getProducts());
     dispatch(getCategories());
 
+    if (categoryProducts) {
+      setDataToRender(categoryProducts);
+    }
     if (query !== null) {
       dispatch(searchProduct(query));
       setDataToRender(prodSearch);
