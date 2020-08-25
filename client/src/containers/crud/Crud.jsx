@@ -6,7 +6,7 @@ import CrudListItem from "../../components/crud/crud_item/CrudItem.jsx";
 import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import AddCategory from "../../components/crud/add_category/AddCategory.jsx";
+import AddCategory from "../../components/crud_categories/add_category/AddCategory.jsx";
 
 export default function Crud() {
   //obtiene la lista de productos
@@ -62,12 +62,11 @@ export default function Crud() {
         <CrudAddProduct id={updateId} type="Edit" onClose={updateRenderEdit} />
       )}
 
-      {renderCat && <AddCategory onClose={updateRenderCategory} />}
+      {/* {renderCat && <AddCategory onClose={updateRenderCategory} />} */}
       {renderDelete && (
         <CrudDeleteProduct id={deleteId} onClose={updateRenderDelete} />
       )}
       <CrudHead
-        onAddCategory={updateRenderCategory}
         onAddProduct={updateRenderAdd}
       />
       <CrudTitle />

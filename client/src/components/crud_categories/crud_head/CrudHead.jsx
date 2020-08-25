@@ -163,22 +163,14 @@ export default function CrudHead(props) {
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
           <Typography className={classes.title} variant="h6" noWrap>
-            Administracion de productos
+            Administracion de categorias
           </Typography>
-
           <div className={classes.grow} />
           <div className={s.space}>
-            {/*<Button onClick={() => props.onAddCategory(true)} className={s.space} variant="contained">
+            <Button onClick={() => props.onAddCategory(true)} className={s.space} variant="contained">
               Agregar Categoria{" "}
-              </Button>{" "}*/}
-            <Button
-              onClick={() => props.onAddProduct(true)}
-              className={s.space}
-              variant="contained"
-              color="primary"
-            >
-              Agregar Producto{" "}
             </Button>{" "}
+            
           </div>
         </Toolbar>
       </AppBar>
