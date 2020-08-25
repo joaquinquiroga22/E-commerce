@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import s from "./TrolleyTable.module.css";
 import axios from 'axios';
-
+import { useDispatch } from "react-redux";
+import { getCart } from "../../actions/cart";
 
 
 export default function TrolleyTable(){
+  const dispatch = useDispatch();
   const [total, setTotal] = useState(0);
   const [products, setProducts] = useState({});
   const [editableProducts, setEditableProducts] = useState({});
@@ -57,6 +59,7 @@ export default function TrolleyTable(){
       array.push(tempProducts[key])
     }
     localStorage.setItem('Cart', JSON.stringify(array));
+    dispatch(getCart());
   }
 
   const sumSubTotal = function(quantity,price){

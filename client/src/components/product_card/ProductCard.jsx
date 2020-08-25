@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import defaultImg from "../../img/default.jpg";
 import s from "./ProductCard.module.css";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getCart } from "../../actions/cart";
 
 const shortText = function (text) {
   var newText = text.substring(0, 50);
@@ -23,6 +25,8 @@ const replaceChars = function (text) {
 };
 
 export default function ProductCard(props) {
+  const dispatch = useDispatch();
+
   const addToCart = function () {
     var data = {
       productId: props.id,
@@ -47,6 +51,7 @@ export default function ProductCard(props) {
     }
     Cart.push(data)
     localStorage.setItem('Cart', JSON.stringify(Cart));
+    dispatch(getCart());
   }
   return (
     <div className={s.card}>

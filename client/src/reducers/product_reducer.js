@@ -5,10 +5,12 @@ import {
   EDIT_PRODUCT,
   DELETE_PRODUCT,
 } from "../actions/products";
+import {GET_CART} from '../actions/cart';
 
 const initialState = {
   products: [],
   product: {},
+  Cart: []
 };
 
 export default (state = initialState, action) => {
@@ -46,6 +48,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         products: state.products.filter((product) => product.id !== action.id),
+      };
+    case GET_CART:
+      return {
+        ...state,
+        Cart: action.cart,
       };
     default:
       return state;
