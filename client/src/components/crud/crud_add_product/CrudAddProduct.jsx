@@ -13,9 +13,8 @@ import { getCategories } from "../../../actions/categories";
 import { getProduct, addProduct, editProduct } from "../../../actions/products";
 
 export default function CrudAddProduct(props) {
-  //nombre, descripcion, precio, imagen, stock
   const [success, setSuccess] = useState(false);
-  //const [loadedCategories, setLoadedCategories] = useState([]);
+
   const [input, setInput] = useState({
     name: "",
     price: 0,
@@ -26,32 +25,16 @@ export default function CrudAddProduct(props) {
   });
 
   const dispatch = useDispatch();
+
+  //Subcripciones al store de redux
   const { categories } = useSelector((state) => state.categories);
-
   const { product } = useSelector((state) => state.products);
-  //Obteniendo todas las categorias cargadas en la DB
-  useEffect(() => {
-    // axios.get("http://localhost:3000/products/category").then((res) => {
-    //   //Guardando las categorias en el estado loadedCategories
-    //   setLoadedCategories(res.data);
-    // });
 
+  useEffect(() => {
     dispatch(getCategories());
     if (props.type === "Edit") {
-      // axios
-      //   .get(`http://localhost:3000/products/${props.id}`)
-      //   .then(function (response) {
-      //     setInput({
-      //       name: replaceChars(response.data.name),
-      //       price: response.data.price,
-      //       description: response.data.description,
-      //       stock: response.data.stock,
-      //       image: response.data.image,
-      //       categories:[]
-      //     });
-      //   });
+      console.log(`Action dentro del render EDIT con ${props.id}`);
       dispatch(getProduct(props.id));
-      console.log(props.product);
       if (product) {
         setInput({ ...product });
       }
@@ -91,28 +74,15 @@ export default function CrudAddProduct(props) {
       image: input.image,
       idCategoria: input.categories,
     };
-
+    //Para agregar dispatcheo action add
     if (props.type === "Add") {
-      // axios.post("http://localhost:3000/products", data).then((res) => {
-      //   setSuccess(true);
-      //   setTimeout(function () {
-      //     setSuccess(false);
-      //   }, 1500);
-      // });
-
       dispatch(addProduct(data));
+      setSuccess(true);
     }
+    //Para edit dispatcheo action edit
     if (props.type === "Edit") {
-      // axios
-      //   .put(`http://localhost:3000/products/${props.id}`, data)
-      //   .then((res) => {
-      //     setSuccess(true);
-      //     setTimeout(function () {
-      //       setSuccess(false);
-      //     }, 1500);
-      //   });
-
       dispatch(editProduct(props.id, data));
+      setSuccess(true);
     }
   };
 

@@ -26,6 +26,7 @@ export default function Crud() {
   const [updateId, setUpdateId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
+
   const [renderCat, setRenderCat] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
 
@@ -41,7 +42,8 @@ export default function Crud() {
   };
 
   const updateRenderEdit = function (value, id) {
-    dispatch(getProduct(id));
+    console.log(`Action dentro del render EDIT con ${id}`);
+    //dispatch(getProduct(id));
     setRenderEdit(value);
     dispatch(getProducts());
   };
