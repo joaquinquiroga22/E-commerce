@@ -4,6 +4,7 @@ import {
   ADD_CATEGORY,
   DELETE_CATEGORY,
   EDIT_CATEGORY,
+  GET_CATEGORY_BY_ID,
 } from "../actions/categories";
 
 const initialState = {
@@ -24,6 +25,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         categoryProducts: action.categoriesProducts,
+      };
+
+    case GET_CATEGORY_BY_ID:
+      return {
+        ...state,
+        category: action.category,
       };
 
     case ADD_CATEGORY:

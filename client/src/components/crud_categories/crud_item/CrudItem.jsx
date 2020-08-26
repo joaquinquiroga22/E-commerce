@@ -15,14 +15,10 @@ export default function CrudItem({
   category,
   onEditCategory,
   onDeleteCategory,
-
-})
-
-{
-
+}) {
   return (
     <div className={s.component}>
-      <div className={s.div}> {category.name} </div>      
+      <div className={s.div}> {category.name} </div>
 
       <div className={s.button}>
         <Button
@@ -33,6 +29,7 @@ export default function CrudItem({
         >
           Editar
         </Button>
+
         <Button
           onClick={() => onDeleteCategory(true, category.id)}
           variant="contained"

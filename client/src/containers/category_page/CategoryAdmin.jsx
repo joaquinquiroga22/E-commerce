@@ -6,10 +6,14 @@ import CrudItem from "../../components/crud_categories/crud_item/CrudItem.jsx";
 import axios from "axios";
 import AddCategory from "../../components/crud_categories/add_category/AddCategory.jsx";
 import DeleteCategory from "../../components/crud_categories/crud_delete_product/CrudDeleteCategory.jsx";
+//REDUX
+import { useSelector, useDispatch } from "react-redux";
+import { getCategories, getCategoryById } from "../../actions/categories";
 
 export default function Categories() {
   //obtiene la lista de categorias
-  const [categories, setCategories] = useState([]);
+  const { categories, category } = useSelector((state) => state.categories);
+  //ANTERIOR => const [categories, setCategories] = useState([]);
   //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct
@@ -18,33 +22,27 @@ export default function Categories() {
   const [deleteId, setDeleteId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
 
-  useEffect(() => {
-    getCategories();
-  }, [categories]);
+  const dispatch = useDispatch();
 
-  const getCategories = function () {
-    axios.get("http://localhost:3000/products/category").then(function (res) {
-      if (res.data.length !== categories.length) {
-        return setCategories(res.data);
-      }
-    });
-  };
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [categories]);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    getCategories();
+    dispatch(getCategories());
   };
 
   const updateRenderEdit = function (value, id) {
     setRenderEdit(value);
     setUpdateId(id);
-    getCategories();
+    dispatch(getCategories());
   };
 
   const updateRenderDelete = function (value, id) {
     setRenderDelete(value);
     setDeleteId(id);
-    getCategories();
+    dispatch(getCategories());
   };
 
   return (

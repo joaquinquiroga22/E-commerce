@@ -5,7 +5,7 @@ export const GET_CATEGORY_PRODUCT = "GET_CATEGORY_PRODUCT";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const DELETE_CATEGORY = "DELETE_CATEGORY";
 export const EDIT_CATEGORY = "EDIT_CATEGORY";
-export const GET_CATEGORY_BY_NAME = "GET_CATEGORY_BY_NAME";
+export const GET_CATEGORY_BY_ID = "GET_CATEGORY_BY_ID";
 
 //ACTION TRAE LISTA DE CATEGORIAS
 export const getCategories = () => {
@@ -14,6 +14,17 @@ export const getCategories = () => {
       dispatch({
         type: GET_CATEGORY,
         categories: res.data,
+      });
+    });
+  };
+};
+
+export const getCategoryById = (id) => {
+  return (dispatch) => {
+    axios.get(`http://localhost:3000/products/category/${id}`).then((cat) => {
+      dispatch({
+        type: GET_CATEGORY_BY_ID,
+        category: cat.data,
       });
     });
   };
