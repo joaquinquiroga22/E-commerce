@@ -7,6 +7,7 @@ import Categories from '../category_page/CategoryAdmin.jsx'
 //material ui
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import StoreIcon from '@material-ui/icons/Store';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 
 export default function AdminPage() {
@@ -39,11 +40,11 @@ export default function AdminPage() {
         <div className={s.aside}>
           <h3>Menu</h3>
           <input type="radio" onChange={(e) => renderComponent(e)} id="manage_orders" name="menu" value="orders"/>
-          <label htmlFor="manage_orders"><ReceiptIcon className={s.icon} />Lista de ordenes</label>
+          <label htmlFor="manage_orders"><ReceiptIcon className={s.icon} />Administrar ordenes</label>
           <input type="radio" onChange={(e) => renderComponent(e)} id="manage_products" name="menu" value="products"/>
-          <label htmlFor="manage_products"><StoreIcon className={s.icon} />Gestion de productos</label>
+          <label htmlFor="manage_products"><StoreIcon className={s.icon} />Administrar productos</label>
           <input type="radio" onChange={(e) => renderComponent(e)} id="manage_categories" name="menu" value="categories"/>
-          <label htmlFor="manage_categories"><StoreIcon className={s.icon} />Gestion de categorias</label>
+          <label htmlFor="manage_categories"><ListAltIcon className={s.icon} />Administrar categorias</label>
         </div>
         <div className={s.main}>
           {component && component}
