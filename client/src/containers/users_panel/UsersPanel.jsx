@@ -39,7 +39,7 @@ export default function UsersPanel(){
 
 
   if(!users){
-    return (<h1>Cargando...</h1>)
+    return (<div className={s.container}></div>);
   }
 
   return (<div className={s.container}>
