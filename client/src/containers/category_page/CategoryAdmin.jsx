@@ -19,7 +19,6 @@ export default function Categories() {
   const [renderDelete, setRenderDelete] = useState(false);
 
 
-
   useEffect(() => {
     getCategories();
   },[categories]);
@@ -49,9 +48,9 @@ export default function Categories() {
     getCategories();
   };
 
-//   const updateRenderCategory = function (value) {
-//     setRenderCat(value);
-//   };
+  // const updateRenderCategory = function (value) {
+  //   setRenderCat(value);
+  // };
 
   return (
       
