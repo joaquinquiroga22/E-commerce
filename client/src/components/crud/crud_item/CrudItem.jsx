@@ -23,7 +23,7 @@ export default function CrudListItem({
       <div className={s.div}> {"$ " + product.price} </div>
       <div className={s.div}>
         {" "}
-        {product.categories && product.categories[0].name}{" "}
+        {product.categories[0] && product.categories[0].name}{" "}
       </div>
 
       <div className={s.buttons}>

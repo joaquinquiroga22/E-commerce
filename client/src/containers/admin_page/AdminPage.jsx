@@ -3,6 +3,7 @@ import s from './AdminPage.module.css';
 import Crud from '../crud/Crud.jsx';
 import OrdersTable from '../orders_table/OrdersTable.jsx';
 import Categories from '../category_page/CategoryAdmin.jsx'
+import PermMediaIcon from '@material-ui/icons/PermMedia';
 
 //material ui
 import ReceiptIcon from '@material-ui/icons/Receipt';
