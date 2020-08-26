@@ -9,8 +9,7 @@ import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudD
 import AddCategory from "../../components/crud_categories/add_category/AddCategory.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getProducts, searchProduct, getProduct } from "../../actions/products";
-import { getCategories, getCategoryProduct } from "../../actions/categories";
+import { getProducts, getProduct } from "../../actions/products";
 
 export default function Crud() {
   //obtiene la lista de productos
@@ -43,7 +42,7 @@ export default function Crud() {
 
   const updateRenderEdit = function (value, id) {
     console.log(`Action dentro del render EDIT con ${id}`);
-    //dispatch(getProduct(id));
+    dispatch(getProduct(id));
     setRenderEdit(value);
     dispatch(getProducts());
   };

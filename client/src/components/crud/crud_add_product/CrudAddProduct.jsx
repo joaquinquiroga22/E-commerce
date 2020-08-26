@@ -10,7 +10,7 @@ import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCategories } from "../../../actions/categories";
-import { getProduct, addProduct, editProduct } from "../../../actions/products";
+import { addProduct, editProduct } from "../../../actions/products";
 
 export default function CrudAddProduct(props) {
   const [success, setSuccess] = useState(false);
@@ -34,7 +34,7 @@ export default function CrudAddProduct(props) {
     dispatch(getCategories());
     if (props.type === "Edit") {
       console.log(`Action dentro del render EDIT con ${props.id}`);
-      dispatch(getProduct(props.id));
+      //dispatch(getProduct(props.id));
       if (product) {
         setInput({ ...product });
       }
@@ -81,7 +81,7 @@ export default function CrudAddProduct(props) {
     }
     //Para edit dispatcheo action edit
     if (props.type === "Edit") {
-      dispatch(editProduct(props.id, data));
+      dispatch(editProduct(product.id, data));
       setSuccess(true);
     }
   };
@@ -125,7 +125,7 @@ export default function CrudAddProduct(props) {
       categories: [...input.categories, newCategory],
     });
   };
-  console.log("product ==", product);
+
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
       <div className={s.content}>

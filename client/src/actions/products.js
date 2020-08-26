@@ -78,6 +78,11 @@ export const editProduct = (id, data) => {
   console.log(`Accion editar producto id: ${id}`);
   return (dispatch) => {
     axios.put(`http://localhost:3000/products/${id}`, data).then((product) => {
+      console.log(
+        "----------- DEVOLUCION DEL AXIOS DENTRO DEL ACTION --------------"
+      );
+      console.log(product.data);
+
       dispatch({
         type: EDIT_PRODUCT,
         product: product.data,
