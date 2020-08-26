@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "./category.module.css";  
+import s from "./category.module.css";
 import CrudHead from "../../components/crud_categories/crud_head/CrudHead.jsx";
 import CrudTitle from "../../components/crud_categories/crud_list_title/CrudTitle.jsx";
 import CrudItem from "../../components/crud_categories/crud_item/CrudItem.jsx";
@@ -18,18 +18,17 @@ export default function Categories() {
   const [deleteId, setDeleteId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
 
-
   useEffect(() => {
     getCategories();
-  },[categories]);
+  }, [categories]);
 
-  const getCategories = function(){
-    axios.get("http://localhost:3000/products/category").then(function(res) {
-      if(res.data.length !== categories.length){
+  const getCategories = function () {
+    axios.get("http://localhost:3000/products/category").then(function (res) {
+      if (res.data.length !== categories.length) {
         return setCategories(res.data);
       }
     });
-  }
+  };
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
@@ -38,7 +37,7 @@ export default function Categories() {
 
   const updateRenderEdit = function (value, id) {
     setRenderEdit(value);
-    setUpdateId(id)
+    setUpdateId(id);
     getCategories();
   };
 
@@ -48,34 +47,31 @@ export default function Categories() {
     getCategories();
   };
 
-  // const updateRenderCategory = function (value) {
-  //   setRenderCat(value);
-  // };
-
   return (
-      
     <div className={s.component}>
-        {renderAdd && <AddCategory type="Add" onClose={updateRenderAdd} />}
+      {renderAdd && <AddCategory type="Add" onClose={updateRenderAdd} />}
 
-        {renderEdit && (<AddCategory id={updateId} type="Edit" onClose={updateRenderEdit} /> )}
+      {renderEdit && (
+        <AddCategory id={updateId} type="Edit" onClose={updateRenderEdit} />
+      )}
 
-        {renderDelete && (
+      {renderDelete && (
         <DeleteCategory id={deleteId} onClose={updateRenderDelete} />
-        )}
+      )}
 
-        <CrudHead onAddCategory={updateRenderAdd} />
-        <CrudTitle />
-        {categories.length > 0 && categories.map(function (category) {
-        return (
-          <CrudItem
-            onEditCategory={updateRenderEdit}
-            onDeleteCategory={updateRenderDelete}
-            key={category.id}
-            category={category}
-          />
-        );
-      })}
-
+      <CrudHead onAddCategory={updateRenderAdd} />
+      <CrudTitle />
+      {categories.length > 0 &&
+        categories.map(function (category) {
+          return (
+            <CrudItem
+              onEditCategory={updateRenderEdit}
+              onDeleteCategory={updateRenderDelete}
+              key={category.id}
+              category={category}
+            />
+          );
+        })}
     </div>
   );
 }
