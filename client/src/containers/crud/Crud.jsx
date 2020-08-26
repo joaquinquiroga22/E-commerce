@@ -35,14 +35,6 @@ export default function Crud() {
     dispatch(getProducts());
   }, [products]);
 
-  // const getProducts = function(){
-  //   axios.get("http://localhost:3000/products").then(function (res) {
-  //     if(res.data.length !== products.length){
-  //       return setProducts(res.data);
-  //     }
-  //   });
-  // }
-
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
     dispatch(getProducts());
