@@ -115,25 +115,44 @@ server.get("/", (req, res, next) => {
 
 //Hacemos un get a /products/category/:nameCategory para buscar por name de categoria.
 
-server.get("/:nameCategory", (req, res, next) => {
+// server.get("/:nameCategory", (req, res, next) => {
+//   Category.findOne({
+//     where: {
+//       name: req.params.nameCategory,
+//     },
+//     include: Product,
+//   })
+//     .then((category) => {
+//       if (!category) {
+//         return res.send({
+//           message: `No existe la categoria: ${req.params.nameCategory}`,
+//         });
+//       }
+//       if (category.products.length === 0) {
+//         return res.send({
+//           message: `La categoria: ${req.params.nameCategory} no tiene productos asociados`,
+//         });
+//       }
+//       res.send(category.products);
+//     })
+//     .catch((error) => next(error));
+// });
+
+server.get("/:id", (req, res, next) => {
   Category.findOne({
     where: {
-      name: req.params.nameCategory,
-    },
-    include: Product,
+      id: req.params.id,
+    }
   })
     .then((category) => {
+      console.log(category)
       if (!category) {
         return res.send({
-          message: `No existe la categoria: ${req.params.nameCategory}`,
+          message: `No existe la categoria: ${req.params.id}`,
         });
       }
-      if (category.products.length === 0) {
-        return res.send({
-          message: `La categoria: ${req.params.nameCategory} no tiene productos asociados`,
-        });
-      }
-      res.send(category.products);
+      
+      res.send(category);
     })
     .catch((error) => next(error));
 });

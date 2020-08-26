@@ -221,7 +221,10 @@ export default function CrudAddProduct(props) {
             )}
           </fieldset>
           {success && (
-            <Alert severity="success">{props.type === "Edit" ? "Producto actualizado correctamente" : "Producto agregado correctamente"}</Alert>
+            <Alert severity="success">
+              {props.type === "Edit" ? 
+              "Producto actualizado correctamente" : "Producto agregado correctamente"}
+            </Alert>
           )}
           <SuccessBtn text={props.type === "Edit" ? "Actualizar producto" : "Agregar producto"} />
           <CancelBtn text="Cancelar" close={props.onClose} />
