@@ -14,8 +14,8 @@ export default function EditOrder({onClose, id}){
 
   useEffect(() => {
 
-    if(!items){
-      axios.get(`http://localhost:3000/users/${id}/cart`).then((res) => setItems(res.data))
+    if(order){
+      axios.get(`http://localhost:3000/users/${order.userId}/cart`).then((res) => setItems(res.data))
     }
     if(!order){
       axios.get(`http://localhost:3000/orders/${id}`).then((res) => {
