@@ -48,8 +48,12 @@ export default function AddC(props) {
     };
 
     if(props.type === "Add"){
-      axios.post("http://localhost:3000/products/category", data ).then((res) => {
-        console.log(res.data)
+      axios.post("http://localhost:3000/products/category", data )
+      .then((res) => {
+        setSuccess(true);
+        setTimeout(function() {
+          setSuccess(false);
+        }, 1500)
       })
     }
     if(props.type === "Edit"){
@@ -99,13 +103,14 @@ export default function AddC(props) {
           ></textarea>
         </fieldset>
         {success && (
-          <Alert severity="success">
-            {props.type === "Edit"
-              ? "Categoria actualizada correctamente"
-              : "Categoria agregada correctamente"}
-          </Alert>
-        )}
-        <SuccessBtn text="Crear Categoria" />
+            <Alert severity="success">
+              {props.type === "Edit" ? 
+              "Producto actualizado correctamente" : "Producto agregado correctamente"}
+              </Alert>
+              
+          )}
+        
+        <SuccessBtn text={props.type === "Edit" ? "Actualizar producto" : "Agregar producto"} />
         <CancelBtn text="Cancelar" close={props.onClose} />
       </div>
     </form>

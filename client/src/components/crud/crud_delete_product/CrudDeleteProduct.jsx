@@ -51,7 +51,11 @@ export default function CrudDeleteProduct({ onClose, id }) {
           <h3>Eliminar producto</h3>
           <div className={s.info}>
           <p><span>Nombre: </span>{product.name}</p>
-          <p><span>Descripcion: </span>{product.name}</p>
+          <p><span>Descripcion: </span>{product.description}</p>
+          <p><span>Precio: </span>{product.price}</p>
+          <p><span>Stock: </span>{product.stock}</p>
+          
+          
           </div>
           {success && (
             <Alert severity="success">Producto eliminado correctamente</Alert>

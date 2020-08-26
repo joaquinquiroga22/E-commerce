@@ -21,7 +21,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
       console.log(response.data)
       setCategory({
         name: response.data.name,
-        description: response.data.description,
+        description: response.data.description
       });
     });
   }, []);
@@ -47,7 +47,7 @@ export default function CrudDeleteProduct({ onClose, id }) {
           <h3>Eliminar Category </h3>
           <div className={s.info}>
           <p><span>Nombre: </span> {category.name} </p>
-          <p><span>Descripcion: </span>{category.name}</p>
+          <p><span>Descripcion: </span>{category.description}</p>
           </div>
           {success && (
             <Alert severity="success">Categoria eliminado correctamente</Alert>
