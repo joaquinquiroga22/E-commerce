@@ -34,11 +34,25 @@ server.put("/:id", (req, res, next) => {
   }
 });
 
+server.get("/:id", (req, res, next) => {
+  User.findOne({
+    where: { id: req.params.id },
+    include: [Order]
+  })
+    .then((user) => {
+      if(!user){
+        return res.status(400).json({ message: "No se encontro el usuario" });
+      }
+      return res.send(user);
+    })
+    .catch((error) => next(error));
+})
+
 server.get("/", (req, res, next) => {
   User.findAll({ include: Order })
     .then((users) => {
       if (users && users.length === 0) {
-        return res.status(400).json({ message: "No existe ningun usuario" });
+        return res.send([]);
       }
       res.send(users);
     })
