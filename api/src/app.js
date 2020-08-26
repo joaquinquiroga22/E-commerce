@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
+// var passport = require('passport');
+// var Strategy = require('passport-local').Strategy;
 require("./db.js");
 
 const server = express();
@@ -27,6 +29,13 @@ server.use((req, res, next) => {
   next();
 });
 
+// app.use(require('express-session')({
+//   secret: 'secret',
+//   resave: false,
+//   saveUninitialized: false
+// }));
+
+
 server.use("/", routes);
 
 // Error catching endware.
@@ -37,5 +46,42 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(status).send(message);
 });
+
+// passport.use(new Strategy(
+//   function(username, password, done) {
+//     db.users.findByUsername(username)
+//       .then((user) => {
+//         if(!user) {
+//           return done(null, false);
+//         }
+//         if(user.password != password) {
+//           return done(null, false);
+//         }
+//         return done(null, user);
+//       })
+//     .catch(err => {
+//       return done(err);
+//     })
+//   }));
+
+//   passport.serializeUser(function(user, done) {
+//     done(null, user.id);
+//   });
+  
+  // Al deserealizar la información del usuario va a quedar almacenada en req.user
+  
+  // passport.deserializeUser(function(id, done) {
+  //   db.users.findByPk(id)
+  //     .then((user) => {
+  //       done(null, user);
+  //     })
+  //     .catch(err => {
+  //       return done(err);
+  //     })
+  // });
+  
+
+
+
 
 module.exports = server;
