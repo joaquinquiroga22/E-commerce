@@ -5,13 +5,15 @@ import s from "./AddUser.module.css";
 import CloseBtn from "../close_btn/CloseBtn.jsx";
 import CancelBtn from "../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../success_btn/SuccessBtn.jsx";
+import { connect } from "react-redux";
+import { loginWithGoogleAction } from "../../store/userDuck";
 
-export default function AddUser(props) {
+function AddUser(props) {
   const [success, setSuccess] = useState(false);
   const [info, setInfo] = useState({
     show: false,
     type: "",
-    msg:""
+    msg: "",
   });
 
   const [input, setInput] = useState({
@@ -19,29 +21,32 @@ export default function AddUser(props) {
     lastname: "",
     email: "",
     password: "",
-    confirmpassword: ""
+    confirmpassword: "",
   });
 
-  const checkMatch = function(e){
+  const checkMatch = function (e) {
     let password = document.getElementById("password");
     let confirmpassword = document.getElementById("confirmpassword");
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
-    if(e.target.value !== password.value || e.target.value !== confirmpassword.value){
+    if (
+      e.target.value !== password.value ||
+      e.target.value !== confirmpassword.value
+    ) {
       return setInfo({
         show: true,
         type: "error",
-        msg:"Las contraseñas no coinciden"
-      })
+        msg: "Las contraseñas no coinciden",
+      });
     }
     setInfo({
       show: false,
       type: "",
-      msg:""
-    })
-  }
+      msg: "",
+    });
+  };
 
   const handleInputChange = function (e) {
     var error = "";
@@ -63,24 +68,34 @@ export default function AddUser(props) {
     axios
       .post("http://localhost:3000/users", data)
       .then((res) => {
-        if(res.status === 201){
-          setInfo({show:true,type:"success",msg:"Cuenta creada con exito"})
+        if (res.status === 201) {
+          setInfo({
+            show: true,
+            type: "success",
+            msg: "Cuenta creada con exito",
+          });
           setTimeout(function () {
-            setInfo({show:false,type:"",msg:""})
+            setInfo({ show: false, type: "", msg: "" });
           }, 1000);
-        }
-        else{
+        } else {
           var error = res.data.original.detail;
-          error = error.replace("(email)=","");
-          error = error.replace("la llave","el email");
-          setInfo({show:true,type:"error",msg:error})
+          error = error.replace("(email)=", "");
+          error = error.replace("la llave", "el email");
+          setInfo({ show: true, type: "error", msg: error });
         }
       })
       .catch((err) => {
         alert("Error del server");
       });
   };
-
+  console.log(
+    "props adduser: " + props.fetching + "action" + props.loginWithGoogleAction
+  );
+  function doLogin() {
+    console.log(props.loginWithGoogleAction());
+    props.loginWithGoogleAction();
+  }
+  if (props.fetching) return <h2>Cargando...</h2>;
   return (
     <form className={s.form} onSubmit={onSubmitHandle}>
       <div className={s.content}>
@@ -90,7 +105,9 @@ export default function AddUser(props) {
             ? "Modificar Cuenta/Usuario"
             : "Crear Cuenta/Usuario"}
         </h3>
+        <button onClick={doLogin}>Iniciar Sesion con Google</button>
 
+        {/* <SuccessBtn onClick={doLogin} text={"Inicia Sesion con Google"} /> */}
         <div className={s.inputs}>
           <fieldset>
             <legend>Nombre</legend>
@@ -148,11 +165,7 @@ export default function AddUser(props) {
               required
             ></input>
           </fieldset>
-          {info.show && (
-            <Alert severity={info.type}>
-              {info.msg}
-            </Alert>
-          )}
+          {info.show && <Alert severity={info.type}>{info.msg}</Alert>}
           <SuccessBtn
             text={props.type === "Edit" ? "Modificar Cuenta" : "Crear Cuenta"}
           />
@@ -162,3 +175,9 @@ export default function AddUser(props) {
     </form>
   );
 }
+
+function mapState({ user: { fetching } }) {
+  return { fetching };
+}
+
+export default connect(mapState, { loginWithGoogleAction })(AddUser);
