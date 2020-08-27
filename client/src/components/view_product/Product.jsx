@@ -1,7 +1,8 @@
 import React,{ useState, useEffect } from "react";
 import s from "./Product.module.css";
 import Rating from "@material-ui/lab/Rating";
-import Typography from "@material-ui/core/Typography";
+
+//import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 
@@ -9,11 +10,11 @@ import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 //importamos la funcion a dispatchear
 import { getProduct } from "../../actions/products.js";
-
+import Review from "../view_review/Review";
 
 export default function Product({ id }) {
+  const [renderReview, setRenderReview] = useState(false);
   const [value, setValue] = useState(2);
-
   //definimos las constantes para usar las funciones y almacenar el estado
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.products);
@@ -25,7 +26,10 @@ export default function Product({ id }) {
 
     dispatch(getProduct(id));
   }, [getProduct]);
-  console.log(product);
+  //console.log(product);
+  const updateRenderReview = (value) => {
+    setRenderReview(value);
+  }
   return (
     <div className={s.container}>
       <div className={s.img} >
@@ -35,8 +39,8 @@ export default function Product({ id }) {
       <div className={s.body}>
         <div className={s.izquierda}>
           <h2 className={s.title}> {product.name} </h2>
-          <p className={s.e}> {product.description} </p>
-          <h5> Quedan: {product.stock}</h5>
+          <p className={s.e}> Descripción: {product.description} </p>
+          <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
           <div className={s.rating}>
             <Box
@@ -46,7 +50,10 @@ export default function Product({ id }) {
               mb={3}
               borderColor="transparent"
             >
-              <Typography component="legend"> Opinion: </Typography>
+               <button className = {s.opinion} onClick = {() => {updateRenderReview(true)}}>
+              Opinion:
+              </button>
+              { renderReview && <Review  onClose = {updateRenderReview}/>}
               <Rating
                 name="simple-controlled"
                 value={value}
@@ -55,6 +62,12 @@ export default function Product({ id }) {
                 }}
               />
             </Box>
+       
+
+
+
+
+
           </div>
         </div>
 
