@@ -48,9 +48,24 @@
   font-weight: 600;
   font-family: Proxima Nova;
 }
+.title{
+    text-align: center;
+    margin-left:auto;
+    font-family: Proxima Nova,-apple-system,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+}
 
 .rating {
   flex-direction: row;
+}
+.opinion{
+    font-weight: bold;
+    color: black;
+    border: 1px solid black;
+    background-color: whitesmoke;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .buttoms {
   display: flex;

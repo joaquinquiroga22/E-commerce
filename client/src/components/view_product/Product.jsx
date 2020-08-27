@@ -33,8 +33,8 @@ export default function Product({ id }) {
           justifyContent="space-around"
         >
           <h2 className={s.title}> {product.name} </h2>
-          <p className={s.e}> {product.description} </p>
-          <h5> Quedan: {product.stock}</h5>
+          <p className={s.e}> Descripción: {product.description} </p>
+          <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
           <Box>
             <Button variant="contained" color="secondary">

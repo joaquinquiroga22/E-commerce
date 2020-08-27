@@ -16,6 +16,7 @@ import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
 
+
 function App() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
@@ -26,6 +27,7 @@ function App() {
     dispatch(getProducts());
     dispatch(getCategories());
   }, [getCategories, getProducts]);
+
 
   return (
     <Router>
