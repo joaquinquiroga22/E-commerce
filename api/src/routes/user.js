@@ -3,7 +3,7 @@ const { User, Order, Productsorder, Product } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
-  if (email && name && lastname && password && role) {
+  if (email && name && lastname && password) {
     User.create({ email, name, lastname, password, role })
       .then((users) => {
         res.status(201);
@@ -12,9 +12,10 @@ server.post("/", (req, res, next) => {
       .catch((error) => {
         res.send(error);
       });
-
   } else {
-    return res.status(400).json({ message: "Debe pasar los parametros requeridos." });
+    return res
+      .status(400)
+      .json({ message: "Debe pasar los parametros requeridos." });
   }
 });
 
@@ -95,7 +96,9 @@ server.post("/:idUser/cart", (req, res, next) => {
           .json({ message: "La cantidad debe ser mayor a 0" });
       }
       if (values[1][0] === null) {
-        return res.status(400).json({ message: "No existe un usuario con ese id" });
+        return res
+          .status(400)
+          .json({ message: "No existe un usuario con ese id" });
       }
       let cart = values[1][0];
       let product = values[0];
@@ -121,19 +124,16 @@ server.get("/:idUser/cart", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        return res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
-      }
-      else{
+        return res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
+      } else {
         orderId = orders[0].dataValues.id;
         return Productsorder.findAll({
           where: { orderId: orderId },
         });
-        }
-      })
+      }
+    })
     .then((products) => {
       res.send(products);
     })
@@ -148,11 +148,9 @@ server.delete("/:idUser/cart/", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
       orderId = orders[0].dataValues.id;
       return Productsorder.destroy({
@@ -178,11 +176,9 @@ server.put("/:idUser/cart", (req, res, next) => {
       include: User,
     }).then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
       if (orders[0].dataValues.id !== idProducto) {
         res
@@ -212,11 +208,9 @@ server.get("/:idUser/orders", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
       res.send(orders);
     })

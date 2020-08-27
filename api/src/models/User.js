@@ -6,9 +6,9 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-                args: true,
-                message: 'Username must be unique.',
-            },
+        args: true,
+        message: "Username must be unique.",
+      },
       validate: {
         isEmail: true,
       },
@@ -37,7 +37,8 @@ module.exports = (sequelize) => {
     },
     role: {
       type: DataTypes.ENUM("admin", "user"),
-      allowNull: false,
+      defaultValue: "user",
+      // allowNull: false,
     },
   });
 };
