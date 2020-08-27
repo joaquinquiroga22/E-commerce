@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 //IMPORTS PROPIOS
 import defaultImg from "../../img/default.jpg";
 import s from "./ProductCard.module.css";
+
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart";
+
 
 const shortText = function (text) {
   var newText = text.substring(0, 50);
