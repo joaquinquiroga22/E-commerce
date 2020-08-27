@@ -5,15 +5,15 @@
 }
 .succesBtn{
 	outline: none;
-  position: relative;
+  
 	cursor: pointer;
 	border: none;
-	font-weight: bold;
-	font-size: 16px;
+	
+	position: relative;
 	border-radius: 10px;
-	padding: 5px 15px 5px 40px;
-	margin-bottom: 5px;
-	margin-right: 20px;
+	padding: 14px 20px 10px 15px;
+	margin-bottom: 50px;
+	margin-right: 3px;
 	color:#fff;
 	background-color: #1b8014;
 }

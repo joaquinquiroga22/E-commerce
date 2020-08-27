@@ -13,7 +13,7 @@ import Navbar from "./containers/navbar/Navbar.jsx";
 import Product from "./components/view_product/Product.jsx";
 import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import AdminPage from "./containers/admin_page/AdminPage.jsx";
-import AddUser from "./components/users/AddUser.jsx";
+import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
 
 import { useSelector, useDispatch } from "react-redux";

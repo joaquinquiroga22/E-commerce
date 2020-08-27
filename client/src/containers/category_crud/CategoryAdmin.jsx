@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "./category.module.css";  
+import s from "./category.module.css";
 import CrudHead from "../../components/crud_categories/crud_head/CrudHead.jsx";
 import CrudTitle from "../../components/crud_categories/crud_list_title/CrudTitle.jsx";
 import CrudItem from "../../components/crud_categories/crud_item/CrudItem.jsx";
@@ -17,7 +17,6 @@ export default function Categories() {
   const [updateId, setUpdateId] = useState();
   const [deleteId, setDeleteId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
-
 
 
   useEffect(() => {
@@ -49,12 +48,12 @@ export default function Categories() {
     getCategories();
   };
 
-//   const updateRenderCategory = function (value) {
-//     setRenderCat(value);
-//   };
+  // const updateRenderCategory = function (value) {
+  //   setRenderCat(value);
+  // };
 
   return (
-      
+
     <div className={s.component}>
         {renderAdd && <AddCategory type="Add" onClose={updateRenderAdd} />}
 

@@ -2,13 +2,14 @@ import React,{useEffect, useState} from 'react';
 import s from './AdminPage.module.css';
 import Crud from '../crud/Crud.jsx';
 import OrdersTable from '../orders_table/OrdersTable.jsx';
-import Categories from '../category_page/CategoryAdmin.jsx'
-import PermMediaIcon from '@material-ui/icons/PermMedia';
+import Categories from '../category_crud/CategoryAdmin.jsx';
+import UsersPanel from '../users_panel/UsersPanel.jsx';
 
 //material ui
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import StoreIcon from '@material-ui/icons/Store';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
 export default function AdminPage() {
@@ -30,6 +31,9 @@ export default function AdminPage() {
         case "manage_categories":
             element = <Categories />;
             break;
+        case "manage_users":
+            element = <UsersPanel />;
+            break;
         default:
           element = <h2>Bienvenido a el panel de administracion</h2>;
           break;
@@ -46,6 +50,8 @@ export default function AdminPage() {
           <label htmlFor="manage_products"><StoreIcon className={s.icon} />Administrar productos</label>
           <input type="radio" onChange={(e) => renderComponent(e)} id="manage_categories" name="menu" value="categories"/>
           <label htmlFor="manage_categories"><ListAltIcon className={s.icon} />Administrar categorias</label>
+          <input type="radio" onChange={(e) => renderComponent(e)} id="manage_users" name="menu" value="users"/>
+          <label htmlFor="manage_users"><SupervisorAccountIcon className={s.icon} />Administrar usuarios</label>
         </div>
         <div className={s.main}>
           {component && component}
