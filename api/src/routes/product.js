@@ -47,6 +47,8 @@ server.post("/", (req, res, next) => {
   if (!idCategoria || idCategoria.length === 0) {
     return res.status(400).send("Category missing");
   }
+
+  //Usamos esta Variable para luego hacer el JOIN con CATEGORY
   var productId;
   if (name && description && price && stock) {
     Category.findAll({ where: { id: idCategoria } })
@@ -64,13 +66,13 @@ server.post("/", (req, res, next) => {
         return product.setCategories(idCategoria);
       })
       .then(() => {
-        return Product.findAll({
+        return Product.findOne({
           where: { id: productId },
           include: Category,
         });
       })
       .then((product) => {
-        return res.status(201).send(product[0]);
+        return res.status(201).send(product);
       })
       .catch((error) => next(error));
   } else {

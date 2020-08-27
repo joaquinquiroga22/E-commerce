@@ -33,13 +33,14 @@ export default (state = initialState, action) => {
         ...state,
         product: action.product,
       };
+
     // Al arreglo de productos le devuelvo un nuevo arreglo con nuevoproducto
 
-    // case ADD_PRODUCT:
-    //   return {
-    //     ...state,
-    //     products: [...state.products, action.product],
-    //   };
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        products: [...state.products, action.product],
+      };
 
     // Al arrgelo de productos, busco el que tiene el id y lo reemplazo por el nuevo editado
     case EDIT_PRODUCT:

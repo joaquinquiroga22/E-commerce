@@ -57,7 +57,10 @@ export const addProduct = (data) => {
   console.log("Accion Agregar un producto");
   return (dispatch) => {
     axios.post("http://localhost:3000/products", data).then((product) => {
-      dispatch(getProducts);
+      dispatch({
+        type: ADD_PRODUCT,
+        product,
+      });
     });
   };
 };
