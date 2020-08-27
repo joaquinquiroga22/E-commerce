@@ -9,9 +9,6 @@ import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
 
-//SACAR
-import ReviewCard from "./components/reviews/reviewCard.jsx";
-
 import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
 import { getProducts } from "./actions/products.js";
@@ -45,7 +42,6 @@ function App() {
         {renderAddUser && <AddUser onClose={setRenderAddUser} />}
         <Route path="/" component={Footer} />
       </div>
-      <ReviewCard />
     </Router>
   );
 }

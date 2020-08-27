@@ -1,34 +1,21 @@
 import React, { useState, useEffect } from "react";
-
-import { Container, Box, List } from "@material-ui/core";
-
+import { Container, Box, Button } from "@material-ui/core";
 import s from "./Product.module.css";
-import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
-
-import Button from "@material-ui/core/Button";
-
+import ReviewCard from "../reviews/ReviewCard";
 //Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
+
 //importamos la funcion a dispatchear
 import { getProduct } from "../../actions/products.js";
-import ReviewCard from "../reviews/ReviewCard";
 
 export default function Product({ id }) {
-  const [value, setValue] = useState(2);
-
-  //definimos las constantes para usar las funciones y almacenar el estado
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.products);
   useEffect(() => {
-    // axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
-    //   setInfo(response.data);
-    //   console.log(response);
-    // });
-
     dispatch(getProduct(id));
   }, [getProduct]);
-  console.log(product);
+
   return (
     <Container
       display="flex"
@@ -53,6 +40,7 @@ export default function Product({ id }) {
             <Button variant="contained" color="secondary">
               Comprar ya
             </Button>
+            <span> </span>
             <Button variant="contained" color="primary">
               Carrito
             </Button>
