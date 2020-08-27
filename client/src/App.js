@@ -15,7 +15,8 @@ import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
-import axios from 'axios';
+
+
 function App() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
