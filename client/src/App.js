@@ -15,7 +15,7 @@ import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
-
+import axios from 'axios';
 function App() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
@@ -23,24 +23,41 @@ function App() {
   const [renderAddUser, setRenderAddUser] = useState(false);
 
   useEffect(() => {
-    dispatch(getProducts());
-    dispatch(getCategories());
-  }, [getCategories, getProducts]);
+    // dispatch(getProducts());
+    // dispatch(getCategories());
+    axios.get("http://localhost:3000/profile", {withCredentials: true}).then((res) => console.log(res))
+  }, [
+    //getCategories, getProducts
+  ]);
+
+  const logout = function(){
+    //axios.get("http://localhost:3000/profile", {withCredentials: true}).then((res) => console.log(res))
+
+    axios.get("http://localhost:3000/logout", {withCredentials: true}).then((res) => console.log(res))
+  }
+
+  const login = function(e){
+    e.preventDefault();
+    const data = {
+      email: "usuario1@user.com",
+      password: "user"
+    }
+    axios.post("http://localhost:3000/login",data, {withCredentials: true}).then((res) => console.log(res) )
+  }
+  const Login = function(){
+    return (<form onSubmit={login}>
+              <input type="email" name="email" />
+              <input type="password" name="password" />
+              <input type="submit" value="nico gay"/>
+              <button type="button" onClick={logout}>Logout</button>
+            </form>);
+  }
 
   return (
     <Router>
       <div className="App">
-        <Route path="/" render={() => <Navbar botonNav={setRenderAddUser} />} />
-        <Route exact path="/catalogo" component={Catalogue} />
-        <Route exact path="/admin" component={AdminPage} />
-        <Route exact path="/carrito" component={TrolleyTable} />
-        <Route
-          exact
-          path="/product/:id"
-          render={({ match }) => <Product id={match.params.id} />}
-        />
-        {renderAddUser && <AddUser onClose={setRenderAddUser} />}
-        <Route path="/" component={Footer} />
+        <Route path="/" component={Login} />
+
       </div>
     </Router>
   );
