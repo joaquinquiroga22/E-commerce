@@ -28,6 +28,7 @@ function App() {
     dispatch(getCategories());
   }, [getCategories, getProducts]);
 
+
   return (
     <Router>
       <div className="App">
