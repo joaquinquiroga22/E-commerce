@@ -23,46 +23,51 @@ export const userService = {
 
 function login(email, password) {
   const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
+    email,
+    password,
   };
 
-  return fetch(`http://localhost:3000/auth/login%22`, requestOptions)
-    .then(handleResponse)
-    .then((user) => {
-      // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem("user", JSON.stringify(user));
+  return (
+    axios
+      .post(`http://localhost:3000/auth/login`, requestOptions)
+      // .then(handleResponse)
+      .then((user) => {
+        console.log(user);
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(user));
 
-      return user;
-    });
+        return user;
+      })
+  );
 }
 
 function logout() {
   // remove user from local storage to log user out
-  localStorage.removeItem("user");
+  return axios.get(`http://localhost:3000/auth/logout`).then((res) => {
+    console.log("el user en el logout jajaj +++++++ + ++ " + res.data);
+    localStorage.removeItem("user");
+  });
 }
 
 function getAll() {
   const requestOptions = {
-    method: "GET",
-    // headers: authHeader(),
+    // method: "GET",
+    headers: authHeader(),
   };
 
-  return fetch(`http://localhost:3000/users`, requestOptions).then(
-    handleResponse
-  );
+  return axios.get(`http://localhost:3000/users`, requestOptions);
+  // .then
+  // // handleResponse
+  // ();
 }
 
 function getById(id) {
   const requestOptions = {
-    method: "GET",
-    // headers: authHeader(),
+    // method: "GET",
+    headers: authHeader(),
   };
 
-  return fetch(`http://localhost:3000/users/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return axios.get(`http://localhost:3000/users/${id}`, requestOptions);
 }
 
 function register(user) {
@@ -73,24 +78,23 @@ function update(user) {
   const requestOptions = {
     method: "PUT",
     // headers: { ...authHeader(), "Content-Type": "application/json" },
-    body: JSON.stringify(user),
+    user,
   };
 
-  return fetch(`http://localhost:3000/users/${user.id}`, requestOptions).then(
-    handleResponse
+  return axios.put(
+    `http://localhost:3000/users/${user.data.id}`,
+    requestOptions
   );
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
   const requestOptions = {
-    method: "DELETE",
-    // headers: authHeader(),
+    // method: "DELETE",
+    headers: authHeader(),
   };
 
-  return fetch(`http://localhost:3000/users/${id}`, requestOptions).then(
-    handleResponse
-  );
+  return axios.delete(`http://localhost:3000/users/${id}`, requestOptions);
 }
 
 function handleResponse(response) {

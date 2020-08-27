@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import Alert from "@material-ui/lab/Alert";
 import { userActions } from "../../actions/user";
 
 function HomePage() {
@@ -18,15 +18,17 @@ function HomePage() {
   }
 
   return (
-    <div className="col-lg-8 offset-lg-2">
-      <h1>Hi {user.name}!</h1>
-      <p>You're logged in with React Hooks!!</p>
-      <h3>All registered users:</h3>
+    <div>
+      <Alert>
+        Hi {user.data.name}!<p>Se ha logueado Correctamente</p>
+      </Alert>
+
+      {/* <h3>All registered users:</h3>
       {users.loading && <em>Loading users...</em>}
       {users.error && <span className="text-danger">ERROR: {users.error}</span>}
       {users.items && (
         <ul>
-          {users.items.map((user, index) => (
+          {users.items.data.map((user, index) => (
             <li key={user.id}>
               {user.name + " " + user.lastname}
               {user.deleting ? (
@@ -46,9 +48,9 @@ function HomePage() {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
       <p>
-        <Link to="/login/">Logout</Link>
+        <Link to="/loginpage">Logout</Link>
       </p>
     </div>
   );

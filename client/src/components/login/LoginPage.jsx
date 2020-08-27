@@ -6,11 +6,11 @@ import { userActions } from "../../actions/user";
 
 function LoginPage() {
   const [inputs, setInputs] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [submitted, setSubmitted] = useState(false);
-  const { username, password } = inputs;
+  const { email, password } = inputs;
   const loggingIn = useSelector((state) => state.authentication.loggingIn);
   const dispatch = useDispatch();
 
@@ -28,8 +28,8 @@ function LoginPage() {
     e.preventDefault();
 
     setSubmitted(true);
-    if (username && password) {
-      dispatch(userActions.login(username, password));
+    if (email && password) {
+      dispatch(userActions.login(email, password));
     }
   }
 
@@ -38,18 +38,18 @@ function LoginPage() {
       <h2>Login</h2>
       <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username</label>
+          <label>email</label>
           <input
             type="text"
-            name="username"
-            value={username}
+            name="email"
+            value={email}
             onChange={handleChange}
             className={
-              "form-control" + (submitted && !username ? " is-invalid" : "")
+              "form-control" + (submitted && !email ? " is-invalid" : "")
             }
           />
-          {submitted && !username && (
-            <div className="invalid-feedback">Username is required</div>
+          {submitted && !email && (
+            <div className="invalid-feedback">email is required</div>
           )}
         </div>
         <div className="form-group">

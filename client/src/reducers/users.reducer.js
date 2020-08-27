@@ -23,18 +23,18 @@ export function users(state = {}, action) {
     case DELETE_REQUEST:
       return {
         ...state,
-        items: state.items.map((user) =>
+        items: state.items.data.map((user) =>
           user.id === action.id ? { ...user, deleting: true } : user
         ),
       };
     case DELETE_SUCCESS:
       return {
-        items: state.items.filter((user) => user.id !== action.id),
+        items: state.items.data.filter((user) => user.id !== action.id),
       };
     case DELETE_FAILURE:
       return {
         ...state,
-        items: state.items.map((user) => {
+        items: state.items.data.map((user) => {
           if (user.id === action.id) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = user;
