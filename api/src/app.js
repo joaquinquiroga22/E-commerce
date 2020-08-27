@@ -30,6 +30,7 @@ passport.use(new Strategy({ usernameField: 'email', passwordField: 'password'},
         });
       })
     .catch(err => {
+      console.log(err)
       return done(err);
     })
 }));
