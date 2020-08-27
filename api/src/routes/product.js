@@ -47,7 +47,7 @@ server.post("/", (req, res, next) => {
   if (!idCategoria || idCategoria.length === 0) {
     return res.status(400).send("Category missing");
   }
-
+  var productId;
   if (name && description && price && stock) {
     Category.findAll({ where: { id: idCategoria } })
       .then((categories) => {
@@ -60,8 +60,17 @@ server.post("/", (req, res, next) => {
         }
       })
       .then((product) => {
-        product.setCategories(idCategoria);
-        res.status(201).send(product.dataValues);
+        productId = product.dataValues.id;
+        return product.setCategories(idCategoria);
+      })
+      .then(() => {
+        return Product.findAll({
+          where: { id: productId },
+          include: Category,
+        });
+      })
+      .then((product) => {
+        return res.status(201).send(product[0]);
       })
       .catch((error) => next(error));
   } else {
