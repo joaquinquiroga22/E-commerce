@@ -33,6 +33,7 @@ passport.use(new Strategy({ usernameField: 'email', passwordField: 'password'},
       return done(err);
     })
 }));
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -81,34 +82,6 @@ server.use((req, res, next) => {
   next();
 });
 
-
-server.post('/login',  passport.authenticate('local'),
-  function(req, res) {
-    res.send("te logeaste")
-  });
-
-function isAuthenticated(req, res, next) {
-  if(req.isAuthenticated()) {
-    console.log("logeado")
-    next();
-  } else {
-    console.log("no logeado")
-    res.send('no logeado');
-  }
-}
-
-server.get('/profile',
-  isAuthenticated,
-  function(req, res){
-     console.log(req.sessionID)
-    res.send("Estas en tu perfil");
-});
-
-server.get('/logout',
-  function(req, res){
-    req.logout();
-    res.redirect('/');
-  });
 
 server.use("/", routes);
 
