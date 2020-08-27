@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import s from "./TrolleyTable.module.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart";
 
@@ -102,7 +103,11 @@ export default function TrolleyTable() {
                       X
                     </button>
                   </td>
-                  <td>{producto.name}</td>
+                  <td>
+                    <Link to={`/product/${producto.productId}`}>
+                      {producto.name}
+                    </Link>
+                  </td>
                   <td>{producto.description}</td>
                   <td className={s.quantity}>
                     <input
