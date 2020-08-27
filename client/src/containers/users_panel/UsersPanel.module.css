@@ -3,12 +3,12 @@
     min-height: 300px;
 }
 
-.orders{
+.usersTable{
     border-radius: 10px;
     overflow: hidden;
     border-collapse: collapse;
 }
-.orders caption{
+.usersTable caption{
   background-color: #362181;
   color: white;
   font-weight: 200;
@@ -16,23 +16,17 @@
   padding:20px 0 20px 25px;
   font-size: 20px;
 }
-.orders th{
+.usersTable th{
     color:black;
-    padding:10px 25px;
+    padding:10px 70px;
     font-weight: bold;
 }
 
-.orders td{
+.usersTable td{
     padding:15px;
     color:#2f3640;
 }
-.orders tr:nth-child(even){background-color: #e6e6e6}
-.orders tr:nth-child(odd) {
+.usersTable tr:nth-child(even){background-color: #e6e6e6}
+.usersTable tr:nth-child(odd) {
     background-color: #f3f3f3;
   }
-.cart{
-  background-color: yellow;
-}
-.normal{
-  background:transparent;
-}

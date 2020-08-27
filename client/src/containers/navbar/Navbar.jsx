@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -8,8 +8,20 @@ import s from "./Navbar.module.css";
 import FilterVintageIcon from '@material-ui/icons/FilterVintage';
 import Badge from "@material-ui/core/Badge";
 
+import { useSelector, useDispatch } from "react-redux";
+import { getCart } from "../../actions/cart.js";
+
 export default function Navbar({ onSearch, botonNav }) {
-  const [count, setCount] = React.useState(15);
+  const dispatch = useDispatch();
+  const { Cart } = useSelector((state) => state.products);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if(Cart){
+      setCount(Cart.length);
+    }
+  },[Cart])
+
   if(window.location.pathname === '/admin'){
     return (<div className={s.adminNav}>
         <Link to="/">
@@ -17,6 +29,9 @@ export default function Navbar({ onSearch, botonNav }) {
         </Link>
         <h2 style={{color:"white"}}>Panel de Administracion</h2>
       </div>)
+  }
+  const updateCart = function(){
+    dispatch(getCart());
   }
   return (
     <div className={s.navbar}>

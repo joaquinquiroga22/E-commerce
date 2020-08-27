@@ -28,6 +28,11 @@ export default function CrudAddProduct(props) {
   const { categories } = useSelector((state) => state.categories);
   //Obteniendo todas las categorias cargadas en la DB
   useEffect(() => {
+    // axios.get("http://localhost:3000/products/category").then((res) => {
+    //   //Guardando las categorias en el estado loadedCategories
+    //   setLoadedCategories(res.data);
+    // });
+
     dispatch(getCategories());
     if(props.type === "Edit"){
       console.log("Edit")
@@ -216,7 +221,10 @@ export default function CrudAddProduct(props) {
             )}
           </fieldset>
           {success && (
-            <Alert severity="success">{props.type === "Edit" ? "Producto actualizado correctamente" : "Producto agregado correctamente"}</Alert>
+            <Alert severity="success">
+              {props.type === "Edit" ? 
+              "Producto actualizado correctamente" : "Producto agregado correctamente"}
+            </Alert>
           )}
           <SuccessBtn text={props.type === "Edit" ? "Actualizar producto" : "Agregar producto"} />
           <CancelBtn text="Cancelar" close={props.onClose} />

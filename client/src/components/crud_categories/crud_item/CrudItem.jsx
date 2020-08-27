@@ -11,10 +11,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CrudListItem({
-  product,
-  onEditProduct,
-  onDeleteProduct,
+export default function CrudItem({
+  category,
+  onEditCategory,
+  onDeleteCategory,
 
 })
 
@@ -22,14 +22,11 @@ export default function CrudListItem({
 
   return (
     <div className={s.component}>
-      <div className={s.div}> {product.id} </div>
-      <div className={s.div}> {product.name} </div>
-      <div className={s.div}> {"$ " + product.price} </div>
-      <div className={s.div}> {product.categories[0] && product.categories[0].name} </div>
+      <div className={s.div}> {category.name} </div>      
 
-      <div className={s.buttons}>
+      <div className={s.button}>
         <Button
-          onClick={() => onEditProduct(true, product.id)}
+          onClick={() => onEditCategory(true, category.id)}
           variant="contained"
           color="primary"
           className={s.button}
@@ -37,7 +34,7 @@ export default function CrudListItem({
           Editar
         </Button>
         <Button
-          onClick={() => onDeleteProduct(true, product.id)}
+          onClick={() => onDeleteCategory(true, category.id)}
           variant="contained"
           color="secondary"
           className={s.button}
