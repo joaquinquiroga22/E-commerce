@@ -1,7 +1,7 @@
 .icon{
 	position: absolute;
-	left: 10px;
-	top:0px;
+	left: 2px;
+	top:-4px;
 }
 
 .cancelBtn{
@@ -10,9 +10,9 @@
 	border: none;
 	position: relative;
 	border-radius: 10px;
-	padding: 5px 15px 2px 20px;
+	padding: 13px 20px 20px 20px;
 	margin-bottom: 50px;
-	margin-right: 120px;
+	margin-right: 5px;
 	color:#fff;
 	background-color: #bf0d0d;
 }

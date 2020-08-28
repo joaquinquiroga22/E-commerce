@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 //importamos la accion a dispatchear
 import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
+import Review from "./components/view_review/Review.jsx"
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
 
@@ -36,6 +37,7 @@ function App() {
         <Route exact path="/catalogo" component={Catalogue} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/carrito" component={TrolleyTable} />
+        <Route exact path="/Review" component={Review} />
         <Route
           exact
           path="/product/:id"

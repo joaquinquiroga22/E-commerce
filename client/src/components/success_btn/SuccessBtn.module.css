@@ -1,7 +1,7 @@
 .icon{
 	position: absolute;
-	left: 10px;
-	top:1px;
+	left: 1px;
+	top:-4px;
 }
 .succesBtn{
 	outline: none;
@@ -11,7 +11,7 @@
 	
 	position: relative;
 	border-radius: 10px;
-	padding: 14px 20px 10px 15px;
+	padding: 14px 20px 20px 15px;
 	margin-bottom: 50px;
 	margin-right: 3px;
 	color:#fff;

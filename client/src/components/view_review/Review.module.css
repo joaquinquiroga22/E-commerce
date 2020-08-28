@@ -1,70 +1,50 @@
-.form{
-	position: fixed;
-	z-index: 502;
-	top:0;
-	left:0;
-	background-color: rgba(0,0,0,.8);
-	width: 100%;
-	height: 100%;
-}
 .content{
 	position: relative;
 	margin-left:auto;
 	margin-right: auto;
-	margin-top:50px;
-	width: 600px;
-	background-color:whitesmoke;
-	border-radius: 10px;
-	overflow: hidden;
-	height: 300px;
+	height: 100%;
+	background-color: white;
 }
-.content legend{
-	color:black;
-	text-align: left;
-
-}
-.inputs{
-	margin-right: 10px;
-	margin-left: 1px;
-	float: left;
-	width: 200px;
+.form{
+position: fixed;
+width: 100%;
+height: 100%;
+z-index: 200;
+top: 0;
+left: 0;
 }
 .content fieldset{
 	border: none;
 	font-weight: 500;
-	margin-left: 50px;
-	margin-right: 20px;
-	margin-bottom: 20px;
-	width: 400px;
-	border: 2px solid #362181;
-	border-radius: 10px;
-	height: 40%;
-}
-.estrellas{
-	width: 100%;
-	margin-left: -120px;
+	margin-left: auto;
 	margin-right: auto;
-	display: flex;
+	margin-bottom: 10px;
+	width: 400px;
+	border: 2px solid Black;
+	border-radius: 10px;
 }
-.estrellas fieldset{
-	width: 100px;
-	margin-left: 170px;
-	margin-right: 310px;
-	padding: 1px;
-	display: inline-block;
+.content legend{
+	color:steelblue;
+	text-align: center;
 }
 .input{
 	resize: none;
-	font-size: 10px;
+	font-size: 16px;
 	background:transparent;
 	border: none;
 	outline: none;
 	outline-style: none;
-	width: 95%;
+	width: 100%;
 	padding: 5px 0 5px 5px;
 }
-.success{
-    
-	margin-right: auto;
-	margin-left: auto;
+.estrellas fieldset{
+	width: 40px;
+	display: inline-block;
+	height: 40px;
+}
+.estrellas{
+	width: 550px;
+	margin-left: 511px;
+	margin-right: 50%;
+	display: flex;
 }

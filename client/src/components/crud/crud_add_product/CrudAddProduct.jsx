@@ -141,7 +141,6 @@ export default function CrudAddProduct(props) {
     <form className={s.form} onSubmit={onSubmitHandle}>
       <div className={s.content}>
         <CloseBtn close={props.onClose} />
-
         <h3>{props.type === "Edit" ? "Actualizar un producto" : "Agregar un producto"}</h3>
         <div className={s.image}>
           <img src={input.image !== "" ? input.image : defaultImage} />
