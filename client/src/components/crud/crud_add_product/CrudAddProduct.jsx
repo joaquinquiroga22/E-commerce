@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
 import s from "./CrudAddProduct.module.css";
 import defaultImage from "../../../img/default.jpg";

@@ -24,9 +24,9 @@ export default function AddC(props) {
 
   useEffect(() => {
     if (props.type === "Edit") {
-      // if (category) {
-      //   setInput(...category);
-      // }
+      if (category) {
+        setInput({ ...category });
+      }
       setInput({
         name: category.name,
         description: category.description,
@@ -85,7 +85,11 @@ export default function AddC(props) {
             onChange={handleInputChange}
             name="description"
             rows="5"
-            placeholder="Describe la nueva categoria"
+            placeholder={
+              input.description === ""
+                ? "Describe la nueva categoria"
+                : input.description
+            }
           ></textarea>
         </fieldset>
         {success && (

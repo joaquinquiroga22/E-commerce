@@ -58,7 +58,7 @@ export const addProduct = (data) => {
     axios.post("http://localhost:3000/products", data).then((product) => {
       dispatch({
         type: ADD_PRODUCT,
-        product,
+        product: product.data,
       });
     });
   };

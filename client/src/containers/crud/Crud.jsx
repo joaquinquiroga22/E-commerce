@@ -39,7 +39,7 @@ export default function Crud() {
       setRenderEdit(false);
       return dispatch(getProducts());
     }
-    //Seteo El producto a editar
+    //Seteo El producto a editar en el store
     dispatch(getProduct(id));
     setRenderEdit(value);
     dispatch(getProducts());
@@ -50,7 +50,7 @@ export default function Crud() {
       setRenderDelete(false);
       return dispatch(getProducts());
     }
-    //Seteo El producto a eliminar
+    //Seteo El producto a eliminar en el store
     dispatch(getProduct(id));
     setRenderDelete(value);
     dispatch(getProducts());
@@ -72,13 +72,13 @@ export default function Crud() {
       <CrudHead onAddProduct={updateRenderAdd} />
       <CrudTitle />
       {products.length > 0 &&
-        products.map(function (product) {
+        products.map(function (prod) {
           return (
             <CrudListItem
               onEditProduct={updateRenderEdit}
               onDeleteProduct={updateRenderDelete}
-              key={product.id}
-              product={product}
+              key={prod.id}
+              product={prod}
             />
           );
         })}
