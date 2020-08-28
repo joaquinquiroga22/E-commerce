@@ -25,7 +25,7 @@ export default function Categories() {
 
   useEffect(() => {
     dispatch(getCategories());
-  }, [categories]);
+  }, []);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);

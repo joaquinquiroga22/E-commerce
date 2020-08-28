@@ -5,33 +5,33 @@ import {
   EDIT_PRODUCT,
   DELETE_PRODUCT,
   SEARCH_PRODUCT,
+  GET_PRODUCTS_CATEGORY,
 } from "../actions/products";
 
 const initialState = {
   products: [],
   product: {},
-  prodSearch: [],
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     //Reemplazo products con lo que devolvio la action
     case GET_PRODUCTS:
-      if (action.products.length !== state.products.length) {
-        return {
-          ...state,
-          products: action.products,
-        };
-      } else {
-        return {
-          ...state,
-        };
-      }
+      return {
+        ...state,
+        products: action.products,
+      };
 
     case GET_PRODUCT:
       return {
         ...state,
         product: action.product,
+      };
+
+    case GET_PRODUCTS_CATEGORY:
+      return {
+        ...state,
+        products: action.productsCategory,
       };
 
     // Al arreglo de productos le devuelvo un nuevo arreglo con nuevoproducto
@@ -61,7 +61,7 @@ export default (state = initialState, action) => {
     case SEARCH_PRODUCT:
       return {
         ...state,
-        prodSearch: action.founds,
+        products: action.founds,
       };
 
     default:

@@ -16,16 +16,10 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_CATEGORY:
-      if (action.categories.length !== state.categories.length) {
-        return {
-          ...state,
-          categories: action.categories,
-        };
-      } else {
-        return {
-          ...state,
-        };
-      }
+      return {
+        ...state,
+        categories: action.categories,
+      };
 
     case GET_CATEGORY_PRODUCT:
       return {

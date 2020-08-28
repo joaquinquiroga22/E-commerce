@@ -27,7 +27,7 @@ export default function Crud() {
 
   useEffect(() => {
     dispatch(getProducts());
-  }, [products]);
+  }, []);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);

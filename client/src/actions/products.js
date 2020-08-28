@@ -6,7 +6,7 @@ export const ADD_PRODUCT = "ADD_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const EDIT_PRODUCT = "EDIT_PRODUCT";
 export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
-export const GET_PRODUCTxCATEGORIES = "GET_PRODUCTxCATEGORIES";
+export const GET_PRODUCTS_CATEGORY = "GET_PRODUCTS_CATEGORY";
 
 //Action Creators (thunk middleware nos permite ejecutar funciones como acciones en vez de objetos)
 
@@ -37,15 +37,17 @@ export const getProduct = (id) => {
 };
 
 //Trae todos los productos asociados a una categoria
-export const getCategoryProduct = (id) => {
+export const getProductsCategory = (id) => {
   console.log(`Accion Traer productos en categoria: ${id}`);
   return (dispatch) => {
     axios
       .get(`http://localhost:3000/products/category/?id=${id}`)
       .then((res) => {
+        console.log(`EL RES TIENE ESTO:`);
+        console.log(res);
         dispatch({
-          type: GET_PRODUCTxCATEGORIES,
-          categoriesProducts: res.data[0].products,
+          type: GET_PRODUCTS_CATEGORY,
+          productsCategory: res.data[0].products,
         });
       });
   };
@@ -80,11 +82,6 @@ export const editProduct = (id, data) => {
   console.log(`Accion editar producto id: ${id}`);
   return (dispatch) => {
     axios.put(`http://localhost:3000/products/${id}`, data).then((product) => {
-      console.log(
-        "----------- DEVOLUCION DEL AXIOS DENTRO DEL ACTION --------------"
-      );
-      console.log(product.data);
-
       dispatch({
         type: EDIT_PRODUCT,
         product: product.data,
