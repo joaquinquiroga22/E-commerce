@@ -23,6 +23,13 @@ function isAuthenticated(req, res, next) {
   }
 }
 
+server.get('/me',
+  isAuthenticated,
+  function(req, res){
+    res.send(req.user);
+});
+
+
 server.get('/logout',
   function(req, res){
     req.logout();
@@ -30,4 +37,5 @@ server.get('/logout',
   });
 
 
+  
 module.exports = server;
