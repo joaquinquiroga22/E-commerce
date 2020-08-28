@@ -1,5 +1,4 @@
-// import axios from "axios";
-// import { DELETE_PRODUCT } from "./products";
+import axios from "axios";
 
 // export const GET_USERS = "GET_USERS";
 // export const ADD_USER = "ADD_USER";

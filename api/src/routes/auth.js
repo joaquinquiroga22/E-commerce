@@ -8,14 +8,12 @@ server.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/auth/login" }),
   function (req, res) {
-    res
-      .status(200)
-      .send({
-        id: req.user.id,
-        role: req.user.role,
-        name: req.user.name,
-        lastname: req.user.lastname,
-      });
+    res.status(200).send({
+      id: req.user.id,
+      role: req.user.role,
+      name: req.user.name,
+      lastname: req.user.lastname,
+    });
   }
 );
 
@@ -31,6 +29,10 @@ function isAuthenticated(req, res, next) {
     res.send("no logeado");
   }
 }
+
+server.get("/me", isAuthenticated, function (req, res) {
+  res.send(req.user);
+});
 
 server.get("/logout", function (req, res) {
   req.logout();

@@ -17,10 +17,13 @@ server.post("/", (req, res, next) => {
         };
         User.create(newUser)
           .then((users) => {
+            console.log(users);
             res.status(201);
             res.send(users.dataValues);
           })
           .catch((error) => {
+            console.log("Boka");
+            res.status(400);
             res.send(error);
           });
       });
@@ -228,6 +231,51 @@ server.put("/:idUser/cart", (req, res, next) => {
   // Lo que le faltaria a este es que tire un mensaje cuando el idPrdocut que le pasas no coincide con ningun product.
 });
 
+// Esta en verdad vendria a ser la password update
+server.put("/:id/passwordUpdate", (req, res, next) => {
+  let { password } = req.body;
+  console.log(password);
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      var password = hash;
+      User.update(
+        { password },
+        { where: { id: req.params.id }, returning: true }
+      )
+        .then((response) => {
+          console.log("correcto");
+          res.json(response);
+        })
+        .catch((error) => {
+          console.log("ripeo");
+          res.json(error);
+        });
+    });
+  });
+});
+
+server.put("/:id/passwordReset", (req, res, next) => {
+  let password2 = " ";
+
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password2, salt, function (err, hash) {
+      var password = hash;
+      User.update(
+        { password },
+        { where: { id: req.params.id }, returning: true }
+      )
+        .then((response) => {
+          console.log(response);
+          res.json(response);
+        })
+        .catch((error) => {
+          console.log("ripeo");
+          res.json(error);
+        });
+    });
+  });
+});
+
 server.get("/:idUser/orders", (req, res, next) => {
   User.findAll({
     where: { id: req.params.idUser },
@@ -243,4 +291,5 @@ server.get("/:idUser/orders", (req, res, next) => {
     })
     .catch((error) => next(error));
 });
+
 module.exports = server;
