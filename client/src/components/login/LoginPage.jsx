@@ -57,7 +57,6 @@ function LoginPage(props) {
     }, 1500);
     setTimeout(function () {
       setSuccess(false);
-      // window.location.replace("http://localhost:3001/home");
       props.history.push("/home");
     }, 3000);
   }
