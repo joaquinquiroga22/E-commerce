@@ -34,7 +34,7 @@ function login(email, password) {
     userService.login(email, password).then(
       (user) => {
         dispatch(success(user));
-        createBrowserHistory().push("/loginhome");
+        createBrowserHistory().push("/home");
       },
       (error) => {
         dispatch(failure(error.toString()));

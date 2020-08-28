@@ -25,9 +25,10 @@ import { getCategories } from "./actions/categories";
 
 import { alertActions } from "./actions/alert";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
-import { HomePage } from "./components/login/HomePage";
+// import { HomePage } from "./components/login/HomePage";
 import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
+import { HomePage } from "./containers/home/HomePage.jsx";
 
 function App() {
   const alert = useSelector((state) => state.alert);
@@ -56,10 +57,11 @@ function App() {
             path="/"
             render={() => <Navbar botonNav={setRenderAddUser} />}
           />
+          <Route exact path="/home" component={HomePage} />
           <Route exact path="/catalogo" component={Catalogue} />
           <PrivateRoute exact path="/admin" component={AdminPage} />
 
-          <Route exact path="/admin" component={AdminPage} />
+          {/* <Route exact path="/admin" component={AdminPage} /> */}
           <Route exact path="/carrito" component={TrolleyTable} />
           <Route
             exact

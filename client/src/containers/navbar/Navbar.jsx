@@ -52,12 +52,12 @@ export default function Navbar({ onSearch, botonNav }) {
               botonNav(true);
             }}
           >
-            Crear Cuenta/Usuario{" "}
+            Login
           </button>
         </div>
       </div>
       <div className={s.nav}>
-        <Link to="/">
+        <Link to="/home">
           <span>
             <HomeIcon className={s.icon} />
             Inicio
@@ -80,7 +80,7 @@ export default function Navbar({ onSearch, botonNav }) {
         <Link to="/admin">
           <span>Administrar</span>
         </Link>
-        <Link to="/loginpage">
+        <Link to="/loginpage" className={s.login}>
           <span>Login</span>
         </Link>
       </div>
