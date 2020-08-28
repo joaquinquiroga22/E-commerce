@@ -39,9 +39,9 @@ export default function CrudAddProduct(props) {
   useEffect(() => {
     dispatch(getCategories());
     if (props.type === "Edit") {
-      if (product) {
-        setInput({ ...product });
-      }
+      // if (product) {
+      //   setInput({ ...product });
+      // }
       setInput({
         name: replaceChars(product.name),
         price: product.price,

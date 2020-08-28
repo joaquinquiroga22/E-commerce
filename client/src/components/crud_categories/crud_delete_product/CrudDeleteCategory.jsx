@@ -9,7 +9,7 @@ import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCategory } from "../../../actions/categories";
 
-export default function CrudDeleteProduct({ onClose, id }) {
+export default function CrudDeleteProduct({ onClose }) {
   const dispatch = useDispatch();
 
   const category = useSelector((state) => state.categories.category);

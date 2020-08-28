@@ -76,6 +76,7 @@ export default function AddC(props) {
             name="name"
             value={input.name}
             onChange={handleInputChange}
+            required
           />
         </fieldset>
         <fieldset>
@@ -90,6 +91,7 @@ export default function AddC(props) {
                 ? "Describe la nueva categoria"
                 : input.description
             }
+            required
           ></textarea>
         </fieldset>
         {success && (
