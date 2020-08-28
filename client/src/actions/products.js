@@ -5,12 +5,15 @@ export const GET_PRODUCT = "GET_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const EDIT_PRODUCT = "EDIT_PRODUCT";
+export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
+export const GET_PRODUCTS_CATEGORY = "GET_PRODUCTS_CATEGORY";
+
 //Action Creators (thunk middleware nos permite ejecutar funciones como acciones en vez de objetos)
 
 //Trae todos los products productos del back y se lo manda al reducer
 export const getProducts = () => {
+  console.log("Accion Traer todo los productos");
   return (dispatch) => {
-    console.log("hola");
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
         type: GET_PRODUCTS,
@@ -22,10 +25,9 @@ export const getProducts = () => {
 
 //trae un unico producto por id del back y lo manda al reducer
 export const getProduct = (id) => {
-  console.log("Entre en la accion");
+  console.log("Accion Traer un producto");
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/${id}`).then((product) => {
-      console.log(product);
       dispatch({
         type: GET_PRODUCT,
         product: product.data,
@@ -34,8 +36,24 @@ export const getProduct = (id) => {
   };
 };
 
-//Agrega un producto al back y manda al reducer el mismo producto
+//Trae todos los productos asociados a una categoria
+export const getProductsCategory = (id) => {
+  console.log(`Accion Traer productos en categoria: ${id}`);
+  return (dispatch) => {
+    axios
+      .get(`http://localhost:3000/products/category/?id=${id}`)
+      .then((res) => {
+        dispatch({
+          type: GET_PRODUCTS_CATEGORY,
+          productsCategory: res.data[0].products,
+        });
+      });
+  };
+};
+
+//Agrega un producto al back y dispatchea action para recargar store de products
 export const addProduct = (data) => {
+  console.log("Accion Agregar un producto");
   return (dispatch) => {
     axios.post("http://localhost:3000/products", data).then((product) => {
       dispatch({
@@ -47,6 +65,7 @@ export const addProduct = (data) => {
 };
 
 export const deleteProduct = (id) => {
+  console.log(`Accion eliminar producto con ${id}`);
   return (dispatch) => {
     axios.delete(`http://localhost:3000/products/${id}`).then(
       dispatch({
@@ -58,6 +77,7 @@ export const deleteProduct = (id) => {
 };
 
 export const editProduct = (id, data) => {
+  console.log(`Accion editar producto id: ${id}`);
   return (dispatch) => {
     axios.put(`http://localhost:3000/products/${id}`, data).then((product) => {
       dispatch({
@@ -65,5 +85,19 @@ export const editProduct = (id, data) => {
         product: product.data,
       });
     });
+  };
+};
+
+export const searchProduct = (query) => {
+  console.log(`Accion buscar productos con query: ${query}`);
+  return (dispatch) => {
+    axios
+      .get(`http://localhost:3000/search?valor=${query}`)
+      .then((products) => {
+        dispatch({
+          type: SEARCH_PRODUCT,
+          founds: products.data,
+        });
+      });
   };
 };
