@@ -5,14 +5,17 @@ const { User } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 
-server.post('/login',  passport.authenticate('local',  { failureFlash: 'Invalid username or password.' }),
+server.post('/login',  passport.authenticate('local', { failureRedirect: '/auth/login'}),
   function(req, res) {
-    res.status(200).send(true)
+    res.status(200).send({id: req.user.id, role: req.user.role})
 })
+
+server.get('/login', function(req, res){
+    res.status(401).send("Fallo el inicio de sesion");
+});
 
 function isAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
-    console.log("logeado")
     next();
   } else {
     console.log("no logeado")
@@ -30,7 +33,7 @@ server.get('/me',
 server.get('/logout',
   function(req, res){
     req.logout();
-    res.redirect('/');
+    res.send(205,"Deslogeado correctamente")
   });
 
 
