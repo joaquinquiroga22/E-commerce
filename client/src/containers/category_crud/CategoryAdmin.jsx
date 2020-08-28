@@ -3,7 +3,6 @@ import s from "./category.module.css";
 import CrudHead from "../../components/crud_categories/crud_head/CrudHead.jsx";
 import CrudTitle from "../../components/crud_categories/crud_list_title/CrudTitle.jsx";
 import CrudItem from "../../components/crud_categories/crud_item/CrudItem.jsx";
-import axios from "axios";
 import AddCategory from "../../components/crud_categories/add_category/AddCategory.jsx";
 import DeleteCategory from "../../components/crud_categories/crud_delete_product/CrudDeleteCategory.jsx";
 
@@ -19,8 +18,6 @@ export default function Categories() {
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct
   const [renderEdit, setRenderEdit] = useState(false);
-  const [updateId, setUpdateId] = useState();
-  const [deleteId, setDeleteId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
 
   useEffect(() => {
@@ -56,13 +53,9 @@ export default function Categories() {
     <div className={s.component}>
       {renderAdd && <AddCategory type="Add" onClose={updateRenderAdd} />}
 
-      {renderEdit && (
-        <AddCategory id={updateId} type="Edit" onClose={updateRenderEdit} />
-      )}
+      {renderEdit && <AddCategory type="Edit" onClose={updateRenderEdit} />}
 
-      {renderDelete && (
-        <DeleteCategory id={deleteId} onClose={updateRenderDelete} />
-      )}
+      {renderDelete && <DeleteCategory onClose={updateRenderDelete} />}
 
       <CrudHead onAddCategory={updateRenderAdd} />
       <CrudTitle />
