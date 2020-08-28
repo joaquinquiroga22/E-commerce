@@ -73,7 +73,7 @@ function LoginPage() {
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <form name="form" onSubmit={handleSubmit} noValidate>
+          <form name="form" onSubmit={handleSubmit}>
             <Grid>
               <Grid md={12}>
                 <FormControl margin="dense" variant="filled">

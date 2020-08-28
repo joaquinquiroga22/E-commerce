@@ -10,11 +10,14 @@ import Badge from "@material-ui/core/Badge";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart.js";
+import { userActions } from "../../actions/user";
 
 export default function Navbar({ onSearch, botonNav }) {
   const dispatch = useDispatch();
   const { Cart } = useSelector((state) => state.products);
   const [count, setCount] = useState(0);
+  const user = useSelector((state) => state.authentication.user);
+  const loggedIn = useSelector((state) => state.authentication.loggedIn);
 
   useEffect(() => {
     if (Cart) {
@@ -22,10 +25,14 @@ export default function Navbar({ onSearch, botonNav }) {
     }
   }, [Cart]);
 
+  useEffect(() => {
+    dispatch(userActions.getAll());
+  }, []);
+
   if (window.location.pathname === "/admin") {
     return (
       <div className={s.adminNav}>
-        <Link to="/">
+        <Link to="/home">
           <span>
             <ArrowBackIcon className={s.icon} />
             Atras
@@ -38,10 +45,11 @@ export default function Navbar({ onSearch, botonNav }) {
   const updateCart = function () {
     dispatch(getCart());
   };
+
   return (
     <div className={s.navbar}>
       <div className={s.top}>
-        <Link to="/" className={s.logo}>
+        <Link to="/home" className={s.logo}>
           <h2>Vivero E-commerce</h2>
         </Link>
         <SearchInput onSearch={onSearch} />
@@ -52,7 +60,7 @@ export default function Navbar({ onSearch, botonNav }) {
               botonNav(true);
             }}
           >
-            Login
+            {loggedIn ? `Hola ${user.data.name}` : <p>Login</p>}
           </button>
         </div>
       </div>
@@ -81,7 +89,7 @@ export default function Navbar({ onSearch, botonNav }) {
           <span>Administrar</span>
         </Link>
         <Link to="/loginpage" className={s.login}>
-          <span>Login</span>
+          {loggedIn ? <span>Logout</span> : <span>Login</span>}
         </Link>
       </div>
     </div>
