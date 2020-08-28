@@ -20,12 +20,12 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-server.get('/profile',
+server.get('/me',
   isAuthenticated,
   function(req, res){
-     console.log(req.sessionID)
-    res.send("Estas en tu perfil");
+    res.send(req.user);
 });
+
 
 server.get('/logout',
   function(req, res){
@@ -34,4 +34,5 @@ server.get('/logout',
   });
 
 
+  
 module.exports = server;
