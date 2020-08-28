@@ -3,6 +3,8 @@ import s from "./Catalogue.module.css";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
 import { useSelector, useDispatch } from "react-redux";
 
+import replaceChars from "../../helpers/replaceChars";
+
 //Actions para dispatcehar
 import {
   getProducts,
@@ -41,12 +43,6 @@ export default function Catalogue() {
       dispatch(getProducts);
     }
   }, [query]);
-
-  const replaceChars = function (text) {
-    var newText = text.split("_").join(" ");
-    newText = newText.charAt(0).toUpperCase() + newText.slice(1);
-    return newText;
-  };
 
   //Filtra Productos de acuerdo a la Categoria Seleccionada
   const getFilter = function (e) {
