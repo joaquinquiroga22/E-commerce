@@ -51,7 +51,6 @@ export default function Catalogue() {
   //Filtra Productos de acuerdo a la Categoria Seleccionada
   const getFilter = function (e) {
     let filterId = e.target.id;
-    console.log(`ID del FILTER QUE LLEGA A getFilter ${filterId}`);
     if (filterId !== "all") {
       dispatch(getProductsCategory(filterId));
     }

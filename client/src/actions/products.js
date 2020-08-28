@@ -43,8 +43,6 @@ export const getProductsCategory = (id) => {
     axios
       .get(`http://localhost:3000/products/category/?id=${id}`)
       .then((res) => {
-        console.log(`EL RES TIENE ESTO:`);
-        console.log(res);
         dispatch({
           type: GET_PRODUCTS_CATEGORY,
           productsCategory: res.data[0].products,
