@@ -239,7 +239,7 @@ server.put("/:idUser/cart", (req, res, next) => {
 
 
 // Esta en verdad vendria a ser la password update 
-server.put("/:id/passwordReset",(req,res,next) => {
+server.put("/:id/passwordUpdate",(req,res,next) => {
   let { password } = req.body;
   console.log(password)
     bcrypt.genSalt(10, function(err, salt) {
@@ -256,6 +256,28 @@ server.put("/:id/passwordReset",(req,res,next) => {
         });
     });
 })
+
+server.put("/:id/passwordReset",(req,res,next) => {
+  let password2  = " ";
+
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(password2, salt, function(err, hash) {
+            var password = hash;
+            User.update({ password },{ where: { id: req.params.id }, returning: true })
+            .then((response) => {
+              console.log(response)
+              res.json(response)
+            })
+            .catch(error => {
+              console.log("ripeo")
+              res.json(error)})
+        });
+    });
+})
+
+
+
+
 
 server.get("/:idUser/orders", (req, res, next) => {
   User.findAll({

@@ -77,11 +77,11 @@ server.use(passport.session());
 
 
 
-server.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
-  next();
-});
+// server.use((req, res, next) => {
+//   console.log(req.session);
+//   console.log(req.user);
+//   next();
+// });
 
 
 server.use("/", routes);
