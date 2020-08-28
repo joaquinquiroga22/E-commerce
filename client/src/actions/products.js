@@ -28,7 +28,6 @@ export const getProduct = (id) => {
   console.log("Accion Traer un producto");
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/${id}`).then((product) => {
-      console.log(product);
       dispatch({
         type: GET_PRODUCT,
         product: product.data,
@@ -66,7 +65,7 @@ export const addProduct = (data) => {
 };
 
 export const deleteProduct = (id) => {
-  console.log(`Accion  producto con ${id}`);
+  console.log(`Accion eliminar producto con ${id}`);
   return (dispatch) => {
     axios.delete(`http://localhost:3000/products/${id}`).then(
       dispatch({

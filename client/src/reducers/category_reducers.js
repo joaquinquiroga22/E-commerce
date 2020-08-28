@@ -16,10 +16,16 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_CATEGORY:
-      return {
-        ...state,
-        categories: action.categories,
-      };
+      if (action.categories.length !== state.categories.length) {
+        return {
+          ...state,
+          categories: action.categories,
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
 
     case GET_CATEGORY_PRODUCT:
       return {
@@ -49,7 +55,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         categories: state.categories.map((cat) => {
-          return cat.id === action.id ? action.category : cat;
+          return cat.id === action.category.id ? action.category : cat;
         }),
       };
     default:

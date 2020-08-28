@@ -1,15 +1,6 @@
 import React from "react";
 import s from "./CrudItem.module.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 
 export default function CrudListItem({
   product,
@@ -23,7 +14,7 @@ export default function CrudListItem({
       <div className={s.div}> {"$ " + product.price} </div>
       <div className={s.div}>
         {" "}
-        {product.categories[0] && product.categories[0].name}{" "}
+        {product.categories && product.categories[0].name}{" "}
       </div>
 
       <div className={s.buttons}>

@@ -8,26 +8,10 @@ import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
-
-import { useSelector, useDispatch } from "react-redux";
-//importamos la accion a dispatchear
-import { getProducts } from "./actions/products.js";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
-import ProductCard from "./components/product_card/ProductCard";
-import { getCategories } from "./actions/categories";
-
 
 function App() {
-  const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
-  const categories = useSelector((state) => state.categories.categories);
   const [renderAddUser, setRenderAddUser] = useState(false);
-
-  useEffect(() => {
-    dispatch(getProducts());
-    dispatch(getCategories());
-  }, [getCategories, getProducts]);
-
 
   return (
     <Router>

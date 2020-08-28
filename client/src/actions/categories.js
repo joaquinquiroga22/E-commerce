@@ -9,6 +9,7 @@ export const GET_CATEGORY_BY_ID = "GET_CATEGORY_BY_ID";
 
 //ACTION TRAE LISTA DE CATEGORIAS
 export const getCategories = () => {
+  console.log(`ACCION OBTENER TODAS LAS CATEGORIAS`);
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/category`).then((res) => {
       dispatch({
@@ -20,6 +21,7 @@ export const getCategories = () => {
 };
 
 export const getCategoryById = (id) => {
+  console.log(`ACCION OBTENER LA CATEGORIA ID: ${id}`);
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/category/${id}`).then((cat) => {
       dispatch({
@@ -32,6 +34,7 @@ export const getCategoryById = (id) => {
 
 //ACTION TRAE LISTA DE PRODUCTOS ASIGNADOS A x CATEGORIA
 export const getCategoryProduct = (id) => {
+  console.log(`ACCION OBTENER TODOS LOS PRODUCTOS EN CATEGORIA ID: ${id}`);
   return (dispatch) => {
     axios
       .get(`http://localhost:3000/products/category/?id=${id}`)
@@ -45,11 +48,11 @@ export const getCategoryProduct = (id) => {
 };
 
 export const addCategory = (data) => {
+  console.log(`ACCION AGREGAR CATEGORIA`);
   return (dispatch) => {
     axios
       .post(`http://localhost:3000/products/category`, data)
       .then((category) => {
-        console.log(category);
         dispatch({
           type: ADD_CATEGORY,
           category: category.data,
@@ -59,6 +62,7 @@ export const addCategory = (data) => {
 };
 
 export const deleteCategory = (id) => {
+  console.log(`ACCION ELIMINAR LA CATEGORIA CON ID: ${id}`);
   return (dispatch) => {
     axios.delete(`http://localhost:3000/products/category/${id}`).then(() => {
       dispatch({
@@ -70,6 +74,7 @@ export const deleteCategory = (id) => {
 };
 
 export const editCategory = (id, data) => {
+  console.log(`ACCION EDITAR LA CATEGORIA CON ID: ${id}`);
   return (dispatch) => {
     axios
       .put(`http://localhost:3000/products/category/${id}`, data)

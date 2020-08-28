@@ -9,6 +9,7 @@ import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
+//Actions REDUX
 import { getCategories } from "../../../actions/categories";
 import { addProduct, editProduct } from "../../../actions/products";
 
@@ -30,11 +31,15 @@ export default function CrudAddProduct(props) {
   const { categories } = useSelector((state) => state.categories);
   const { product } = useSelector((state) => state.products);
 
+  const replaceChars = function (text) {
+    var newText = text && text.split("_").join(" ");
+    newText = newText && newText.charAt(0).toUpperCase() + newText.slice(1);
+    return newText;
+  };
+
   useEffect(() => {
     dispatch(getCategories());
     if (props.type === "Edit") {
-      console.log(`Action dentro del render EDIT con ${props.id}`);
-      //dispatch(getProduct(props.id));
       if (product) {
         setInput({ ...product });
       }
@@ -48,11 +53,6 @@ export default function CrudAddProduct(props) {
       });
     }
   }, [product]);
-  const replaceChars = function (text) {
-    var newText = text && text.split("_").join(" ");
-    newText = newText && newText.charAt(0).toUpperCase() + newText.slice(1);
-    return newText;
-  };
 
   const handleInputChange = function (e) {
     setInput({

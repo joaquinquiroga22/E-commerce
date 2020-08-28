@@ -5,16 +5,10 @@ import Alert from "@material-ui/lab/Alert";
 import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
-import axios from "axios";
 
 //REDUX
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getCategories,
-  getCategoryById,
-  addCategory,
-  editCategory,
-} from "../../actions/categories";
+import { addCategory, editCategory } from "../../../actions/categories";
 
 export default function AddC(props) {
   const [success, setSuccess] = useState(false);
@@ -27,11 +21,12 @@ export default function AddC(props) {
 
   //Subcripciones al Store
   const category = useSelector((state) => state.categories.category);
+
   useEffect(() => {
     if (props.type === "Edit") {
-      if (category) {
-        setInput(...category);
-      }
+      // if (category) {
+      //   setInput(...category);
+      // }
       setInput({
         name: category.name,
         description: category.description,
@@ -55,37 +50,20 @@ export default function AddC(props) {
     };
 
     if (props.type === "Add") {
-      axios
-        .post("http://localhost:3000/products/category", data)
-        .then((res) => {
-          setSuccess(true);
-          setTimeout(function () {
-            setSuccess(false);
-          }, 1500);
-        });
+      dispatch(addCategory(data));
+      setSuccess(true);
     }
     if (props.type === "Edit") {
-      axios
-        .put(`http://localhost:3000/products/category/${props.id}`, data)
-        .then((res) => {
-          setSuccess(true);
-          setTimeout(function () {
-            setSuccess(false);
-          }, 1500);
-        });
+      dispatch(editCategory(category.id, data));
+      setSuccess(true);
     }
-
-    // dispatch(addCategory(data));
-    // setSuccess(true);
   };
 
   return (
     <form onSubmit={handleSubmit} className={s.form}>
       <div className={s.content}>
         <h3>
-          {props.type === "Edit"
-            ? "Actualizar una categoria"
-            : "Agregar una categoria"}
+          {props.type === "Edit" ? "Actualizar Categoria" : "Agregar Categoria"}
         </h3>
         <CloseBtn close={props.onClose} />
 
@@ -98,7 +76,6 @@ export default function AddC(props) {
             name="name"
             value={input.name}
             onChange={handleInputChange}
-            autofocus
           />
         </fieldset>
         <fieldset>

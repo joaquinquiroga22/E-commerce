@@ -44,10 +44,6 @@ export default (state = initialState, action) => {
 
     // Al arrgelo de productos, busco el que tiene el id y lo reemplazo por el nuevo editado
     case EDIT_PRODUCT:
-      console.log(
-        "----------- ACTION.PRODUCT DENTRO DEL REDUCER --------------"
-      );
-      console.log(action.product);
       return {
         ...state,
         products: state.products.map((product) => {
