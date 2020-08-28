@@ -86,7 +86,11 @@ export default function Navbar({ onSearch, botonNav }) {
           <span>Mi Carrito</span>
         </Link>
         <Link to="/admin">
-          <span>Administrar</span>
+          {loggedIn && user.data.role === "admin" ? (
+            <span>Administrar</span>
+          ) : (
+            <></>
+          )}
         </Link>
         <Link to="/loginpage" className={s.login}>
           {loggedIn ? <span>Logout</span> : <span>Login</span>}

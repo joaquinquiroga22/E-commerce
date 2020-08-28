@@ -7,6 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import { useSelector, useDispatch } from "react-redux";
 
 //Componentes
 import Navbar from "./containers/navbar/Navbar.jsx";
@@ -25,8 +26,11 @@ import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
 import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
 import { HomePage } from "./containers/home/HomePage.jsx";
+import { useHistory } from "react-router-dom";
+// export const history = createBrowserHistory();
 
 function App() {
+  let history = useHistory();
   const alert = useSelector((state) => state.alert);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
@@ -40,13 +44,13 @@ function App() {
     });
   }, []);
 
-  useEffect(() => {
-    dispatch(getProducts());
-    dispatch(getCategories());
-  }, [getCategories, getProducts]);
+  // useEffect(() => {
+  //   dispatch(getProducts());
+  //   dispatch(getCategories());
+  // }, [getCategories, getProducts]);
 
   return (
-    <Router history={createBrowserHistory()}>
+    <Router history={history}>
       <Switch>
         <div className="App">
           <Route

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
+import { createBrowserHistory } from "history";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -20,7 +21,7 @@ import Container from "@material-ui/core/Container";
 
 import { userActions } from "../../actions/user";
 
-function LoginPage() {
+function LoginPage(props) {
   const [success, setSuccess] = useState(false);
   const [inputs, setInputs] = useState({
     email: "",
@@ -56,6 +57,8 @@ function LoginPage() {
     }, 1500);
     setTimeout(function () {
       setSuccess(false);
+      // window.location.replace("http://localhost:3001/home");
+      props.history.push("/home");
     }, 3000);
   }
 
