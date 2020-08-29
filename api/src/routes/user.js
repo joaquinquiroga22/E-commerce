@@ -1,6 +1,6 @@
 const server = require("express").Router();
 const bcrypt = require("bcryptjs");
-const { User, Order, Productsorder, Product } = require("../db.js");
+const { User, Order, Productsorder, Product, Reviews } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
@@ -54,7 +54,7 @@ server.put("/:id", (req, res, next) => {
 server.get("/:id", (req, res, next) => {
   User.findOne({
     where: { id: req.params.id },
-    include: [Order],
+    include: [Order, Reviews],
   })
     .then((user) => {
       if (!user) {
@@ -66,7 +66,7 @@ server.get("/:id", (req, res, next) => {
 });
 
 server.get("/", (req, res, next) => {
-  User.findAll({ include: Order })
+  User.findAll({ include: [Order, Reviews] })
     .then((users) => {
       if (users && users.length === 0) {
         return res.send([]);
@@ -93,53 +93,78 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-server.post("/:userid/cart",(req, res, next) => {
+server.post("/:userid/cart", (req, res, next) => {
   const idUser = req.params.userid;
   const { idProduct, state, address, quantity, description } = req.body;
 
-  const product = Product.findOne({where:{ id: idProduct}});
+  const product = Product.findOne({ where: { id: idProduct } });
 
-
-  Order.findAll({ where: { userId: idUser, state: "cart"} })
+  Order.findAll({ where: { userId: idUser, state: "cart" } })
     .then((orders) => {
       //Si no hay ninguna orden del usuario en estado cart, creamos una.
-      if (orders.length === 0){
-        console.log("no hay nah")
-        const newOrder = Order.create({ userId: idUser,state: "cart", address: "general pico" })
+      if (orders.length === 0) {
+        console.log("no hay nah");
+        const newOrder = Order.create({
+          userId: idUser,
+          state: "cart",
+          address: "general pico",
+        });
 
-        Promise.all([product,newOrder])
-        .then((values) => {
+        Promise.all([product, newOrder]).then((values) => {
           let productToAdd = values[0].dataValues;
           let orderData = values[1].dataValues;
-          Productsorder.create({price: productToAdd.price, quantity: quantity,
-          description: productToAdd.description, orderId: orderData.id, productId: productToAdd.id})
+          Productsorder.create({
+            price: productToAdd.price,
+            quantity: quantity,
+            description: productToAdd.description,
+            orderId: orderData.id,
+            productId: productToAdd.id,
+          });
           return orders;
-        })
+        });
       }
       let updateOrder = orders[0].dataValues;
-      const productInOrder = Productsorder.findOne({where: {productId: idProduct, orderId: updateOrder.id}})
+      const productInOrder = Productsorder.findOne({
+        where: { productId: idProduct, orderId: updateOrder.id },
+      });
       //Si no hay ningun producto en esa orden lo agrega (devuelve null)
-      Promise.all([product,productInOrder]).then((values) => {
-        let productToAdd = values[0].dataValues;
-        if(values[1] === null){
-          Productsorder.create({price: productToAdd.price, quantity: quantity,
-          description: productToAdd.description, orderId: updateOrder.id, productId: productToAdd.id})
+      Promise.all([product, productInOrder])
+        .then((values) => {
+          let productToAdd = values[0].dataValues;
+          if (values[1] === null) {
+            Productsorder.create({
+              price: productToAdd.price,
+              quantity: quantity,
+              description: productToAdd.description,
+              orderId: updateOrder.id,
+              productId: productToAdd.id,
+            });
+            return values;
+          }
+          Productsorder.update(
+            {
+              price: productToAdd.price,
+              quantity: quantity,
+              description: productToAdd.description,
+              productId: productToAdd.id,
+            },
+            { where: { productId: productToAdd.id } }
+          );
+          return orders;
+        })
+        .then((values) => {
           return values;
-        }
-        Productsorder.update({price: productToAdd.price, quantity: quantity,
-        description: productToAdd.description, productId: productToAdd.id}, {where: { productId: productToAdd.id}});
-        return orders;
-      })
-      .then((values) => {return values})
-
+        });
     })
     .then((order) => {
-      res.send(order)
+      res.send(order);
     })
-    .catch((err) => {return res.send(err)})
+    .catch((err) => {
+      return res.send(err);
+    });
 
   //Fin del POST
-})
+});
 
 server.get("/:idUser/cart", (req, res, next) => {
   var orderId;
