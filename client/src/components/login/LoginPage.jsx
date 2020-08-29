@@ -1,65 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// Material-UI
 import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
-import { createBrowserHistory } from "history";
-
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
+//Actions
 import { userActions } from "../../actions/user";
+import { alertActions } from "../../actions/alert";
 
 function LoginPage(props) {
   const [success, setSuccess] = useState(false);
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-  });
+  const [failure, setFailure] = useState(false);
+  const [inputs, setInputs] = useState({ email: "", password: "" });
   const { email, password } = inputs;
-  const loggingIn = useSelector((state) => state.authentication.loggingIn);
-  const dispatch = useDispatch();
 
+  // Traigo el usuario del Local Storage
+  const user = JSON.parse(localStorage.getItem("user"));
+  //Selectores de estados en redux
+  const loggingIn = useSelector((state) => state.authentication.loggingIn);
+  const loggedIn = useSelector((state) => state.authentication.loggedIn);
+  const alert = useSelector((state) => state.alert.message);
+
+  const dispatch = useDispatch();
   // reset login status
   useEffect(() => {
     dispatch(userActions.logout());
   }, []);
-
-  const user = useSelector((state) => state.authentication.user);
   useEffect(() => {
-    dispatch(userActions.getAll());
+    dispatch(alertActions.clear());
   }, []);
 
+  const preventDefault = (event) => event.preventDefault();
   function handleChange(e) {
     const { name, value } = e.target;
     setInputs((inputs) => ({ ...inputs, [name]: value }));
   }
-  const [seconds, setSeconds] = useState(1.5);
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (email && password) {
       dispatch(userActions.login(email, password));
+      dispatch(alertActions.clear());
     }
-    setTimeout(function () {
-      setSuccess(true);
-    }, 1500);
-    setTimeout(function () {
-      setSuccess(false);
-      props.history.push("/home");
-    }, 3000);
-  }
+    setSuccess(true);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -112,19 +102,37 @@ function LoginPage(props) {
                   </FormHelperText>
                 </FormControl>
               </Grid>
-              {success && (
-                <Alert severity="success">
-                  Hola {user.data && user.data.name}!
-                  <p>Se ha logueado Correctamente</p>
+
+              {loggedIn &&
+                setTimeout(function () {
+                  setFailure(false);
+                }, 1) &&
+                success &&
+                setTimeout(function () {
+                  console.log(user.name);
+                  setSuccess(false);
+                  props.history.push("/home");
+                }, 2500) && (
+                  <Alert severity="success">
+                    Hola {user && user.name}!<p>Se ha logueado Correctamente</p>
+                  </Alert>
+                )}
+              {alert &&
+                setTimeout(function () {
+                  setFailure(true);
+                }, 20) && <></>}
+              {failure && (
+                <Alert severity="error">
+                  <p>Ingrese los datos correctamente</p>
                 </Alert>
               )}
               <Grid md={12}>
                 <Button type="submit" variant="contained" color="primary">
-                  {loggingIn && <span></span>}
+                  {loggingIn && <CircularProgress size="40" disableShrink />}
                   Login
                 </Button>
-                <Button variant="outlined" color="primary" href="/register">
-                  Register
+                <Button variant="outlined" color="primary">
+                  <Link to="/register">Registrate</Link>
                 </Button>
                 <Grid container>
                   <Grid item xs>
