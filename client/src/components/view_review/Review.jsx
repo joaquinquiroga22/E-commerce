@@ -6,8 +6,10 @@ import SuccessBtn from "../success_btn/SuccessBtn.jsx";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
 
+
 export default function Review (props){
-  //console.log(props.onClose + "OLA");
+  const [renderUpdate,setRenderUpdate] = useState(false);
+  console.log(props.onClose + "OLA");
   const onSubmitHandle = function (event) {
     event.preventDefault();
     const data = {
@@ -17,7 +19,7 @@ export default function Review (props){
     
     };
      }
-  const [success,setSuccess] = useState(false);
+  const [success,setSuccess] = useState();
     useEffect(() => { 
         axios
           .get(`http://localhost:3000/products/${props.id}`)
@@ -44,8 +46,8 @@ export default function Review (props){
         description: "",
       });
     return(
-       <form className={s.form} onSubmit={onSubmitHandle}>
-         <div className={s.content}>
+      <form className={s.form}>
+        <div className = {s.content}>
         <CloseBtn close={props.onClose} />
         <div className={s.inputs}>
           <fieldset>
@@ -88,10 +90,12 @@ export default function Review (props){
             {success && (
             <Alert severity="success">Review agregada correctamente</Alert>
           )}
+          
           <SuccessBtn className = {s.success} text={ "Agregar Review"} />
+        
             <CancelBtn text="Cancelar" close={props.onClose} />
           </div>
         </div>
-      </form>
+    </form>
     );
 }

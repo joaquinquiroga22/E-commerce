@@ -9,7 +9,7 @@ function Footer() {
         <ul>
           <li>Joaquin Quiroga</li>
           <li>Nicolas Caillet Bois</li>
-          <li>German Moren</li>
+          <li>German Moreno</li>
           <li>Alberto Popelka</li>
           <li>Julian Lucero</li>
         </ul>

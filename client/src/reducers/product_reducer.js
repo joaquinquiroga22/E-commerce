@@ -4,13 +4,13 @@ import {
   ADD_PRODUCT,
   EDIT_PRODUCT,
   DELETE_PRODUCT,
+  SEARCH_PRODUCT,
+  GET_PRODUCTS_CATEGORY,
 } from "../actions/products";
-import {GET_CART} from '../actions/cart';
 
 const initialState = {
   products: [],
   product: {},
-  Cart: []
 };
 
 export default (state = initialState, action) => {
@@ -27,7 +27,15 @@ export default (state = initialState, action) => {
         ...state,
         product: action.product,
       };
-    // Al arreglo de productos le agrego un nuevoproducto
+
+    case GET_PRODUCTS_CATEGORY:
+      return {
+        ...state,
+        products: action.productsCategory,
+      };
+
+    // Al arreglo de productos le devuelvo un nuevo arreglo con nuevoproducto
+
     case ADD_PRODUCT:
       return {
         ...state,
@@ -49,11 +57,13 @@ export default (state = initialState, action) => {
         ...state,
         products: state.products.filter((product) => product.id !== action.id),
       };
-    case GET_CART:
+
+    case SEARCH_PRODUCT:
       return {
         ...state,
-        Cart: action.cart,
+        products: action.founds,
       };
+
     default:
       return state;
   }
