@@ -1,7 +1,7 @@
 const server = require("express").Router();
 const session = require('express-session');
 const passport = require('passport');
-const { User } = require("../db.js");
+const { User} = require("../db.js");
 const { Sequelize } = require("sequelize");
 
 
@@ -26,7 +26,7 @@ function isAuthenticated(req, res, next) {
 server.get('/logout',
   function(req, res){
     req.logout();
-    res.send(205,"Deslogeado correctamente")
+    res.status(205).send("Deslogeado correctamente")
   });
 
 
