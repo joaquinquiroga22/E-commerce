@@ -4,7 +4,7 @@ const { User, Order, Productsorder, Product } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
-  if (email && name && lastname && password && role) {
+  if (email && name && lastname && password) {
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash(password, salt, function (err, hash) {
         // Store hash in your password DB.

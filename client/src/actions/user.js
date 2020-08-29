@@ -1,8 +1,5 @@
 import { alertActions } from "./alert";
 import { userService } from "../services/user.service";
-// import { createBrowserHistory } from "history";
-// import { history } from "../../src/App";
-import { useHistory } from "react-router-dom";
 
 const REGISTER_REQUEST = "USERS_REGISTER_REQUEST";
 const REGISTER_SUCCESS = "USERS_REGISTER_SUCCESS";
@@ -22,13 +19,6 @@ const DELETE_REQUEST = "USERS_DELETE_REQUEST";
 const DELETE_SUCCESS = "USERS_DELETE_SUCCESS";
 const DELETE_FAILURE = "USERS_DELETE_FAILURE";
 
-// const someAction = () => {
-//   return (dispatch) => {
-//       history.push("/home");
-//     });
-//   };
-// };
-
 export const userActions = {
   login,
   logout,
@@ -40,13 +30,10 @@ export const userActions = {
 function login(email, password) {
   return (dispatch) => {
     dispatch(request({ email }));
-    // let history = useHistory();
     userService.login(email, password).then(
       (user) => {
         dispatch(success(user));
-
-        // history.push("/home");
-        return user;
+        // return user;
       },
       (error) => {
         dispatch(failure(error.toString()));
@@ -74,7 +61,6 @@ function logout() {
 function register(user) {
   return (dispatch) => {
     dispatch(request(user));
-
     userService.register(user).then(
       (user) => {
         dispatch(success());

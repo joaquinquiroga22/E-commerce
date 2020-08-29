@@ -10,24 +10,23 @@ import Badge from "@material-ui/core/Badge";
 
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart.js";
-import { userActions } from "../../actions/user";
+// import { userActions } from "../../actions/user";
 
 export default function Navbar({ onSearch, botonNav }) {
   const dispatch = useDispatch();
   const { Cart } = useSelector((state) => state.products);
   const [count, setCount] = useState(0);
-  const user = useSelector((state) => state.authentication.user);
-  const loggedIn = useSelector((state) => state.authentication.loggedIn);
+  // const user = useSelector((state) => state.authentication.user);
+  // const loggedIn = useSelector((state) => state.authentication.loggedIn);
+
+  let user = JSON.parse(localStorage.getItem("user"));
+  const loggedIn = user ? true : false;
 
   useEffect(() => {
     if (Cart) {
       setCount(Cart.length);
     }
   }, [Cart]);
-
-  useEffect(() => {
-    dispatch(userActions.getAll());
-  }, []);
 
   if (window.location.pathname === "/admin") {
     return (
@@ -60,7 +59,7 @@ export default function Navbar({ onSearch, botonNav }) {
               botonNav(true);
             }}
           >
-            {loggedIn ? `Hola ${user.data.name}` : <p>Login</p>}
+            {loggedIn ? `Hola ${user.name}` : <p>Login</p>}
           </button>
         </div>
       </div>
@@ -86,11 +85,7 @@ export default function Navbar({ onSearch, botonNav }) {
           <span>Mi Carrito</span>
         </Link>
         <Link to="/admin">
-          {loggedIn && user.data.role === "admin" ? (
-            <span>Administrar</span>
-          ) : (
-            <></>
-          )}
+          {loggedIn && user.role === "admin" ? <span>Administrar</span> : <></>}
         </Link>
         <Link to="/loginpage" className={s.login}>
           {loggedIn ? <span>Logout</span> : <span>Login</span>}
