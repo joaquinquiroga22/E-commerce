@@ -4,7 +4,7 @@ const { User, Order, Productsorder, Product } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
-  if (email && name && lastname && password && role) {
+  if (email && name && lastname && password) {
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash(password, salt, function (err, hash) {
         // Store hash in your password DB.
@@ -93,58 +93,53 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-server.post("/:idUser/cart", (req, res, next) => {
-  const idUser = req.params.idUser;
+server.post("/:userid/cart",(req, res, next) => {
+  const idUser = req.params.userid;
   const { idProduct, state, address, quantity, description } = req.body;
-  if (!idProduct || !state || !address || quantity === null || !description) {
-    return res
-      .status(400)
-      .json({ message: "Debe pasar los parametros necesarios" });
-  }
-  const promiseProduct = Product.findByPk(idProduct);
-  const promiseOrder = Order.findOrCreate({
-    where: { userId: idUser, state: state, address: address },
-  });
-  var price;
-  var orderId;
-  Promise.all([promiseProduct, promiseOrder])
-    .then((values) => {
-      orderId = values[1][0].dataValues.id;
-      if (values[0] == null) {
-        return res
-          .status(400)
-          .json({ message: "Debe pasar un idProduct valido" });
+
+  const product = Product.findOne({where:{ id: idProduct}});
+
+
+  Order.findAll({ where: { userId: idUser, state: "cart"} })
+    .then((orders) => {
+      //Si no hay ninguna orden del usuario en estado cart, creamos una.
+      if (orders.length === 0){
+        console.log("no hay nah")
+        const newOrder = Order.create({ userId: idUser,state: "cart", address: "general pico" })
+
+        Promise.all([product,newOrder])
+        .then((values) => {
+          let productToAdd = values[0].dataValues;
+          let orderData = values[1].dataValues;
+          Productsorder.create({price: productToAdd.price, quantity: quantity,
+          description: productToAdd.description, orderId: orderData.id, productId: productToAdd.id})
+          return orders;
+        })
       }
-      price = values[0].dataValues.price;
-      let stock = values[0].dataValues.stock;
-      if (quantity > stock) {
-        return res.status(400).json({ message: "Sin stock disponible" });
-      }
-      if (quantity < 1) {
-        return res
-          .status(400)
-          .json({ message: "La cantidad debe ser mayor a 0" });
-      }
-      if (values[1][0] === null) {
-        return res
-          .status(400)
-          .json({ message: "No existe un usuario con ese id" });
-      }
-      let cart = values[1][0];
-      let product = values[0];
-      return cart.addProducts(product);
+      let updateOrder = orders[0].dataValues;
+      const productInOrder = Productsorder.findOne({where: {productId: idProduct, orderId: updateOrder.id}})
+      //Si no hay ningun producto en esa orden lo agrega (devuelve null)
+      Promise.all([product,productInOrder]).then((values) => {
+        let productToAdd = values[0].dataValues;
+        if(values[1] === null){
+          Productsorder.create({price: productToAdd.price, quantity: quantity,
+          description: productToAdd.description, orderId: updateOrder.id, productId: productToAdd.id})
+          return values;
+        }
+        Productsorder.update({price: productToAdd.price, quantity: quantity,
+        description: productToAdd.description, productId: productToAdd.id}, {where: { productId: productToAdd.id}});
+        return orders;
+      })
+      .then((values) => {return values})
+
     })
-    .then((values) => {
-      return Productsorder.update(
-        { price, quantity, description },
-        { where: { productId: idProduct, orderId: orderId }, returning: true }
-      );
+    .then((order) => {
+      res.send(order)
     })
-    .then((values) => {
-      res.send(values[1][0]);
-    })
-    .catch((error) => next(error));
-});
+    .catch((err) => {return res.send(err)})
+
+  //Fin del POST
+})
 
 server.get("/:idUser/cart", (req, res, next) => {
   var orderId;

@@ -17,6 +17,7 @@ import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
+import Review from "./components/view_review/Review.jsx"
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
 
@@ -50,6 +51,7 @@ function App() {
   // }, [getCategories, getProducts]);
 
   return (
+
     <Router history={history}>
       <Switch>
         <div className="App">
@@ -79,6 +81,7 @@ function App() {
           <Route path="/" component={Footer} />
         </div>
       </Switch>
+
     </Router>
   );
 }

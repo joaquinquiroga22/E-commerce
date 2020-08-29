@@ -3,6 +3,7 @@ import axios from "axios";
 function authHeader() {
   // return authorization header with jwt token
   let user = JSON.parse(localStorage.getItem("user"));
+  console.log("el usuario traido de localStorage:-------" + user);
 
   if (user && user.token) {
     return { Authorization: "Bearer " + user.token };
@@ -32,11 +33,11 @@ function login(email, password) {
       .post(`http://localhost:3000/auth/login`, requestOptions)
       // .then(handleResponse)
       .then((user) => {
-        console.log(user);
+        // console.log("en el login:         " + user.data);
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(user.data));
 
-        return user;
+        return user.data;
       })
   );
 }
@@ -44,7 +45,7 @@ function login(email, password) {
 function logout() {
   // remove user from local storage to log user out
   return axios.get(`http://localhost:3000/auth/logout`).then((res) => {
-    console.log("el user en el logout jajaj +++++++ + ++ " + res.data);
+    console.log("el user en el logout " + res);
     localStorage.removeItem("user");
   });
 }
@@ -97,20 +98,20 @@ function _delete(id) {
   return axios.delete(`http://localhost:3000/users/${id}`, requestOptions);
 }
 
-function handleResponse(response) {
-  return response.then((text) => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        // auto logout if 401 response returned from api
-        logout();
-        // location.reload(true);
-      }
+// function handleResponse(response) {
+//   return response.then((text) => {
+//     const data = text && JSON.parse(text);
+//     if (!response.ok) {
+//       if (response.status === 401) {
+//         // auto logout if 401 response returned from api
+//         logout();
+//         // location.reload(true);
+//       }
 
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
+//       const error = (data && data.message) || response.statusText;
+//       return Promise.reject(error);
+//     }
 
-    return data;
-  });
-}
+//     return data;
+//   });
+// }
