@@ -2,12 +2,15 @@ import React,{useEffect, useState} from 'react';
 import s from './UsersPanel.module.css';
 import axios from 'axios';
 import ViewUser from "../../components/view_user/ViewUser.jsx";
+import ViewReset from "../../components/view_reset/ViewReset.jsx"
 
 export default function UsersPanel(){
   const [users,setUsers] = useState();
   const [renderViewUser, setRenderViewUser] = useState(false);
   const [viewId, setViewId] = useState(0);
-
+  const [reset, setReset] = useState(0)
+  const [renderReset, setRenderReset] = useState(false)
+  
   useEffect(() => {
     getUsers("mounted")
   },[users])
@@ -15,6 +18,8 @@ export default function UsersPanel(){
   useEffect(() => {
     getUsers("update")
   },[renderViewUser])
+
+   
 
   const getUsers = function(type){
     if(type === "mounted"){
@@ -37,6 +42,11 @@ export default function UsersPanel(){
     setRenderViewUser(true)
   }
 
+  const onViewReset = function(e){
+    setReset(Number(e.target.id));
+    setRenderReset(true)
+  }
+
 
   if(!users){
     return (<div className={s.container}></div>);
@@ -44,7 +54,8 @@ export default function UsersPanel(){
 
   return (<div className={s.container}>
           {renderViewUser && <ViewUser id={viewId} onClose={setRenderViewUser} />}
-          <table className={s.usersTable}>
+          {renderReset && <ViewReset id={reset} onClose={setRenderReset} /> }
+          <table className={s.usersTable}>s
           <caption>Administración de usuarios</caption>
             <thead>
               <tr>
@@ -52,6 +63,7 @@ export default function UsersPanel(){
                 <th>Email</th>
                 <th>Rol</th>
                 <th>Acciones</th>
+                <th>Resetear Password</th> 
               </tr>
             </thead>
             <tbody>
@@ -61,10 +73,21 @@ export default function UsersPanel(){
                           <td>{user.email}</td>
                           <td>{user.role}</td>
                           <td><button id={user.id} onClick={onViewUser}>Ver usuario</button></td>
-                      </tr>)
+                          <td> <button id={user.id} onClick={onViewReset}>Reset</button></td> 
+
+                        </tr>)
               })}
             </tbody>
 
           </table>
           </div>);
 }
+
+
+// 1) El boton resetear agrega al usuario a una tabla nueva => reset por ejemplo, 
+// ---> post axios 
+// 2) Antes de que se logee, tenga que chekear si ese usuario esta en esa tabla de la base de datos que mande 
+// FindOne para ver si esta en esa tabla con un if 
+//  
+// un mensaje al front y que le redirija al usuario al login para que ponga una nueva password. 
+// el put se hace cuando quiera updetear la password 

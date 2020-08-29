@@ -7,15 +7,20 @@ export default function ViewUser({id, onClose }){
   const [user,setUser] = useState();
   const [edit, setEdit] = useState(false);
   const [input, setInput] = useState({});
+  
+   
+
   useEffect(() => {
     if(!user){
       axios.get(`http://localhost:3000/users/${id}`).then((res) => {
         setUser(res.data);
         setInput(res.data)
+        
       })
     }
   },[user])
 
+  
 
   const handleInputChange = function (e) {
     setInput({
@@ -35,6 +40,7 @@ export default function ViewUser({id, onClose }){
       alert("Actualizado correctamente");
     })
   }
+
   const onDelete = function(){
     axios.delete(`http://localhost:3000/users/${id}`).then((res) => {
       alert("Eliminado correctamente");
