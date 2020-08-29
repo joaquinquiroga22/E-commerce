@@ -1,83 +1,45 @@
 import React, { useEffect, useState } from "react";
 import s from "./TrolleyTable.module.css";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getCart } from "../../actions/cart";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart, setQuantity, removeFromCart } from "../../actions/cart";
+
+import replaceChars from "../../helpers/replaceChars";
 
 export default function TrolleyTable() {
   const dispatch = useDispatch();
+
   const [total, setTotal] = useState(0);
-  const [products, setProducts] = useState({});
-  const [editableProducts, setEditableProducts] = useState({});
-  //Obtengo del localStorage el item Cart
-  var Cart = localStorage.getItem("Cart");
-  Cart = JSON.parse(Cart);
+
+  const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
-    if (Cart === null) {
-      return setProducts([]);
-    }
-    var productos = {};
-    Cart.forEach((producto) => {
-      axios
-        .get(`http://localhost:3000/products/${producto.productId}`)
-        .then((res) => {
-          producto.maxQuantity = Number(res.data.stock);
-        });
-      productos[producto.productId] = producto;
-    });
-    setProducts(productos);
-  }, [editableProducts]);
+    sumTotal();
+    localStorage.setItem("Cart", JSON.stringify(cart));
+  }, [cart]);
 
   const quantityChange = function (e) {
-    //localStorage.setItem('Cart', JSON.stringify(Cart));
     let id = Number(e.target.id);
-    let tempProducts = products;
-    if (e.target.value > tempProducts[id].maxQuantity) {
-      e.target.value = tempProducts[id].maxQuantity;
-    }
-    if (e.target.value < 1) {
-      e.target.value = 1;
-    }
-    tempProducts[id].quantity = e.target.value;
-    setEditableProducts(tempProducts);
-    let array = [];
-    for (let key in tempProducts) {
-      array.push(tempProducts[key]);
-    }
-    localStorage.setItem("Cart", JSON.stringify(array));
+    let qty = Number(e.target.value);
+    dispatch(setQuantity(id, qty));
   };
 
   const deleteItem = function (e) {
     let id = Number(e.target.id);
-    let tempProducts = products;
-
-    delete tempProducts[id];
-    setEditableProducts(tempProducts);
-
-    let array = [];
-    for (let key in tempProducts) {
-      array.push(tempProducts[key]);
-    }
-    localStorage.setItem("Cart", JSON.stringify(array));
-    dispatch(getCart());
+    dispatch(removeFromCart(id));
   };
 
   const sumSubTotal = function (quantity, price) {
     return Math.ceil(quantity * price);
   };
+
   const sumTotal = function () {
-    let newTotal = 0;
-    let tempProducts = products;
-    for (let key in tempProducts) {
-      let subtotal = sumSubTotal(
-        tempProducts[key].quantity,
-        tempProducts[key].price
-      );
-      newTotal += subtotal;
-    }
-    return newTotal;
+    let suma = 0;
+    cart.products.forEach((prod) => {
+      var stotal = prod.quantity * prod.price;
+      suma += stotal;
+    });
+    setTotal(suma);
   };
   return (
     <div className={s.table}>
@@ -94,28 +56,28 @@ export default function TrolleyTable() {
           </tr>
         </thead>
         <tbody>
-          {Cart &&
-            Cart.map((producto) => {
+          {cart.products &&
+            cart.products.map((producto) => {
               return (
-                <tr key={producto.productId}>
+                <tr key={producto.id}>
                   <td>
-                    <button id={producto.productId} onClick={deleteItem}>
+                    <button id={producto.id} onClick={deleteItem}>
                       X
                     </button>
                   </td>
                   <td>
-                    <Link to={`/product/${producto.productId}`}>
-                      {producto.name}
+                    <Link to={`/product/${producto.id}`}>
+                      {replaceChars(producto.name)}
                     </Link>
                   </td>
                   <td>{producto.description}</td>
                   <td className={s.quantity}>
                     <input
                       step="1"
-                      max={producto.maxQuantity}
+                      max={producto.stock}
                       min="1"
                       type="number"
-                      id={producto.productId}
+                      id={producto.id}
                       onChange={quantityChange}
                       value={producto.quantity}
                     />
@@ -132,7 +94,7 @@ export default function TrolleyTable() {
             <td></td>
             <td className={s.totalspan} colSpan="2">
               <span className={s.total}>Total:</span>
-              {sumTotal()}
+              {total}
             </td>
           </tr>
         </tbody>
