@@ -4,7 +4,6 @@ export const SET_QUANTITY = "SET_QUANTITY";
 export const EMPTY_CART = "EMPTY_CART";
 export const GET_CART = "GET_CART";
 
-<<<<<<< HEAD
 //Action para mandar al reducer lo que este en DB (Si esta logueado) o lo que este en LocalStorage
 export const getCart = (localCart, user) => {
   if (user) {
@@ -67,13 +66,6 @@ export const setQuantity = (productId, qty, idUser) => {
     productId,
     qty,
   };
-=======
-export const addToCart = (id) => {
-  dispatchEvent({
-    type: ADD_TO_CART,
-    id,
-  });
->>>>>>> master
 };
 
 //Si mandan idUser hago delete al server sino no (para localstorage)
