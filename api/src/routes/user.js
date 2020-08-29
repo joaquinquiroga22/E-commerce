@@ -268,8 +268,10 @@ server.put("/:id/passwordReset", (req, res, next) => {
           res.json(error);
         });
     });
+
   });
 });
+
 
 server.get("/:idUser/orders", (req, res, next) => {
   User.findAll({

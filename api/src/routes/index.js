@@ -6,7 +6,7 @@ const searchRouter = require("./search.js");
 const userRouter = require("./user.js");
 const ordersRouter = require("./orders.js");
 const authRouter = require("./auth.js");
-
+const resetRouter = require("./reset.js")
 // load each router on a route
 // i.e: router.use('/auth', authRouter);
 
@@ -16,5 +16,6 @@ router.use("/products", productRouter);
 router.use("/search", searchRouter);
 router.use("/users", userRouter);
 router.use("/orders", ordersRouter);
+router.use("/reset", resetRouter)
 
 module.exports = router;
