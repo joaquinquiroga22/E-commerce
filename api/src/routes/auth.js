@@ -30,17 +30,9 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-<<<<<<< HEAD
-server.get('/logout',
-  function(req, res){
-    req.logout();
-    res.status(205).send("Deslogeado correctamente")
-  });
-=======
 server.get("/me", isAuthenticated, function (req, res) {
   res.send(req.user);
 });
->>>>>>> master
 
 server.get("/logout", function (req, res) {
   req.logout();
