@@ -1,63 +1,70 @@
 const express = require("express");
-const session = require('express-session');
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
-const bcrypt = require('bcryptjs');
-const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
+const bcrypt = require("bcryptjs");
+const passport = require("passport");
+const Strategy = require("passport-local").Strategy;
 require("./db.js");
 
 //Modelo de usuario
 const { User, Review, Order, Products_Order  } = require("./db.js");
 
-
-passport.use(new Strategy({ usernameField: 'email', passwordField: 'password'},
- function(username, password, done) {
-    User.findOne({where: { email: username }}).then((user) => {
-        if(!user) {
+passport.use(
+  new Strategy({ usernameField: "email", passwordField: "password" }, function (
+    username,
+    password,
+    done
+  ) {
+    User.findOne({ where: { email: username } })
+      .then((user) => {
+        if (!user) {
           return done(null, false);
         }
         bcrypt.compare(password, user.password).then((res) => {
-            // res === true
-            console.log(res)
-            if(res){
-              return done(null, user);
-            }
-            return done(null, false);
+          // res === true
+          console.log(res);
+          if (res) {
+            return done(null, user);
+          }
+          return done(null, false);
         });
       })
-    .catch(err => {
-      console.log(err)
-      return done(err);
-    })
-}));
+      .catch((err) => {
+        console.log(err);
+        return done(err);
+      });
+  })
+);
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findOne({where: { id: id}})
+passport.deserializeUser(function (id, done) {
+  User.findOne({ where: { id: id } })
     .then((user) => {
       done(null, user);
     })
-    .catch(err => {
+    .catch((err) => {
       return done(err);
-    })
+    });
 });
 
 const server = express();
 //Middlewares
 //Usamos el modulo cors para las politics cors
 
-
 server.name = "API";
-server.use(cors({
-  origin: "http://localhost:3001",
-  credentials: true}));
+server.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
@@ -65,12 +72,16 @@ server.use(morgan("dev"));
 server.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
 });
-server.use(session({ secret: "clasificado", resave: false, saveUninitialized: false }));
-
+server.use(
+  session({ secret: "clasificado", resave: false, saveUninitialized: false })
+);
 
 server.use(passport.initialize());
 server.use(passport.session());
@@ -114,6 +125,5 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(status).send(message);
 });
-
 
 module.exports = server;
