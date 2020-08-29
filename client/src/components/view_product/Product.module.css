@@ -50,8 +50,8 @@
 }
 .title{
     text-align: center;
-    margin-left:auto;
-    font-family: Proxima Nova,-apple-system,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+    margin-left:0px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .rating {
@@ -65,7 +65,7 @@
     margin: 2px;
     cursor: pointer;
     border-radius: 8px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
 }
 .buttoms {
   display: flex;
@@ -78,4 +78,10 @@ h5 {
 
 .review {
   flex-direction: column;
+}
+.opinion{
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
