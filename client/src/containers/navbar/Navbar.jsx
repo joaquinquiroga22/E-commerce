@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import HomeIcon from "@material-ui/icons/Home";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
+// Components
 import SearchInput from "../../components/search_input/SearchInput.jsx";
+// Material y estilos
 import s from "./Navbar.module.css";
+import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
-
+import IconButton from "@material-ui/core/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+//Redux
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart.js";
 // import { userActions } from "../../actions/user";
 
 export default function Navbar({ onSearch, botonNav }) {
   const dispatch = useDispatch();
-  const { Cart } = useSelector((state) => state.products);
+  const Cart = useSelector((state) => state.cart);
   const [count, setCount] = useState(0);
-  // const user = useSelector((state) => state.authentication.user);
-  // const loggedIn = useSelector((state) => state.authentication.loggedIn);
-
-  let user = JSON.parse(localStorage.getItem("user"));
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const user = JSON.parse(localStorage.getItem("user"));
   const loggedIn = user ? true : false;
 
   useEffect(() => {
     if (Cart) {
-      setCount(Cart.length);
+      setCount(Cart.products.length);
     }
   }, [Cart]);
 
@@ -44,6 +49,12 @@ export default function Navbar({ onSearch, botonNav }) {
   const updateCart = function () {
     dispatch(getCart());
   };
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className={s.navbar}>
@@ -54,12 +65,47 @@ export default function Navbar({ onSearch, botonNav }) {
         <SearchInput onSearch={onSearch} />
         <div>
           <button
-            className={s.buttons}
-            onClick={() => {
-              botonNav(true);
-            }}
+          // className={s.buttons}
+          // onClick={() => {
+          //   botonNav(true);
+          // }}
           >
-            {loggedIn ? `Hola ${user.name}` : <p>Login</p>}
+            {loggedIn ? (
+              <>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  zIndex="modal"
+                  color="inherit"
+                >
+                  <> {user.name}</>
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  zIndex="modal"
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <>Nico</>
+            )}
           </button>
         </div>
       </div>
@@ -88,7 +134,7 @@ export default function Navbar({ onSearch, botonNav }) {
           {loggedIn && user.role === "admin" ? <span>Administrar</span> : <></>}
         </Link>
         <Link to="/loginpage" className={s.login}>
-          {loggedIn ? <span>Logout</span> : <span>Login</span>}
+          {loggedIn ? <span>Cerrar Sesion</span> : <span>Iniciar Sesion</span>}
         </Link>
       </div>
     </div>
