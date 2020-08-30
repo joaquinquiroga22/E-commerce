@@ -45,7 +45,7 @@ function login(email, password) {
 function logout() {
   // remove user from local storage to log user out
   return axios.get(`http://localhost:3000/auth/logout`).then((res) => {
-    console.log("el user en el logout " + res);
+    // console.log("el user en el logout " + res);
     localStorage.removeItem("user");
   });
 }
