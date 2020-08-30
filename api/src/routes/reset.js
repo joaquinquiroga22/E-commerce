@@ -18,6 +18,19 @@ const {email} = req.body;
                 });
           });
     
+          
+  server.get('/', (req, res, next) => {
+    Toresetpassword.findAll()
+                .then((users) => {
+                  console.log(users)
+                  res.status(201);
+                  res.send(users.dataValues);
+                })
+                .catch((error) => {
+                  res.status(400)
+                  res.send(error);
+                });
+          });
   
   
      
