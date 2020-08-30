@@ -252,6 +252,7 @@ server.put("/:idUser/cart", (req, res, next) => {
 });
 
 // Esta en verdad vendria a ser la password update
+
 server.put("/:id/passwordUpdate", (req, res, next) => {
   let { password } = req.body;
   console.log(password);
