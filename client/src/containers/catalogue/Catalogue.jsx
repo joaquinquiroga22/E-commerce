@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import s from "./Catalogue.module.css";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
 import { useSelector, useDispatch } from "react-redux";
-
 import replaceChars from "../../helpers/replaceChars";
+
+//HELPERS
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 //Actions para dispatcehar
 import {
@@ -13,13 +15,18 @@ import {
 } from "../../actions/products";
 import { getCategories } from "../../actions/categories";
 
+//CART
+import { getCart } from "../../actions/cart";
+
 //componentes
 import ProductCard from "../../components/product_card/ProductCard.jsx";
+import Alert from "@material-ui/lab/Alert";
 
 export default function Catalogue() {
   // Redux - Store:
   //State de products
   const products = useSelector((state) => state.products.products);
+  const message = useSelector((state) => state.cart.message);
 
   //State con Categorias
   const categories = useSelector((state) => state.categories.categories);
@@ -33,7 +40,8 @@ export default function Catalogue() {
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getCategories());
-  }, [getCategories, getProducts]);
+    dispatch(getCart(getOrCreateLocalStorage()));
+  }, []);
 
   useEffect(() => {
     if (query !== null) {
@@ -81,6 +89,11 @@ export default function Catalogue() {
         })}
       </div>
       <div className={s.products}>
+        {message && (
+          <Alert severity="warning">
+            El Producto ya se encuentra en el carrito
+          </Alert>
+        )}
         <div className={s.listproducts}>
           {products.length > 0 ? (
             products.map(function (product) {
@@ -96,6 +109,7 @@ export default function Catalogue() {
                     price={product.price}
                     description={product.description}
                     image={product.image}
+                    product={product}
                   />
                 );
               }
