@@ -2,9 +2,20 @@ import React, { useEffect, useState } from "react";
 import s from "./TrolleyTable.module.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart, setQuantity, removeFromCart } from "../../actions/cart";
+import {
+  setQuantity,
+  removeFromCart,
+  getCart,
+  emptyCart,
+} from "../../actions/cart";
+import Alert from "@material-ui/lab/Alert";
+import { Button } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
+//HELPERS
 import replaceChars from "../../helpers/replaceChars";
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 export default function TrolleyTable() {
   const dispatch = useDispatch();
@@ -14,8 +25,13 @@ export default function TrolleyTable() {
   const cart = useSelector((state) => state.cart);
 
   useEffect(() => {
+    dispatch(getCart(getOrCreateLocalStorage()));
+  }, []);
+
+  useEffect(() => {
     sumTotal();
-    localStorage.setItem("Cart", JSON.stringify(cart));
+
+    localStorage.setItem("Cart", JSON.stringify(cart.products));
   }, [cart]);
 
   const quantityChange = function (e) {
@@ -24,13 +40,17 @@ export default function TrolleyTable() {
     dispatch(setQuantity(id, qty));
   };
 
-  const deleteItem = function (e) {
-    let id = Number(e.target.id);
+  const deleteItem = function (id) {
+    console.log(`EL ID TIENE ${id}`);
     dispatch(removeFromCart(id));
   };
 
   const sumSubTotal = function (quantity, price) {
     return Math.ceil(quantity * price);
+  };
+
+  const emptyCarrito = () => {
+    dispatch(emptyCart());
   };
 
   const sumTotal = function () {
@@ -56,14 +76,18 @@ export default function TrolleyTable() {
           </tr>
         </thead>
         <tbody>
-          {cart.products &&
+          {cart && cart.products.length > 0 ? (
             cart.products.map((producto) => {
               return (
                 <tr key={producto.id}>
                   <td>
-                    <button id={producto.id} onClick={deleteItem}>
-                      X
-                    </button>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteItem(producto.id)}
+                      color="primary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </td>
                   <td>
                     <Link to={`/product/${producto.id}`}>
@@ -86,9 +110,29 @@ export default function TrolleyTable() {
                   <td>{sumSubTotal(producto.quantity, producto.price)}</td>
                 </tr>
               );
-            })}
+            })
+          ) : (
+            <tr>
+              <td></td>
+              <td></td>
+              <td className={s.totalspan} colSpan="2">
+                <Alert severity="info"> El carrito esta vacio</Alert>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          )}
           <tr>
-            <td></td>
+            <td className={s.totalspan} colSpan="2">
+              <Button
+                size="small"
+                variant="outlined"
+                color="primary"
+                onClick={emptyCarrito}
+              >
+                Vaciar Carrito
+              </Button>
+            </td>
             <td></td>
             <td></td>
             <td></td>

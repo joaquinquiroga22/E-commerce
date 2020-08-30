@@ -4,6 +4,9 @@ import FilterItem from "../../components/filter_item/FilterItem.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import replaceChars from "../../helpers/replaceChars";
 
+//HELPERS
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
+
 //Actions para dispatcehar
 import {
   getProducts,
@@ -39,17 +42,6 @@ export default function Catalogue() {
     dispatch(getCategories());
     dispatch(getCart(getOrCreateLocalStorage()));
   }, []);
-
-  function getOrCreateLocalStorage() {
-    //Obtengo del localStorage el item Cart
-    var cart = localStorage.getItem("Cart");
-    //Si no existe lo creo
-    if (cart === null) {
-      localStorage.setItem("Cart", JSON.stringify([]));
-      cart = localStorage.getItem("Cart");
-    }
-    return JSON.parse(cart);
-  }
 
   useEffect(() => {
     if (query !== null) {
@@ -98,7 +90,9 @@ export default function Catalogue() {
       </div>
       <div className={s.products}>
         {message && (
-          <Alert severity="warning">Ya tenes ese producto en el carrito</Alert>
+          <Alert severity="warning">
+            El Producto ya se encuentra en el carrito
+          </Alert>
         )}
         <div className={s.listproducts}>
           {products.length > 0 ? (

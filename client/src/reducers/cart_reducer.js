@@ -8,22 +8,20 @@ import {
 
 const initialState = {
   products: [],
-  total: 0,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case GET_CART:
-      let suma = 0;
-      if (action.products !== []) {
-        suma = action.products.reduce(
-          (acc, product) => acc + parseInt(product.price),
-          0
-        );
-      }
+      // let suma = 0;
+      // if (action.products !== []) {
+      //   suma = action.products.reduce(
+      //     (acc, product) => acc + parseInt(product.price),
+      //     0
+      //   );
+      // }
       return {
         products: action.products,
-        total: suma,
       };
 
     case ADD_TO_CART:
