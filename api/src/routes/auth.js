@@ -6,7 +6,7 @@ const { Sequelize } = require("sequelize");
 
 server.post("/login",passport.authenticate("local", { failureRedirect: "/auth/login" }),
   function (req, res) {
-    let {email} = req.body; 
+    let {email} = req.body;
     console.log(email)
     Toresetpassword.findOne({where: {email: email}})
     .then(user => {
@@ -32,7 +32,7 @@ server.post("/login",passport.authenticate("local", { failureRedirect: "/auth/lo
 
 
 
-    
+
   }
 );
 
@@ -49,9 +49,6 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-server.get("/me", isAuthenticated, function (req, res) {
-  res.send(req.user);
-});
 
 server.get("/logout", function (req, res) {
   req.logout();
