@@ -112,7 +112,9 @@ export default function TrolleyTable() {
                     </Link>
                   </td>
 
+
                   <td >{producto.description}</td>
+
 
                   <td className={s.quantity}>
                     <input

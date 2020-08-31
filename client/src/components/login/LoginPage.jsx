@@ -63,12 +63,16 @@ function ResetPw(props){
 function LoginPage(props) {
   useEffect(() => {
     dispatch(userActions.logout());
+
     //Borro el carrito que esta en localstorage
     localStorage.setItem("Cart", JSON.stringify([]));
+
   }, []);
   useEffect(() => {
     dispatch(alertActions.clear());
   }, []);
+
+
 
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
