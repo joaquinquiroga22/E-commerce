@@ -94,7 +94,7 @@ export default function TrolleyTable() {
                       {replaceChars(producto.name)}
                     </Link>
                   </td>
-                  <td>{producto.description}</td>
+                  <td >{producto.description}</td>
                   <td className={s.quantity}>
                     <input
                       step="1"
