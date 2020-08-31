@@ -92,8 +92,9 @@ export default function Product({ id }) {
           </Box>
         </Box>
       </Box>
-      <Box m={5} display="flex" flexDirection="column" alignItems="center">
-        <Typography variant="h5"> Reviews </Typography>
+      
+      <Box m={5} display="flex" flexDirection="column" alignItems="strech">
+        <Typography className = {s.Palabrareview} variant="h4"> Reviews </Typography>
 
         {product.reviews && product.reviews.length > 0 ? (
           product.reviews.map((review) => {

@@ -109,7 +109,7 @@ function LoginPage(props) {
                 }, 1) &&
                 success &&
                 setTimeout(function () {
-                  console.log(user.name);
+                  //console.log(user.name);
                   setSuccess(false);
                   props.history.push("/home");
                 }, 2500) && (
