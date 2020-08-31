@@ -16,7 +16,7 @@ import {
 import { getCategories } from "../../actions/categories";
 
 //CART
-import { getCart } from "../../actions/cart";
+import { getCart, fetchCartFromDb } from "../../actions/cart";
 
 //componentes
 import ProductCard from "../../components/product_card/ProductCard.jsx";
@@ -27,6 +27,9 @@ export default function Catalogue() {
   //State de products
   const products = useSelector((state) => state.products.products);
   const message = useSelector((state) => state.cart.message);
+
+  //State con user
+  const user = useSelector((state) => state.authentication.user);
 
   //State con Categorias
   const categories = useSelector((state) => state.categories.categories);
@@ -40,7 +43,11 @@ export default function Catalogue() {
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getCategories());
-    dispatch(getCart(getOrCreateLocalStorage()));
+    if (user) {
+      dispatch(fetchCartFromDb(user.id));
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
   }, []);
 
   useEffect(() => {

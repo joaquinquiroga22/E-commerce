@@ -7,6 +7,7 @@ import {
   removeFromCart,
   getCart,
   emptyCart,
+  fetchCartFromDb,
 } from "../../actions/cart";
 import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";
@@ -25,7 +26,11 @@ export default function TrolleyTable() {
   const user = useSelector((state) => state.authentication.user);
 
   useEffect(() => {
-    dispatch(getCart(getOrCreateLocalStorage()));
+    if (user) {
+      dispatch(fetchCartFromDb(user.id));
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
   }, []);
 
   useEffect(() => {

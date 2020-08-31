@@ -5,6 +5,7 @@ export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const SET_QUANTITY = "SET_QUANTITY";
 export const EMPTY_CART = "EMPTY_CART";
 export const GET_CART = "GET_CART";
+export const FETCH_FROM_DB = "FETCH_FROM_DB";
 
 //Action para mandar al reducer lo que este en DB (Si esta logueado) o lo que este en LocalStorage
 export const getCart = (localCart, user) => {
@@ -22,6 +23,21 @@ export const getCart = (localCart, user) => {
       products: localCart,
     };
   }
+};
+
+//Esto se puede hacer con dos promesas y hacer promise all
+export const fetchCartFromDb = (idUser) => {
+  const orderPromise = axios.get(`http://localhost:3000/users/${idUser}/cart`);
+  const productsPromise = axios.get(`http://localhost:3000/products`);
+  return (dispatch) => {
+    Promise.all([orderPromise, productsPromise]).then((values) => {
+      dispatch({
+        type: FETCH_FROM_DB,
+        order: values[0].data,
+        products: values[1].data,
+      });
+    });
+  };
 };
 
 //Si mandan idUser hago post al server sino no no
