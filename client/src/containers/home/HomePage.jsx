@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    height: "90%",
+    height: "80%",
     display: "flex",
     flexDirection: "column",
   },
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const cards = [1];
 
 function HomePage() {
   const classes = useStyles();
@@ -55,21 +55,21 @@ function HomePage() {
     <main>
       <Grid container spacing={4}>
         {cards.map((card) => (
-          <Grid item key={card} xs={12} sm={6} md={4}>
+          <Grid item key={card} xs={12} sm={12} md={12}>
             <Card className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image="https://source.unsplash.com/random"
-                title="Image title"
+                image="https://d26lpennugtm8s.cloudfront.net/stores/032/245/themes/material/img-1032456563-1504803228-f39d9f57f5472d4621d5e9fd385255fb1512619566-1920-1920.jpg"
+                // title="Image title"
               />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
-                  Heading
+                  Bienvenido
                 </Typography>
-                <Typography>
+                {/* <Typography>
                   This is a media card. You can use this section to describe the
                   content.
-                </Typography>
+                </Typography> */}
               </CardContent>
               <CardActions>
                 <Button size="small" color="primary">

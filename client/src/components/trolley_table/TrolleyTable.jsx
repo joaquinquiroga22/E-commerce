@@ -46,7 +46,7 @@ export default function TrolleyTable() {
   };
 
   const sumSubTotal = function (quantity, price) {
-    return Math.ceil(quantity * price);
+    return quantity * price;
   };
 
   const emptyCarrito = () => {
@@ -69,7 +69,7 @@ export default function TrolleyTable() {
           <tr>
             <th>Borrar</th>
             <th className={s.header}>Nombre</th>
-            <th className={s.header}>Descripcion</th>
+
             <th className={s.header}>Cantidad</th>
             <th className={s.header}>Precio Unitario</th>
             <th className={s.header}>SubTotal</th>
@@ -94,7 +94,6 @@ export default function TrolleyTable() {
                       {replaceChars(producto.name)}
                     </Link>
                   </td>
-                  <td >{producto.description}</td>
                   <td className={s.quantity}>
                     <input
                       step="1"
@@ -107,7 +106,9 @@ export default function TrolleyTable() {
                     />
                   </td>
                   <td>{producto.price}</td>
-                  <td>{sumSubTotal(producto.quantity, producto.price)}</td>
+                  <td>
+                    {sumSubTotal(producto.quantity, producto.price).toFixed(2)}
+                  </td>
                 </tr>
               );
             })
@@ -134,11 +135,11 @@ export default function TrolleyTable() {
               </Button>
             </td>
             <td></td>
-            <td></td>
+
             <td></td>
             <td className={s.totalspan} colSpan="2">
               <span className={s.total}>Total:</span>
-              {total}
+              {total.toFixed(2)}
             </td>
           </tr>
         </tbody>

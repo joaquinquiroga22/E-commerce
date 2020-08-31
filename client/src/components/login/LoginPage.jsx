@@ -15,6 +15,12 @@ import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
 
 function LoginPage(props) {
+  useEffect(() => {
+    dispatch(userActions.logout());
+  }, []);
+  useEffect(() => {
+    dispatch(alertActions.clear());
+  }, []);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
@@ -29,14 +35,8 @@ function LoginPage(props) {
 
   const dispatch = useDispatch();
   // reset login status
-  useEffect(() => {
-    dispatch(userActions.logout());
-  }, []);
-  useEffect(() => {
-    dispatch(alertActions.clear());
-  }, []);
 
-  const preventDefault = (event) => event.preventDefault();
+  // const preventDefault = (event) => event.preventDefault();
   function handleChange(e) {
     const { name, value } = e.target;
     setInputs((inputs) => ({ ...inputs, [name]: value }));
@@ -75,7 +75,7 @@ function LoginPage(props) {
                     type="email"
                     name="email"
                     aria-describedby="email-helper"
-                    aria-label="true"
+                    // aria-label=true
                     value={email}
                     onChange={handleChange}
                     required="true"
@@ -102,14 +102,12 @@ function LoginPage(props) {
                   </FormHelperText>
                 </FormControl>
               </Grid>
-
               {loggedIn &&
                 setTimeout(function () {
                   setFailure(false);
                 }, 1) &&
                 success &&
                 setTimeout(function () {
-                  //console.log(user.name);
                   setSuccess(false);
                   props.history.push("/home");
                 }, 2500) && (
