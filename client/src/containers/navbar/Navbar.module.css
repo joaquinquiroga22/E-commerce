@@ -62,14 +62,34 @@
   left: -25px;
 }
 .buttons {
+  /* color: inherit; */
+  /* border-color: currentColor; */
+  /* padding: 6px 8px; */
+  /* color: rgb(0 0 0 / 87%); */
+  /* padding: 6px 16px; */
+  font-size: 12px;
+  text-align: right;
+  /* min-width: 64px; */
+  /* box-sizing: border-box; */
+  /* transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; */
+  /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
+  /* font-weight: 500; */
+  /* line-height: 1.75; */
+  /* border-radius: 4px; */
+  /* letter-spacing: 0.02857em; */
+  text-transform: uppercase;
+
   color: slategray;
-  width: 200px;
-  height: 100%;
-  margin-right: 10px;
-  border-radius: 5px;
+  /* width: 200px; */
+  /* height: 100%; */
+  margin-right: 40px;
+  margin-top: 15px;
+  border-radius: 10px;
   cursor: pointer;
   border: 1px solid black;
-  height: 25px;
+  /* height: 25px; */
   background-color: whitesmoke;
   border-color: lightslategray;
 }

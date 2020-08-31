@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { green } from "@material-ui/core/colors";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
 import { getCart } from "../../actions/cart.js";
@@ -65,23 +66,25 @@ export default function Navbar({ onSearch, botonNav }) {
         <SearchInput onSearch={onSearch} />
         <div>
           <button
-          // className={s.buttons}
-          // onClick={() => {
-          //   botonNav(true);
-          // }}
+            className={s.buttons}
+            // onClick={() => {
+            //   botonNav(true);
+            // }}
           >
             {loggedIn ? (
               <>
                 <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
+                  // aria-label="account of current user"
+                  // aria-controls="menu-appbar"
+                  style={{ color: green[500] }}
                   aria-haspopup="true"
                   onClick={handleMenu}
                   zIndex="modal"
-                  color="inherit"
+                  // color="inherit"
+                  style={{ fontSize: 16 }}
                 >
-                  <> {user.name}</>
-                  <AccountCircle />
+                  <AccountCircle style={{ fontSize: 16 }} />
+                  <p> {user.name}</p>
                 </IconButton>
                 <Menu
                   id="menu-appbar"
@@ -99,12 +102,25 @@ export default function Navbar({ onSearch, botonNav }) {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Link to="/catalogo">
+                      <span>
+                        <FilterVintageIcon className={s.icon} />
+                        Profile
+                      </span>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
+                    <Link to="/loginpage" className={s.login}>
+                      <span>Cerrar Sesion</span>
+                    </Link>
+                  </MenuItem>
                 </Menu>
               </>
             ) : (
-              <>Nico</>
+              <Link to="/loginpage" className={s.login}>
+                Iniciar Sesion
+              </Link>
             )}
           </button>
         </div>
@@ -132,9 +148,6 @@ export default function Navbar({ onSearch, botonNav }) {
         </Link>
         <Link to="/admin">
           {loggedIn && user.role === "admin" ? <span>Administrar</span> : <></>}
-        </Link>
-        <Link to="/loginpage" className={s.login}>
-          {loggedIn ? <span>Cerrar Sesion</span> : <span>Iniciar Sesion</span>}
         </Link>
       </div>
     </div>

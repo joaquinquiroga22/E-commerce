@@ -15,6 +15,12 @@ import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
 
 function LoginPage(props) {
+  useEffect(() => {
+    dispatch(userActions.logout());
+  }, []);
+  useEffect(() => {
+    dispatch(alertActions.clear());
+  }, []);
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
@@ -29,12 +35,6 @@ function LoginPage(props) {
 
   const dispatch = useDispatch();
   // reset login status
-  useEffect(() => {
-    dispatch(userActions.logout());
-  }, []);
-  useEffect(() => {
-    dispatch(alertActions.clear());
-  }, []);
 
   // const preventDefault = (event) => event.preventDefault();
   function handleChange(e) {
