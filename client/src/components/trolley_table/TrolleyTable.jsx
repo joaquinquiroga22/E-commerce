@@ -51,6 +51,10 @@ export default function TrolleyTable() {
 
   const deleteItem = function (id) {
     console.log(`EL ID TIENE ${id}`);
+    if (user) {
+      dispatch(removeFromCart(id, user.id));
+      return;
+    }
     dispatch(removeFromCart(id));
   };
 
@@ -61,6 +65,7 @@ export default function TrolleyTable() {
   const emptyCarrito = () => {
     if (user) {
       dispatch(emptyCart(user.id));
+      return;
     }
     dispatch(emptyCart());
   };

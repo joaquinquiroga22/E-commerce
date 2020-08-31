@@ -8,21 +8,11 @@ export const GET_CART = "GET_CART";
 export const FETCH_FROM_DB = "FETCH_FROM_DB";
 
 //Action para mandar al reducer lo que este en DB (Si esta logueado) o lo que este en LocalStorage
-export const getCart = (localCart, user) => {
-  if (user) {
-    //llamado al server y traer orden en status cart
-    // Y return el resultado al reducer
-    // return {
-    //   type: GET_CART,
-    //   products: resdelaxios
-    // };
-    //mando al reducer lo que me mandaron del localCart
-  } else {
-    return {
-      type: GET_CART,
-      products: localCart,
-    };
-  }
+export const getCart = (localCart) => {
+  return {
+    type: GET_CART,
+    products: localCart,
+  };
 };
 
 //Esto se puede hacer con dos promesas y hacer promise all
@@ -60,18 +50,12 @@ export const addToCart = (product, idUser) => {
 //Si mandan idUser hago delete al server sino no (para localstorage)???
 export const removeFromCart = (productId, idUser) => {
   if (idUser) {
-    //lamado al server para eliminar producto del cart (PUT???)
-    //POST /users/idUser/ {prudct.id} y mandar al reducer
-    // return {
-    //   type: REMOVE_FROM_CART,
-    //   productId,
-    // };
-  } else {
-    return {
-      type: REMOVE_FROM_CART,
-      productId,
-    };
+    axios.delete(`http://localhost:3000/users/${idUser}/cart/${productId}`);
   }
+  return {
+    type: REMOVE_FROM_CART,
+    productId,
+  };
 };
 
 //Si mandan idUser hago put al server sino no (para localstorage)
