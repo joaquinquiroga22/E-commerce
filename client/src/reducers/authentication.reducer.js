@@ -4,7 +4,7 @@ const LOGIN_FAILURE = "USERS_LOGIN_FAILURE";
 const LOGOUT = "USERS_LOGOUT";
 
 let user = JSON.parse(localStorage.getItem("user"));
-console.log("el usuario authenticado desde local storage:" + user);
+// console.log("el usuario authenticado desde local storage:" + user);
 const initialState = user ? { loggedIn: true, user } : {};
 
 export function authentication(state = initialState, action) {

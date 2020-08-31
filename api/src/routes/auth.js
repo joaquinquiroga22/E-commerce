@@ -4,7 +4,9 @@ const passport = require("passport");
 const { User, Toresetpassword } = require("../db.js");
 const { Sequelize } = require("sequelize");
 
-server.post("/login",passport.authenticate("local", { failureRedirect: "/auth/login" }),
+server.post(
+  "/login",
+  passport.authenticate("local", { failureRedirect: "/auth/login" }),
   function (req, res) {
     let {email} = req.body;
     console.log(email)
@@ -13,21 +15,17 @@ server.post("/login",passport.authenticate("local", { failureRedirect: "/auth/lo
       if(!user){
         console.log("Entro al !user")
           res.status(200).send({
-          id: req.user.id,
-          role: req.user.role,
-          name: req.user.name,
-          lastname: req.user.lastname,
-        });
-      } else {
-        console.log("Entro al update")
-        res.status(200)
-        console.log(user)
-        res.json({message: "Necesitas cambiar tu password."})
-      }
-    }).catch(error => {
-      console.log("Entro al catch")
-      console.log(error)
-      res.status(444)
+            id: req.user.id,
+            role: req.user.role,
+            name: req.user.name,
+            lastname: req.user.lastname,
+          });
+        } else {
+          console.log("Entro al update");
+          res.status(200);
+          console.log(user);
+          res.json({ message: "Necesitas cambiar tu password." });
+        }
       })
 
 
@@ -41,8 +39,9 @@ server.get("/login", function (req, res) {
 });
 
 function isAuthenticated(req, res, next) {
+  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
-    next();
+    return next();
   } else {
     console.log("no logeado");
     res.send("no logeado");
