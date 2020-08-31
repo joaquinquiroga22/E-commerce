@@ -40,6 +40,7 @@ module.exports = (sequelize) => {
       defaultValue: "user",
       allowNull: true,
     },
+  
   });
 };
 
