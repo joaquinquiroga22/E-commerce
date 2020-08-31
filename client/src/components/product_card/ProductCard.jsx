@@ -22,12 +22,17 @@ const shortText = function (text) {
 export default function ProductCard(props) {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.products);
+  const user = useSelector((state) => state.authentication.user);
 
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cart));
   }, [cart]);
 
   const addToCarrito = function () {
+    if (user) {
+      dispatch(addToCart(props.product, user.id));
+      return;
+    }
     dispatch(addToCart(props.product));
   };
 

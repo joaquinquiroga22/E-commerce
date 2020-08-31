@@ -4,6 +4,7 @@ import {
   SET_QUANTITY,
   EMPTY_CART,
   GET_CART,
+  FETCH_FROM_DB,
 } from "../actions/cart";
 
 const initialState = {
@@ -23,6 +24,37 @@ export default (state = initialState, action) => {
       return {
         products: action.products,
       };
+
+    case FETCH_FROM_DB:
+      if (action.order && action.products) {
+        let order = action.order;
+        let products = action.products;
+
+        //JOIN CON JAVASCRIPT :(
+        let results = [];
+        for (var i = 0; i < order.length; i++) {
+          for (var j = 0; j < products.length; j++) {
+            if (order[i].productId === products[j].id) {
+              results.push({
+                id: products[j].id,
+                name: products[j].name,
+                description: products[j].description,
+                stock: products[j].stock,
+                price: products[j].price,
+                quantity: order[i].quantity,
+              });
+            }
+          }
+        }
+
+        return {
+          products: results,
+        };
+      } else {
+        return {
+          ...state,
+        };
+      }
 
     case ADD_TO_CART:
       //Valido si el producto ya esta en el carrito
