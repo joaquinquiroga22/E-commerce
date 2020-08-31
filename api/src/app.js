@@ -11,7 +11,7 @@ const Strategy = require("passport-local").Strategy;
 require("./db.js");
 
 //Modelo de usuario
-const { User, Review, Order, Products_Order  } = require("./db.js");
+const { User, Review, Order, Products_Order } = require("./db.js");
 
 passport.use(
   new Strategy({ usernameField: "email", passwordField: "password" }, function (
@@ -86,33 +86,29 @@ server.use(
 server.use(passport.initialize());
 server.use(passport.session());
 
-
-
 server.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
+  // console.log(req.session);
+  // console.log(req.user);
   next();
 });
 function isAuthenticated(req, res, next) {
-  if(req.isAuthenticated()) {
+  if (req.isAuthenticated()) {
     next();
   } else {
-    console.log("no logeado")
-    res.send('no logeado');
+    // console.log("no logeado")
+    res.send("no logeado");
   }
 }
 
-server.get('/me',
-  isAuthenticated,
-  function(req, res){
-    console.log(req.user)
-    User.findOne({where: { id: req.user.id }, include: [Order]})
+server.get("/me", isAuthenticated, function (req, res) {
+  // console.log(req.user)
+  User.findOne({ where: { id: req.user.id }, include: [Order] })
     .then((user) => {
-      res.send(user)
+      res.send(user);
     })
-    .catch(err => {
-      res.send("no se encontro el usuario")
-    })
+    .catch((err) => {
+      res.send("no se encontro el usuario");
+    });
 });
 
 server.use("/", routes);

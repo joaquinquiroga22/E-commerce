@@ -17,13 +17,14 @@ import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
-import Review from "./components/view_review/Review.jsx"
+import Review from "./components/view_review/Review.jsx";
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
 
 import { alertActions } from "./actions/alert";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
 // import { HomePage } from "./components/login/HomePage";
+import Profile from "./components/Profile/ProfileCard";
 import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
 import { HomePage } from "./containers/home/HomePage.jsx";
@@ -51,7 +52,6 @@ function App() {
   // }, [getCategories, getProducts]);
 
   return (
-
     <Router history={history}>
       <Switch>
         <div className="App">
@@ -71,7 +71,7 @@ function App() {
             render={({ match }) => <Product id={match.params.id} />}
           />
           {renderAddUser && <AddUser onClose={setRenderAddUser} />}
-          <Route exact path="/loginHome" component={HomePage} />
+          <Route exact path="/me" component={Profile} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
           {/* <Redirect from="*" to="/" /> */}
@@ -81,7 +81,6 @@ function App() {
           <Route path="/" component={Footer} />
         </div>
       </Switch>
-
     </Router>
   );
 }
