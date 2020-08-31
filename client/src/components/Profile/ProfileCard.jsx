@@ -19,7 +19,7 @@ export default function Profile({ id, onClose }) {
           setInput(res.data);
         });
     }
-  }, [usuario]);
+  }, []);
 
   const handleInputChange = function (e) {
     setInput({
