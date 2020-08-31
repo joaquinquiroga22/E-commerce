@@ -51,7 +51,8 @@ function isAuthenticated(req, res, next) {
 
 server.get("/logout", function (req, res) {
   req.logout();
-  res.send(205, "Deslogeado correctamente");
+  res.status(205).send("Deslogeado correctamente");
 });
+
 
 module.exports = server;

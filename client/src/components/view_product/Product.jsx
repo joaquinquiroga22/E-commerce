@@ -20,6 +20,7 @@ import { addToCart } from "../../actions/cart";
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
+    
   },
 }));
 
@@ -79,7 +80,7 @@ export default function Product({ id }) {
           <p className={s.e}> Descripción: {product.description} </p>
           <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
-
+          <Box className = {s.daropinion}>
           {user && (
             <Button
               onClick={setRenderUpdate}
@@ -91,6 +92,7 @@ export default function Product({ id }) {
               Dar opinion:
             </Button>
           )}
+          </Box>
           <Box>
             {/* <Button variant="contained" color="secondary">
               Comprar ya
