@@ -103,7 +103,7 @@ export default function Navbar({ onSearch, botonNav }) {
                   onClose={handleClose}
                 >
                   <MenuItem onClick={handleClose}>
-                    <Link to="/catalogo">
+                    <Link to="/me">
                       <span>
                         <FilterVintageIcon className={s.icon} />
                         Profile

@@ -30,7 +30,9 @@ function login(email, password) {
 
   return (
     axios
-      .post(`http://localhost:3000/auth/login`, requestOptions)
+      .post(`http://localhost:3000/auth/login`, requestOptions, {
+        withCredentials: true,
+      })
       // .then(handleResponse)
       .then((user) => {
         // console.log("en el login:         " + user.data);
