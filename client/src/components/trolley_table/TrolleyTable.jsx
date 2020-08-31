@@ -7,6 +7,7 @@ import {
   removeFromCart,
   getCart,
   emptyCart,
+  fetchCartFromDb,
 } from "../../actions/cart";
 import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";
@@ -21,11 +22,15 @@ export default function TrolleyTable() {
   const dispatch = useDispatch();
 
   const [total, setTotal] = useState(0);
-
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.authentication.user);
 
   useEffect(() => {
-    dispatch(getCart(getOrCreateLocalStorage()));
+    if (user) {
+      dispatch(fetchCartFromDb(user.id));
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
   }, []);
 
   useEffect(() => {
@@ -37,11 +42,19 @@ export default function TrolleyTable() {
   const quantityChange = function (e) {
     let id = Number(e.target.id);
     let qty = Number(e.target.value);
+    if (user) {
+      dispatch(setQuantity(id, qty, user.id));
+      return;
+    }
     dispatch(setQuantity(id, qty));
   };
 
   const deleteItem = function (id) {
     console.log(`EL ID TIENE ${id}`);
+    if (user) {
+      dispatch(removeFromCart(id, user.id));
+      return;
+    }
     dispatch(removeFromCart(id));
   };
 
@@ -50,6 +63,10 @@ export default function TrolleyTable() {
   };
 
   const emptyCarrito = () => {
+    if (user) {
+      dispatch(emptyCart(user.id));
+      return;
+    }
     dispatch(emptyCart());
   };
 
@@ -94,6 +111,11 @@ export default function TrolleyTable() {
                       {replaceChars(producto.name)}
                     </Link>
                   </td>
+
+
+                  <td >{producto.description}</td>
+
+
                   <td className={s.quantity}>
                     <input
                       step="1"

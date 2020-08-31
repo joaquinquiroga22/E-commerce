@@ -25,28 +25,28 @@ export default function ViewReset({id, onClose }){
       console.log(input)
       console.log(setInput)
       setUser(res.data);
-      
+
       })
     }
   },[user])
-  
- 
-  
+
+
+
   const onSubmit = function(event){
     event.preventDefault();
     const data = {
       email: input.email
     };
 
-  axios.post(`http://localhost:3000/reset`, data).then((res) => {  
+  axios.post(`http://localhost:3000/reset`, data).then((res) => {
   alert("Reseteado correctamente");
-  
+
     })
-    
+
 
   }
 
- 
+
 
 
 

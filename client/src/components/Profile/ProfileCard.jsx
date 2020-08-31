@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ViewReset from "../view_reset/ViewReset";
+
 import s from "./ProfileCard.module.css"
 //Material-ui
 import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Profile({ id, onClose }) {
   const usuario = JSON.parse(localStorage.getItem("user"));
   const classes = useStyles();
+
   const [user, setUser] = useState();
   const [edit, setEdit] = useState(false);
   const [input, setInput] = useState({});
@@ -28,7 +30,9 @@ export default function Profile({ id, onClose }) {
   useEffect(() => {
     if (usuario) {
       axios
+
         .get(`http://localhost:3000/me`, { withCredentials: true })
+
         .then((res) => {
           setUser(res.data);
           setInput(res.data);
@@ -58,6 +62,7 @@ export default function Profile({ id, onClose }) {
     setRenderReset(true);
   };
   return (
+
     <Container component="main" maxWidth="xs">
       <div className={s.container}>
         <Typography
@@ -74,11 +79,14 @@ export default function Profile({ id, onClose }) {
         <div >
           <p>
           <i className={s.icon}>{<MailOutlineIcon />}</i>
+
             {edit ? (
               <input
                 type="text"
                 name="email"
+
                 placeholder = "Email"
+
                 onChange={handleInputChange}
                 value={input.email}
                 disabled={!edit}
@@ -88,12 +96,16 @@ export default function Profile({ id, onClose }) {
             )}
           </p>
           <p>
+
           <i className={s.icon}>{<PersonIcon />}</i>
+
             {edit ? (
               <input
                 type="text"
                 name="name"
+
                 placeholder = "Nombre"
+
                 onChange={handleInputChange}
                 value={input.name}
                 disabled={!edit}
@@ -103,12 +115,14 @@ export default function Profile({ id, onClose }) {
             )}
           </p>
           <p>
+
           <i className={s.icon}>{<PermIdentityIcon />}</i>
            {edit ? (
               <input
                 type="text"
                 name="lastname"
                 placeholder = "Apellido"
+
                 onChange={handleInputChange}
                 value={input.lastname}
                 disabled={!edit}
@@ -121,6 +135,7 @@ export default function Profile({ id, onClose }) {
         <div>
           <div>
             <p>Editar</p>
+
             <label className={s.switch}>
               <input type="checkbox" onChange={() => setEdit(!edit)} />
               <span className={[s.slider, s.round].join(" ")}></span>
@@ -155,5 +170,6 @@ export default function Profile({ id, onClose }) {
     </Typography> 
   </div>
  </Container>
+
   );
 }
