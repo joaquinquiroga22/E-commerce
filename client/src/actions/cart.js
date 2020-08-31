@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 export const SET_QUANTITY = "SET_QUANTITY";
@@ -22,21 +24,21 @@ export const getCart = (localCart, user) => {
   }
 };
 
-//Si mandan idUser hago post al server sino no (para localstorage)
+//Si mandan idUser hago post al server sino no no
 export const addToCart = (product, idUser) => {
   if (idUser) {
-    //lamado al server para agregar al cart
-    //POST /users/idUser/ {prudct.id} y mandar al reducer
-    // return {
-    //   type: ADD_TO_CART,
-    //   product,
-    // };
-  } else {
-    return {
-      type: ADD_TO_CART,
-      product,
+    let data = {
+      idProduct: product.id,
+      description: "hola desde redux",
+      quantity: 1,
+      address: "chau desde redux",
     };
+    axios.post(`http://localhost:3000/users/${idUser}/cart`, data);
   }
+  return {
+    type: ADD_TO_CART,
+    product,
+  };
 };
 
 //Si mandan idUser hago delete al server sino no (para localstorage)???
@@ -59,7 +61,11 @@ export const removeFromCart = (productId, idUser) => {
 //Si mandan idUser hago put al server sino no (para localstorage)
 export const setQuantity = (productId, qty, idUser) => {
   if (idUser) {
-    //POST al server /users/idUser/cart y se le manda el productId y el qty
+    let data = {
+      quantity: qty,
+      idProducto: productId,
+    };
+    axios.put(`http://localhost:3000/users/${idUser}/cart`, data);
   }
   return {
     type: SET_QUANTITY,
@@ -71,7 +77,7 @@ export const setQuantity = (productId, qty, idUser) => {
 //Si mandan idUser hago delete al server sino no (para localstorage)
 export const emptyCart = (idUser) => {
   if (idUser) {
-    //Delete al server /users/idUser/cart y ver que pasa
+    axios.delete(`http://localhost:3000/users/${idUser}/cart`);
   }
   return {
     type: EMPTY_CART,

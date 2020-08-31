@@ -21,8 +21,8 @@ export default function TrolleyTable() {
   const dispatch = useDispatch();
 
   const [total, setTotal] = useState(0);
-
   const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.authentication.user);
 
   useEffect(() => {
     dispatch(getCart(getOrCreateLocalStorage()));
@@ -37,6 +37,10 @@ export default function TrolleyTable() {
   const quantityChange = function (e) {
     let id = Number(e.target.id);
     let qty = Number(e.target.value);
+    if (user) {
+      dispatch(setQuantity(id, qty, user.id));
+      return;
+    }
     dispatch(setQuantity(id, qty));
   };
 
@@ -50,6 +54,9 @@ export default function TrolleyTable() {
   };
 
   const emptyCarrito = () => {
+    if (user) {
+      dispatch(emptyCart(user.id));
+    }
     dispatch(emptyCart());
   };
 

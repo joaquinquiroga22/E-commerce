@@ -218,23 +218,25 @@ server.delete("/:idUser/cart/", (req, res, next) => {
 });
 
 server.put("/:idUser/cart", (req, res, next) => {
+  console.log(`EL ID DE USUARIO QUE LLEGA ES: ${req.params.idUser}`);
   const { quantity, idProducto } = req.body;
+  var idUser = req.params.idUser;
   var orderId;
   if (quantity && idProducto) {
     Order.findAll({
-      where: { userId: req.params.idUser },
+      where: { userId: idUser },
       include: User,
     }).then((orders) => {
       if (orders && orders.length === 0) {
-        res.status(400).json({
+        return res.status(400).json({
           message: `No hay ningun usuario con el id: ${req.params.idUser}`,
         });
       }
-      if (orders[0].dataValues.id !== idProducto) {
-        res
-          .status(400)
-          .json({ message: `No hay ningun usuario con el id: ${idProducto}` });
-      }
+      // if (orders[0].dataValues.productId !== idProducto) {
+      //   return res
+      //     .status(400)
+      //     .json({ message: `No hay ningun producto con el id: ${idProducto}` });
+      // }
       orderId = orders[0].dataValues.id;
       return Productsorder.update(
         { quantity },
@@ -293,10 +295,8 @@ server.put("/:id/passwordReset", (req, res, next) => {
           res.json(error);
         });
     });
-
   });
 });
-
 
 server.get("/:idUser/orders", (req, res, next) => {
   User.findAll({
