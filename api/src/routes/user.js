@@ -217,6 +217,24 @@ server.delete("/:idUser/cart/", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+server.delete("/:iduser/cart/:idproduct",(req,res,next) => {
+  const idUser = req.params.iduser;
+  const idProduct = req.params.idproduct;
+
+  findOrder = Order.findOne({where: {userId: idUser, state: "cart"}});
+  Promise.all([findOrder]).then((values) => {
+    let order = values[0].dataValues;
+
+    return order;
+  })
+  .then((order) => {
+    Productsorder.destroy({where: {orderId: order.id, productId: idProduct}})
+    return res.send("Producto eliminado del carrito")
+  })
+  .catch((err) => res.send(err))
+
+})
+
 server.put("/:idUser/cart", (req, res, next) => {
   const { quantity, idProducto } = req.body;
   var orderId;

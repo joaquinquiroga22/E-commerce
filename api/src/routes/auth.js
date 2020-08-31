@@ -8,12 +8,12 @@ server.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/auth/login" }),
   function (req, res) {
-    let { email } = req.body;
-    console.log(email);
-    Toresetpassword.findOne({ where: { email: email } })
-      .then((user) => {
-        if (!user) {
-          console.log("Entro al !user");
+    let {email} = req.body;
+    console.log(email)
+    Toresetpassword.findOne({where: {email: email}})
+    .then(user => {
+      if(!user){
+        console.log("Entro al !user")
           res.status(200).send({
             id: req.user.id,
             role: req.user.role,
@@ -27,11 +27,10 @@ server.post(
           res.json({ message: "Necesitas cambiar tu password." });
         }
       })
-      .catch((error) => {
-        console.log("Entro al catch");
-        console.log(error);
-        res.status(444);
-      });
+
+
+
+
   }
 );
 
@@ -49,9 +48,6 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-server.get("/me", isAuthenticated, function (req, res) {
-  res.send(req.user);
-});
 
 server.get("/logout", function (req, res) {
   req.logout();
