@@ -1,4 +1,6 @@
 import { loginWithGoogle } from "../firebase";
+// import { useDispatch, useSelector } from "react-redux";
+// const dispatch = useDispatch();
 
 //Constantes
 
@@ -6,18 +8,18 @@ const initialData = {
   loggedIn: false,
   fetching: false,
 };
-const LOGIN = "LOGIN";
-const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-const LOGIN_ERROR = "LOGIN_ERROR";
+const LOGINGOOGLE = "LOGINGOOGLE";
+const LOGINGOOGLE_SUCCESS = "LOGINGOOGLE_SUCCESS";
+const LOGINGOOGLE_ERROR = "LOGINGOOGLE_ERROR";
 
 // Reducers
 export default function reducer(state = initialData, action) {
   switch (action.type) {
-    case LOGIN:
+    case LOGINGOOGLE:
       return { ...state, fetching: true };
-    case LOGIN_ERROR:
+    case LOGINGOOGLE_ERROR:
       return { ...state, fetching: false, error: action.payload };
-    case LOGIN_SUCCESS:
+    case LOGINGOOGLE_SUCCESS:
       return { ...state, fetching: false, ...action.payload, loggedIn: true };
     default:
       return state;
@@ -28,12 +30,12 @@ export default function reducer(state = initialData, action) {
 
 export const loginWithGoogleAction = () => (dispatch, getState) => {
   dispatch({
-    type: LOGIN,
+    type: LOGINGOOGLE,
   });
   return loginWithGoogle()
     .then((user) => {
       dispatch({
-        type: LOGIN_SUCCESS,
+        type: LOGINGOOGLE_SUCCESS,
         payload: {
           uid: user.uid,
           displayName: user.displayName,
@@ -46,7 +48,7 @@ export const loginWithGoogleAction = () => (dispatch, getState) => {
     .catch((err) => {
       console.log(err);
       dispatch({
-        type: LOGIN_ERROR,
+        type: LOGINGOOGLE_ERROR,
         payload: err.message,
       });
     });
