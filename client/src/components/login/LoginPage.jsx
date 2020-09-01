@@ -7,6 +7,8 @@ import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import SendIcon from '@material-ui/icons/Send';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -19,7 +21,12 @@ import { fetchCartFromDb } from "../../actions/cart";
 //class
 import s from './ResetPw.module.css'
 
-
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    
+  },
+}));
 function ResetPw(props){
   const [input,setInput] = useState({
     password: ""
@@ -32,30 +39,37 @@ function ResetPw(props){
     }
     console.log(data)
     e.preventDefault();
-
+    
     axios.put("http://localhost:3000/reset/passwordupdate",data)
     .then((res) => {
       alert("Contraseña actualizada Correctamente")
       props.onClose(false);
     })
-
+    
   };
-
+  
   const handleInputChange = function(e){
     setInput({
       password: e.target.value
     })
   }
-
-
+  
+  
+    const classes = useStyles();
   return (<form className={s.resetPw} onSubmit={resetpassword}>
     <div className={s.content}>
-      <h3>Resetear contraseña</h3>
-      <label htmlFor="resetpassword">Nueva contraseña</label>
-      <input id="resetpassword" type="password" value={input.password} onChange={handleInputChange} required/>
-      <label htmlFor="confirmresetpassword">Confirme la nueva contraseña</label>
-      <input id="confirmresetpassword" type="password" required/>
-      <input type="submit"/>
+      <h3 className = {s.title}>Resetear contraseña</h3>
+      <input id="resetpassword" type="password" value={input.password} placeholder = "Nueva Contraseña" onChange={handleInputChange} required/>
+      <input id="confirmresetpassword" type="password" placeholder = "Confirme la nueva contraseña" required/>
+      <Button  
+        type = "submit"
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        endIcon={<SendIcon/>}
+        >
+      Send
+      </Button>
     </div>
   </form>)
 }
