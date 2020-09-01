@@ -14,7 +14,7 @@ server.post("/", (req, res, next) => {
     .catch((error) => {
       next(error);
     });
-}); 
+});
 
 server.get("/", (req, res, next) => {
   const key = Object.keys(req.query);
@@ -39,7 +39,7 @@ server.get("/", (req, res, next) => {
       })
       .catch((error) => next(error));
   }
-  
+
 });
 
 server.get("/:id", (req, res, next) => {
@@ -86,7 +86,7 @@ server.put("/:id", (req, res, next) => {
         res.send(orders[1][0].dataValues);
       })
       .catch((error) => next(error));
-  } else { 
+  } else {
     res
       .status(400)
       .json({ message: "Debe pasar un state o address para modificar" });

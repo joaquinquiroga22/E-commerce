@@ -1,62 +1,73 @@
 import React, { useState, useEffect } from "react";
 import s from "./Catalogue.module.css";
-import axios from "axios";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import replaceChars from "../../helpers/replaceChars";
+
+//HELPERS
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
+
+//Actions para dispatcehar
+import {
+  getProducts,
+  searchProduct,
+  getProductsCategory,
+} from "../../actions/products";
+import { getCategories } from "../../actions/categories";
+
+//CART
+import { getCart, fetchCartFromDb } from "../../actions/cart";
 
 //componentes
 import ProductCard from "../../components/product_card/ProductCard.jsx";
+import Alert from "@material-ui/lab/Alert";
 
 export default function Catalogue() {
-  const [products, setProducts] = useState([]);
-  const [showedProducts, setShowedProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // Redux - Store:
+  //State de products
+  const products = useSelector((state) => state.products.products);
+  const message = useSelector((state) => state.cart.message);
+
+  //State con user
+  const user = useSelector((state) => state.authentication.user);
+
+  //State con Categorias
+  const categories = useSelector((state) => state.categories.categories);
+
   const params = new URLSearchParams(window.location.search);
-  var query = params.get('buscar');
+  var query = params.get("buscar");
 
-
+  //Para Dispatchear las Acciones
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get("http://localhost:3000/products").then((res) => {
-      setProducts(res.data);
-    });
-
-    axios.get("http://localhost:3000/products/category").then((res) => {
-      setCategories(res.data);
-    });
-
-    //obteniendo los querys
-
-    if(query !== null){
-      axios.get(`http://localhost:3000/search?valor=${query}`).then(function (res) {
-          setShowedProducts(res.data);
-          query = "";
-      });
+    dispatch(getProducts());
+    dispatch(getCategories());
+    if (user) {
+      dispatch(fetchCartFromDb(user.id));
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
     }
-    if(query === null){
-      axios.get("http://localhost:3000/products").then((res) => {
-        setProducts(res.data);
-        setShowedProducts(res.data);
-      });
+  }, []);
+
+  useEffect(() => {
+    if (query !== null) {
+      dispatch(searchProduct(query));
+    }
+    if (query === null) {
+      dispatch(getProducts);
     }
   }, [query]);
 
-  const replaceChars = function (text) {
-    var newText = text.split("_").join(" ");
-    newText = newText.charAt(0).toUpperCase() + newText.slice(1)
-    return newText;
-  };
-
+  //Filtra Productos de acuerdo a la Categoria Seleccionada
   const getFilter = function (e) {
     let filterId = e.target.id;
     if (filterId !== "all") {
-      axios
-        .get(`http://localhost:3000/products/category?category=${filterId}`)
-        .then((res) => {
-          setShowedProducts(res.data[0].products);
-        });
-      return;
+      dispatch(getProductsCategory(filterId));
     }
-    setShowedProducts(products);
+    if (filterId === "all") {
+      dispatch(getProducts());
+    }
   };
 
   return (
@@ -75,28 +86,40 @@ export default function Catalogue() {
           </label>
         </div>
         {categories.map(function (category) {
-           return <FilterItem key={category.id} name={replaceChars(category.name)} id={category.id} />;
+          return (
+            <FilterItem
+              key={category.id}
+              name={replaceChars(category.name)}
+              id={category.id}
+            />
+          );
         })}
       </div>
       <div className={s.products}>
+        {message && (
+          <Alert severity="warning">
+            El Producto ya se encuentra en el carrito
+          </Alert>
+        )}
         <div className={s.listproducts}>
-          {showedProducts.length > 0 ? (
-            showedProducts.map(function (product) {
-               if (product.stock <= 0) {
-                 return "EL PRODUCTO NO ESTA DISPONIBLE"
-               }else{
-                 return (
-                   <ProductCard
-                     key={product.id}
-                     id={product.id}
-                     name={product.name}
-                     stock={product.stock}
-                     price={product.price}
-                     description={product.description}
-                     image={product.image}
-                   />
-                 );
-               }
+          {products.length > 0 ? (
+            products.map(function (product) {
+              if (product.stock <= 0) {
+                return "EL PRODUCTO NO ESTA DISPONIBLE";
+              } else {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    stock={product.stock}
+                    price={product.price}
+                    description={product.description}
+                    image={product.image}
+                    product={product}
+                  />
+                );
+              }
             })
           ) : (
             <h2>No hay productos para mostrar</h2>

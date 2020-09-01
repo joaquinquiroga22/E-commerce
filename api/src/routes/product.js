@@ -48,6 +48,8 @@ server.post("/", (req, res, next) => {
     return res.status(400).send("Category missing");
   }
 
+  //Usamos esta Variable para luego hacer el JOIN con CATEGORY
+  var productId;
   if (name && description && price && stock) {
     Category.findAll({ where: { id: idCategoria } })
       .then((categories) => {
@@ -60,8 +62,17 @@ server.post("/", (req, res, next) => {
         }
       })
       .then((product) => {
-        product.setCategories(idCategoria);
-        res.status(201).send(product.dataValues);
+        productId = product.dataValues.id;
+        return product.setCategories(idCategoria);
+      })
+      .then(() => {
+        return Product.findOne({
+          where: { id: productId },
+          include: Category,
+        });
+      })
+      .then((product) => {
+        return res.status(201).send(product);
       })
       .catch((error) => next(error));
   } else {
@@ -124,17 +135,11 @@ server.put("/:id", (req, res, next) => {
     return res.status(400).send("Nombre y descripcion no pueden estar vacios");
   }
 
-  if (idCategoria && idCategoria.length > 0) {
-    //
-    Product.findOne({ where: { id: req.params.id } })
-      .then((products) => {
-        products.setCategories(idCategoria);
-        res.send(products.dataValues);
-      })
-      .catch((error) => next(error));
+  if (idCategoria && idCategoria.length === 0) {
+    res.status(400).send("El array de categorias no puede estar vacio");
   }
 
-  if (name || description || price || image || stock) {
+  if (name || description || price || image || stock || idCategoria) {
     Product.update(
       { name, description, price, image, stock },
       { where: { id: req.params.id }, returning: true }
@@ -145,7 +150,19 @@ server.put("/:id", (req, res, next) => {
             .status(400)
             .json({ message: "No se modifico el producto" });
         }
-        return res.send(products[1][0].dataValues);
+        return products[1][0];
+      })
+      .then((product) => {
+        return product.setCategories(idCategoria);
+      })
+      .then(() => {
+        return Product.findOne({
+          where: { id: req.params.id },
+          include: [Category, Reviews],
+        });
+      })
+      .then((product) => {
+        return res.send(product);
       })
       .catch((error) => next(error));
   }
@@ -156,7 +173,7 @@ server.put("/:id", (req, res, next) => {
 server.get("/:id", (req, res, next) => {
   Product.findAll({
     where: { id: req.params.id },
-    include: [Category,Reviews]//Anda!!
+    include: [Category, Reviews], //Anda!!
   })
     .then((products) => {
       if (products.length === 0) {
@@ -200,7 +217,6 @@ server.delete("/:idProducto/category/:idCategoria", (req, res, next) => {
     });
 });
 
-
 //Review
 server.post("/:id/review", (req, res, next) => {
   const idProducto = req.params.id;
@@ -222,41 +238,49 @@ server.post("/:id/review", (req, res, next) => {
     .then((s) => {
       return users.addReviews(review);
     })
-    .then(() =>{
-      User.findByPk(idUser, {include: Reviews})
-      return Product.findByPk(idProducto, {include: Reviews})
+    .then(() => {
+      User.findByPk(idUser, { include: Reviews });
+      return Product.findByPk(idProducto, { include: Reviews });
     })
-    .then((values) =>{
+    .then((values) => {
       res.send(values);
-
     })
     .catch((error) => next(error));
 });
-server.put("/:id/review/:idReview", (req,res,next) =>{
+server.put("/:id/review/:idReview", (req, res, next) => {
   //console.log(req.params)
-   let {title, stars, description} = req.body;
-   //const {id,idReview} = req.params;
-   //const id = req.params;
-   const idReview = req.params.idReview;
-   Reviews.findAll({where: {id:idReview}})
-   .then((values)=>{
-    //console.log(values)
-     //res.send(values)
-    return Reviews.update(
-       {title , stars, description},
-       { where: { id: idReview}, returning: true })
-   })
-     .then((values) => {
-       console.log(values[1][0]);
-       if (values[0] === 0) {
-         return res
-         .status(400)
-         .json({ message: "No se modifico la Review" });
-        }
-        return res.send(values[1][0].dataValues);
-        
-      })
-      .catch((error) => next(error));
+  let { title, stars, description } = req.body;
+  //const {id,idReview} = req.params;
+  //const id = req.params;
+  const idReview = req.params.idReview;
+  Reviews.findAll({ where: { id: idReview } })
+    .then((values) => {
+      //console.log(values)
+      //res.send(values)
+      return Reviews.update(
+        { title, stars, description },
+        { where: { id: idReview }, returning: true }
+      );
+    })
+    .then((values) => {
+      console.log(values[1][0]);
+      if (values[0] === 0) {
+        return res.status(400).json({ message: "No se modifico la Review" });
+      }
+      return res.send(values[1][0].dataValues);
+    })
+    .catch((error) => next(error));
 });
-
+server.delete("/:id/review/:idReview", (req, res, next) => {
+  const { idReview } = req.params;
+  Reviews.destroy({
+    where: {
+      id: idReview,
+    },
+  })
+    .then(res.send("Review eliminada del producto"))
+    .catch((error) => {
+      next(error);
+    });
+});
 module.exports = server;

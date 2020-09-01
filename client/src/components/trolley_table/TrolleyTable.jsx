@@ -1,113 +1,165 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import s from "./TrolleyTable.module.css";
-import axios from 'axios';
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setQuantity,
+  removeFromCart,
+  getCart,
+  emptyCart,
+  fetchCartFromDb,
+} from "../../actions/cart";
+import Alert from "@material-ui/lab/Alert";
+import { Button } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 
+//HELPERS
+import replaceChars from "../../helpers/replaceChars";
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
+export default function TrolleyTable() {
+  const dispatch = useDispatch();
 
-export default function TrolleyTable(){
   const [total, setTotal] = useState(0);
-  const [products, setProducts] = useState({});
-  const [editableProducts, setEditableProducts] = useState({});
-  //Obtengo del localStorage el item Cart
-  var Cart = localStorage.getItem('Cart');
-  Cart = JSON.parse(Cart);
+  const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.authentication.user);
 
   useEffect(() => {
-    if(Cart === null){
-      return setProducts([]);
+    if (user) {
+      dispatch(fetchCartFromDb(user.id));
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
     }
-    var productos = {};
-    Cart.forEach((producto) => {
-      axios.get(`http://localhost:3000/products/${producto.productId}`).then((res) => {
-        producto.maxQuantity = Number(res.data.stock);
-      });
-      productos[producto.productId] = producto;
-    })
-    setProducts(productos)
-  },[editableProducts])
+  }, []);
 
-  const quantityChange = function(e){
-    //localStorage.setItem('Cart', JSON.stringify(Cart));
+  useEffect(() => {
+    sumTotal();
+
+    localStorage.setItem("Cart", JSON.stringify(cart.products));
+  }, [cart]);
+
+  const quantityChange = function (e) {
     let id = Number(e.target.id);
-    let tempProducts = products;
-    if(e.target.value > tempProducts[id].maxQuantity){
-      e.target.value = tempProducts[id].maxQuantity
+    let qty = Number(e.target.value);
+    if (user) {
+      dispatch(setQuantity(id, qty, user.id));
+      return;
     }
-    if(e.target.value < 1){
-      e.target.value = 1
+    dispatch(setQuantity(id, qty));
+  };
+
+  const deleteItem = function (id) {
+    console.log(`EL ID TIENE ${id}`);
+    if (user) {
+      dispatch(removeFromCart(id, user.id));
+      return;
     }
-    tempProducts[id].quantity = e.target.value;
-    setEditableProducts(tempProducts)
-    let array = [];
-    for(let key in tempProducts){
-      array.push(tempProducts[key])
+    dispatch(removeFromCart(id));
+  };
+
+  const sumSubTotal = function (quantity, price) {
+    return quantity * price;
+  };
+
+  const emptyCarrito = () => {
+    if (user) {
+      dispatch(emptyCart(user.id));
+      return;
     }
-    localStorage.setItem('Cart', JSON.stringify(array));
-  }
+    dispatch(emptyCart());
+  };
 
-  const deleteItem = function(e){
-    let id = Number(e.target.id);
-    let tempProducts = products;
-
-    delete tempProducts[id];
-    setEditableProducts(tempProducts);
-
-    let array = [];
-    for(let key in tempProducts){
-      array.push(tempProducts[key])
-    }
-    localStorage.setItem('Cart', JSON.stringify(array));
-  }
-
-  const sumSubTotal = function(quantity,price){
-    return (Math.ceil(quantity*price));
-  }
-  const sumTotal = function(){
-    let newTotal = 0;
-    let tempProducts = products;
-    for(let key in tempProducts){
-      let subtotal = sumSubTotal(tempProducts[key].quantity,tempProducts[key].price);
-      newTotal+=subtotal;
-    }
-    return newTotal;
-  }
-    return ( <div className = {s.table}>
-
-      <table className = {s.title}>
+  const sumTotal = function () {
+    let suma = 0;
+    cart.products.forEach((prod) => {
+      var stotal = prod.quantity * prod.price;
+      suma += stotal;
+    });
+    setTotal(suma);
+  };
+  return (
+    <div className={s.table}>
+      <table className={s.title}>
         <caption>Carrito</caption>
-         <thead>
-                <tr>
-                    <th >Borrar</th>
-                    <th className={s.header}>Nombre</th>
-                    <th className={s.header}>Descripcion</th>
-                    <th className={s.header}>Cantidad</th>
-                    <th className={s.header}>Precio Unitario</th>
-                    <th className={s.header}>SubTotal</th>
-                </tr>
+        <thead>
+          <tr>
+            <th>Borrar</th>
+            <th className={s.header}>Nombre</th>
+            <th className={s.header}>Cantidad</th>
+            <th className={s.header}>Precio Unitario</th>
+            <th className={s.header}>SubTotal</th>
+          </tr>
         </thead>
         <tbody>
-            {Cart && Cart.map((producto) => {
-              return (<tr key={producto.productId}>
-                <td><button id={producto.productId} onClick={deleteItem}>X</button></td>
-                <td>{producto.name}</td>
-                <td>{producto.description}</td>
-                <td className={s.quantity}><input step="1" max={producto.maxQuantity} min="1" type="number" id={producto.productId} onChange={quantityChange} value={producto.quantity}/></td>
-                <td>{producto.price}</td>
-                <td>{ sumSubTotal(producto.quantity,producto.price) }</td>
-              </tr>)
-            })}
+          {cart && cart.products.length > 0 ? (
+            cart.products.map((producto) => {
+              return (
+                <tr key={producto.id}>
+                  <td>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteItem(producto.id)}
+                      color="primary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </td>
+                  <td>
+                    <Link to={`/product/${producto.id}`}>
+                      {replaceChars(producto.name)}
+                    </Link>
+                  </td>
+
+                  <td className={s.quantity}>
+                    <input
+                      step="1"
+                      max={producto.stock}
+                      min="1"
+                      type="number"
+                      id={producto.id}
+                      onChange={quantityChange}
+                      value={producto.quantity}
+                    />
+                  </td>
+                  <td>{producto.price}</td>
+                  <td>
+                    {sumSubTotal(producto.quantity, producto.price).toFixed(2)}
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
             <tr>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td className = {s.totalspan} colSpan = "2">
-                <span className = {s.total}>Total:</span>
-                {sumTotal()}
+              <td className={s.totalspan} colSpan="2">
+                <Alert severity="info"> El carrito esta vacio</Alert>
               </td>
+              <td></td>
+              <td></td>
             </tr>
-            </tbody>
-            </table>
-            </div>
-  )
+          )}
+          <tr>
+            <td className={s.totalspan} colSpan="2">
+              <Button
+                size="small"
+                variant="outlined"
+                color="primary"
+                onClick={emptyCarrito}
+              >
+                Vaciar Carrito
+              </Button>
+            </td>
+            <td></td>
+            <td></td>
+            <td className={s.totalspan} colSpan="2">
+              <span className={s.total}>Total:</span>
+              {total.toFixed(2)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
 }

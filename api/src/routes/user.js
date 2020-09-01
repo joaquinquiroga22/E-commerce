@@ -1,20 +1,37 @@
 const server = require("express").Router();
-const { User, Order, Productsorder, Product } = require("../db.js");
+const bcrypt = require("bcryptjs");
+const { User, Order, Productsorder, Product, Reviews } = require("../db.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
-  if (email && name && lastname && password && role) {
-    User.create({ email, name, lastname, password, role })
-      .then((users) => {
-        res.status(201);
-        res.send(users.dataValues);
-      })
-      .catch((error) => {
-        res.send(error);
+  if (email && name && lastname && password) {
+    bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
+        // Store hash in your password DB.
+        const newUser = {
+          email: email,
+          name: name,
+          lastname: lastname,
+          password: hash,
+          role: role,
+        };
+        User.create(newUser)
+          .then((users) => {
+            console.log(users);
+            res.status(201);
+            res.send(users.dataValues);
+          })
+          .catch((error) => {
+            console.log("Boka");
+            res.status(400);
+            res.send(error);
+          });
       });
-
+    });
   } else {
-    return res.status(400).json({ message: "Debe pasar los parametros requeridos." });
+    return res
+      .status(400)
+      .json({ message: "Debe pasar los parametros requeridos." });
   }
 });
 
@@ -34,11 +51,25 @@ server.put("/:id", (req, res, next) => {
   }
 });
 
+server.get("/:id", (req, res, next) => {
+  User.findOne({
+    where: { id: req.params.id },
+    include: [Order, Reviews],
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(400).json({ message: "No se encontro el usuario" });
+      }
+      return res.send(user);
+    })
+    .catch((error) => next(error));
+});
+
 server.get("/", (req, res, next) => {
-  User.findAll({ include: Order })
+  User.findAll({ include: [Order, Reviews] })
     .then((users) => {
       if (users && users.length === 0) {
-        return res.status(400).json({ message: "No existe ningun usuario" });
+        return res.send([]);
       }
       res.send(users);
     })
@@ -62,55 +93,77 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-server.post("/:idUser/cart", (req, res, next) => {
-  const idUser = req.params.idUser;
+server.post("/:userid/cart", (req, res, next) => {
+  const idUser = req.params.userid;
   const { idProduct, state, address, quantity, description } = req.body;
-  if (!idProduct || !state || !address || quantity === null || !description) {
-    return res
-      .status(400)
-      .json({ message: "Debe pasar los parametros necesarios" });
-  }
-  const promiseProduct = Product.findByPk(idProduct);
-  const promiseOrder = Order.findOrCreate({
-    where: { userId: idUser, state: state, address: address },
-  });
-  var price;
-  var orderId;
-  Promise.all([promiseProduct, promiseOrder])
-    .then((values) => {
-      orderId = values[1][0].dataValues.id;
-      if (values[0] == null) {
-        return res
-          .status(400)
-          .json({ message: "Debe pasar un idProduct valido" });
+
+  const product = Product.findOne({ where: { id: idProduct } });
+
+  Order.findAll({ where: { userId: idUser, state: "cart" } })
+    .then((orders) => {
+      //Si no hay ninguna orden del usuario en estado cart, creamos una.
+      if (orders.length === 0) {
+        console.log("no hay nah");
+        const newOrder = Order.create({
+          userId: idUser,
+          state: "cart",
+          address: "general pico",
+        });
+
+        Promise.all([product, newOrder]).then((values) => {
+          let productToAdd = values[0].dataValues;
+          let orderData = values[1].dataValues;
+          Productsorder.create({
+            price: productToAdd.price,
+            quantity: quantity,
+            description: productToAdd.description,
+            orderId: orderData.id,
+            productId: productToAdd.id,
+          });
+          return orders;
+        });
       }
-      price = values[0].dataValues.price;
-      let stock = values[0].dataValues.stock;
-      if (quantity > stock) {
-        return res.status(400).json({ message: "Sin stock disponible" });
-      }
-      if (quantity < 1) {
-        return res
-          .status(400)
-          .json({ message: "La cantidad debe ser mayor a 0" });
-      }
-      if (values[1][0] === null) {
-        return res.status(400).json({ message: "No existe un usuario con ese id" });
-      }
-      let cart = values[1][0];
-      let product = values[0];
-      return cart.addProducts(product);
+      let updateOrder = orders[0].dataValues;
+      const productInOrder = Productsorder.findOne({
+        where: { productId: idProduct, orderId: updateOrder.id },
+      });
+      //Si no hay ningun producto en esa orden lo agrega (devuelve null)
+      Promise.all([product, productInOrder])
+        .then((values) => {
+          let productToAdd = values[0].dataValues;
+          if (values[1] === null) {
+            Productsorder.create({
+              price: productToAdd.price,
+              quantity: quantity,
+              description: productToAdd.description,
+              orderId: updateOrder.id,
+              productId: productToAdd.id,
+            });
+            return values;
+          }
+          Productsorder.update(
+            {
+              price: productToAdd.price,
+              quantity: quantity,
+              description: productToAdd.description,
+              productId: productToAdd.id,
+            },
+            { where: { productId: productToAdd.id } }
+          );
+          return orders;
+        })
+        .then((values) => {
+          return values;
+        });
     })
-    .then((values) => {
-      return Productsorder.update(
-        { price, quantity, description },
-        { where: { productId: idProduct, orderId: orderId }, returning: true }
-      );
+    .then((order) => {
+      res.send(order);
     })
-    .then((values) => {
-      res.send(values[1][0]);
-    })
-    .catch((error) => next(error));
+    .catch((err) => {
+      return res.send(err);
+    });
+
+  //Fin del POST
 });
 
 server.get("/:idUser/cart", (req, res, next) => {
@@ -121,19 +174,16 @@ server.get("/:idUser/cart", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        return res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
-      }
-      else{
+        return res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
+      } else {
         orderId = orders[0].dataValues.id;
         return Productsorder.findAll({
           where: { orderId: orderId },
         });
-        }
-      })
+      }
+    })
     .then((products) => {
       res.send(products);
     })
@@ -148,11 +198,9 @@ server.delete("/:idUser/cart/", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
       orderId = orders[0].dataValues.id;
       return Productsorder.destroy({
@@ -169,26 +217,44 @@ server.delete("/:idUser/cart/", (req, res, next) => {
     .catch((error) => next(error));
 });
 
+server.delete("/:iduser/cart/:idproduct",(req,res,next) => {
+  const idUser = req.params.iduser;
+  const idProduct = req.params.idproduct;
+
+  findOrder = Order.findOne({where: {userId: idUser, state: "cart"}});
+  Promise.all([findOrder]).then((values) => {
+    let order = values[0].dataValues;
+
+    return order;
+  })
+  .then((order) => {
+    Productsorder.destroy({where: {orderId: order.id, productId: idProduct}})
+    return res.send("Producto eliminado del carrito")
+  })
+  .catch((err) => res.send(err))
+
+})
+
 server.put("/:idUser/cart", (req, res, next) => {
+  console.log(`EL ID DE USUARIO QUE LLEGA ES: ${req.params.idUser}`);
   const { quantity, idProducto } = req.body;
+  var idUser = req.params.idUser;
   var orderId;
   if (quantity && idProducto) {
     Order.findAll({
-      where: { userId: req.params.idUser },
+      where: { userId: idUser },
       include: User,
     }).then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        return res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
-      if (orders[0].dataValues.id !== idProducto) {
-        res
-          .status(400)
-          .json({ message: `No hay ningun usuario con el id: ${idProducto}` });
-      }
+      // if (orders[0].dataValues.productId !== idProducto) {
+      //   return res
+      //     .status(400)
+      //     .json({ message: `No hay ningun producto con el id: ${idProducto}` });
+      // }
       orderId = orders[0].dataValues.id;
       return Productsorder.update(
         { quantity },
@@ -205,6 +271,54 @@ server.put("/:idUser/cart", (req, res, next) => {
   // Lo que le faltaria a este es que tire un mensaje cuando el idPrdocut que le pasas no coincide con ningun product.
 });
 
+// Esta en verdad vendria a ser la password update
+
+
+server.put("/:id/passwordUpdate", (req, res, next) => {
+  let { password } = req.body;
+  console.log(password);
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      var password = hash;
+      User.update(
+        { password },
+        { where: { id: req.params.id }, returning: true }
+      )
+        .then((response) => {
+          console.log("correcto");
+          res.json(response);
+        })
+        .catch((error) => {
+          console.log("ripeo");
+          res.json(error);
+        });
+    });
+  });
+});
+
+
+server.put("/:id/passwordReset", (req, res, next) => {
+  let password2 = " ";
+
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password2, salt, function (err, hash) {
+      var password = hash;
+      User.update(
+        { password },
+        { where: { id: req.params.id }, returning: true }
+      )
+        .then((response) => {
+          console.log(response);
+          res.json(response);
+        })
+        .catch((error) => {
+          console.log("ripeo");
+          res.json(error);
+        });
+    });
+  });
+});
+
 server.get("/:idUser/orders", (req, res, next) => {
   User.findAll({
     where: { id: req.params.idUser },
@@ -212,14 +326,13 @@ server.get("/:idUser/orders", (req, res, next) => {
   })
     .then((orders) => {
       if (orders && orders.length === 0) {
-        res
-          .status(400)
-          .json({
-            message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-          });
+        res.status(400).json({
+          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+        });
       }
       res.send(orders);
     })
     .catch((error) => next(error));
 });
+
 module.exports = server;

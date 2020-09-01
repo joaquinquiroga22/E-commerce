@@ -1,71 +1,135 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Container, Box, Button } from "@material-ui/core";
 import s from "./Product.module.css";
-import Rating from "@material-ui/lab/Rating";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
+import defaultImg from "../../img/default.jpg";
+import ReviewCard from "../reviews/ReviewCard";
+import Review from "../view_review/Review.jsx";
+import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
+
+//Helper
+import replaceChars from "../../helpers/replaceChars";
 
 //Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
 //importamos la funcion a dispatchear
 import { getProduct } from "../../actions/products.js";
+import { addToCart } from "../../actions/cart";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    
+  },
+}));
 
 export default function Product({ id }) {
-  const [value, setValue] = useState(2);
+  const [renderUpdate, setRenderUpdate] = useState(false);
+  const user = useSelector((state) => state.authentication.user);
 
-  //definimos las constantes para usar las funciones y almacenar el estado
+  const classes = useStyles();
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.products);
-  useEffect(() => {
-    // axios.get(`http://localhost:3000/products/${id}`).then(function (response) {
-    //   setInfo(response.data);
-    //   console.log(response);
-    // });
+  const cart = useSelector((state) => state.cart.products);
 
+  useEffect(() => {
     dispatch(getProduct(id));
   }, [getProduct]);
-  console.log(product);
+
+  useEffect(() => {
+    localStorage.setItem("Cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCarrito = function () {
+    if (user) {
+      dispatch(addToCart(product, user.id));
+      return;
+    }
+    dispatch(addToCart(product));
+  };
+
   return (
-    <div className={s.container}>
-      <div className={s.img} >
-        <img className={s.imagen} alt={product.name} src={product.image} />
-      </div>
-
-      <div className={s.body}>
-        <div className={s.izquierda}>
+    <Container
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      m={5}
+    >
+      {renderUpdate && (
+        <Review
+          onClose={setRenderUpdate}
+          userId={user.id}
+          productId={product.id}
+        />
+      )}
+      <Box display="flex" justifyContent="center">
+        <Box className={s.img}>
+          <img
+            className={s.imagen}
+            alt={product.name}
+            src={product.image === "" ? defaultImg : product.image}
+          />
+        </Box>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-around"
+        >
           <h2 className={s.title}> {product.name} </h2>
-          <p className={s.e}> {product.description} </p>
-          <h5> Quedan: {product.stock}</h5>
+          <p className={s.e}> Descripción: {product.description} </p>
+          <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
-          <div className={s.rating}>
-            <Box
-              display="flex"
-              flexDirection="row"
-              component="fieldset"
-              mb={3}
-              borderColor="transparent"
+          <Box className = {s.daropinion}>
+          {user && (
+            <Button
+              onClick={setRenderUpdate}
+              variant="contained"
+              color="default"
+              className={classes.button}
+              endIcon={<RateReviewOutlinedIcon />}
             >
-              <Typography component="legend"> Opinion: </Typography>
-              <Rating
-                name="simple-controlled"
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-              />
-            </Box>
-          </div>
-        </div>
+              Dar opinion:
+            </Button>
+          )}
+          </Box>
+          <Box>
+            {/* <Button variant="contained" color="secondary">
+              Comprar ya
+            </Button>
+            <span> </span> */}
+            <Button variant="contained" color="primary" onClick={addToCarrito}>
+              Carrito
+            </Button>
+          </Box>
+        </Box>
+      </Box>
 
-        <div className={s.buttoms}>
-          <Button variant="contained"> Comprar ya</Button>
-          <Button variant="contained" color="primary">
+      <Box m={5} display="flex" flexDirection="column" alignItems="strech">
+        <Typography className={s.Palabrareview} variant="h4">
+          {" "}
+          Reviews{" "}
+        </Typography>
+        {product.reviews && product.reviews.length > 0 ? (
+          product.reviews.map((review) => {
+            return (
+              <ReviewCard
+                key={review.id}
+                title={review.title}
+                stars={review.stars}
+                description={review.description}
+                user={user && user.name}
+                date={review.updatedAt}
+              />
+            );
+          })
+        ) : (
+          <Typography variant="h6" color="error">
             {" "}
-            Carrito{" "}
-          </Button>
-        </div>
-      </div>
-    </div>
+            Este producto no posee reviews aun{" "}
+          </Typography>
+        )}
+      </Box>
+    </Container>
   );
 }

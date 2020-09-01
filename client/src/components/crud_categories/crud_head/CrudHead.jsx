@@ -15,19 +15,11 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import Button from "@material-ui/core/Button";
 
-const useStyless = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  toolbar:{
+  toolbar: {
     backgroundColor: "#362181",
   },
   menuButton: {
@@ -95,7 +87,6 @@ export default function CrudHead(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
@@ -105,17 +96,6 @@ export default function CrudHead(props) {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -167,10 +147,13 @@ export default function CrudHead(props) {
           </Typography>
           <div className={classes.grow} />
           <div className={s.space}>
-            <Button onClick={() => props.onAddCategory(true)} className={s.space} variant="contained">
+            <Button
+              onClick={() => props.onAddCategory(true)}
+              className={s.space}
+              variant="contained"
+            >
               Agregar Categoria{" "}
             </Button>{" "}
-            
           </div>
         </Toolbar>
       </AppBar>

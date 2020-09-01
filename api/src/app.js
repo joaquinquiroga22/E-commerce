@@ -1,17 +1,70 @@
 const express = require("express");
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const passport = require("passport");
+const Strategy = require("passport-local").Strategy;
 require("./db.js");
+
+//Modelo de usuario
+const { User, Review, Order, Products_Order } = require("./db.js");
+
+passport.use(
+  new Strategy({ usernameField: "email", passwordField: "password" }, function (
+    username,
+    password,
+    done
+  ) {
+    User.findOne({ where: { email: username } })
+      .then((user) => {
+        if (!user) {
+          return done(null, false);
+        }
+        bcrypt.compare(password, user.password).then((res) => {
+          // res === true
+          console.log(res);
+          if (res) {
+            return done(null, user);
+          }
+          return done(null, false);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return done(err);
+      });
+  })
+);
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  User.findOne({ where: { id: id } })
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      return done(err);
+    });
+});
 
 const server = express();
 //Middlewares
 //Usamos el modulo cors para las politics cors
 
 server.name = "API";
-server.use(cors());
+server.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
@@ -25,6 +78,37 @@ server.use((req, res, next) => {
   );
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
   next();
+});
+server.use(
+  session({ secret: "clasificado", resave: false, saveUninitialized: false })
+);
+
+server.use(passport.initialize());
+server.use(passport.session());
+
+server.use((req, res, next) => {
+  // console.log(req.session);
+  // console.log(req.user);
+  next();
+});
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    // console.log("no logeado")
+    res.send("no logeado");
+  }
+}
+
+server.get("/me", isAuthenticated, function (req, res) {
+  // console.log(req.user)
+  User.findOne({ where: { id: req.user.id }, include: [Order] })
+    .then((user) => {
+      res.send(user);
+    })
+    .catch((err) => {
+      res.send("no se encontro el usuario");
+    });
 });
 
 server.use("/", routes);
