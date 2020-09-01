@@ -130,7 +130,6 @@ export default function CrudAddProduct(props) {
       <div className={s.content}>
         <CloseBtn close={props.onClose} />
 
-
         <h3>
           {props.type === "Edit"
             ? "Actualizar un producto"
@@ -138,7 +137,10 @@ export default function CrudAddProduct(props) {
         </h3>
 
         <div className={s.image}>
-          <img src={input.image !== "" ? input.image : defaultImage} />
+          <img
+            src={input.image !== "" ? input.image : defaultImage}
+            alt="Imagen"
+          />
           <label htmlFor="imagen">Imagen del producto</label>
           <input
             type="file"

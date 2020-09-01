@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./RegisterPage.module.css";
@@ -183,7 +183,7 @@ function RegisterPage(props) {
             </div>
             {info.show && <Alert severity={info.type}>{info.msg}</Alert>}
             {message &&
-              message == "Registration successful" &&
+              message === "Registration successful" &&
               setTimeout(function () {
                 setInfo({
                   show: true,
@@ -195,7 +195,7 @@ function RegisterPage(props) {
               )}
 
             {message &&
-              message == "Error: Request failed with status code 400" &&
+              message === "Error: Request failed with status code 400" &&
               setTimeout(function () {
                 setInfo({
                   show: true,

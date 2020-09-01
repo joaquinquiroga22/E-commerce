@@ -1,17 +1,7 @@
 import React from "react";
 import s from "./CrudItem.module.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-
 import replaceChars from "../../../helpers/replaceChars";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 
 export default function CrudItem({
   category,
