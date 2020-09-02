@@ -86,7 +86,6 @@ export default function TrolleyTable() {
           <tr>
             <th>Borrar</th>
             <th className={s.header}>Nombre</th>
-
             <th className={s.header}>Cantidad</th>
             <th className={s.header}>Precio Unitario</th>
             <th className={s.header}>SubTotal</th>
@@ -111,8 +110,6 @@ export default function TrolleyTable() {
                       {replaceChars(producto.name)}
                     </Link>
                   </td>
-
-                  <td >{producto.description}</td>
 
                   <td className={s.quantity}>
                     <input
@@ -155,7 +152,6 @@ export default function TrolleyTable() {
               </Button>
             </td>
             <td></td>
-
             <td></td>
             <td className={s.totalspan} colSpan="2">
               <span className={s.total}>Total:</span>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import s from "./Catalogue.module.css";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
 import { useSelector, useDispatch } from "react-redux";

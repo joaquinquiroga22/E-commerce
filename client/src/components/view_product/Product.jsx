@@ -3,15 +3,19 @@ import { Container, Box, Button } from "@material-ui/core";
 import s from "./Product.module.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
+import defaultImg from "../../img/default.jpg";
 import ReviewCard from "../reviews/ReviewCard";
 import Review from "../view_review/Review.jsx";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
+
+//Helper
+import replaceChars from "../../helpers/replaceChars";
+
 //Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
 //importamos la funcion a dispatchear
 import { getProduct } from "../../actions/products.js";
-import { userActions } from "../../actions/user";
+import { addToCart } from "../../actions/cart";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -22,24 +26,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product({ id }) {
   const [renderUpdate, setRenderUpdate] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
+  const user = useSelector((state) => state.authentication.user);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state.products);
-  const users = useSelector((state) => state.users);
+  const cart = useSelector((state) => state.cart.products);
 
-  // function obtenerUsuario(idUsuario) {
-  //   const usuario = users.item.data.find(({ id }) => id === idUsuario);
-  //   console.log("usuario" + usuario);
-  //   return usuario;
-  // }
-  // useEffect(() => {
-  //   dispatch(userActions.getAll());
-  // }, []);
   useEffect(() => {
     dispatch(getProduct(id));
   }, [getProduct]);
+
+  useEffect(() => {
+    localStorage.setItem("Cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCarrito = function () {
+    if (user) {
+      dispatch(addToCart(product, user.id));
+      return;
+    }
+    dispatch(addToCart(product));
+  };
 
   return (
     <Container
@@ -57,7 +65,11 @@ export default function Product({ id }) {
       )}
       <Box display="flex" justifyContent="center">
         <Box className={s.img}>
-          <img className={s.imagen} alt={product.name} src={product.image} />
+          <img
+            className={s.imagen}
+            alt={product.name}
+            src={product.image === "" ? defaultImg : product.image}
+          />
         </Box>
         <Box
           display="flex"
@@ -82,22 +94,22 @@ export default function Product({ id }) {
           )}
           </Box>
           <Box>
-            <Button variant="contained" color="secondary">
+            {/* <Button variant="contained" color="secondary">
               Comprar ya
             </Button>
-            <span> </span>
-            <Link to="/carrito">
-              <Button variant="contained" color="primary">
-                Carrito
-              </Button>
-            </Link>
+            <span> </span> */}
+            <Button variant="contained" color="primary" onClick={addToCarrito}>
+              Carrito
+            </Button>
           </Box>
         </Box>
       </Box>
-      
-      <Box m={5} display="flex" flexDirection="column" alignItems="strech">
-        <Typography className = {s.Palabrareview} variant="h4"> Reviews </Typography>
 
+      <Box m={5} display="flex" flexDirection="column" alignItems="strech">
+        <Typography className={s.Palabrareview} variant="h4">
+          {" "}
+          Reviews{" "}
+        </Typography>
         {product.reviews && product.reviews.length > 0 ? (
           product.reviews.map((review) => {
             return (
