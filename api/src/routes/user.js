@@ -97,10 +97,9 @@ server.delete("/:id", (req, res, next) => {
 server.post("/:userid/cart", (req, res, next) => {
   const idUser = req.params.userid;
   const { idProduct, quantity, price } = req.body;
-
   var resOrder;
   var prodFound;
-  //VALIDA UE PRODUCTO EXISTA
+  //VALIDA QUE PRODUCTO EXISTA
   Product.findOne({ where: { id: idProduct } })
     .then((product) => {
       if (!product) {
@@ -113,22 +112,23 @@ server.post("/:userid/cart", (req, res, next) => {
       //Busca sino crea ORDEN con (userid y state == "cart")
       return Order.findOrCreate({
         where: { userId: idUser, state: "cart" },
-        include: Product,
       });
     })
     .then((order) => {
-      resOrder = order[0];
-      return order[0].hasProduct(prodFound);
-    })
-    .then((answ) => {
-      //Si el producto no esta en la order, lo agrego
-      if (!answ) {
-        resOrder.addProduct(idProduct, {
-          through: { price: price, quantity: quantity },
-        });
+      async function isInCart() {
+        //Metodo que verifica si existe el producto en la orden
+        const exist = await order[0].hasProduct(prodFound);
+
+        //Si no existe lo agrega
+        if (!exist) {
+          const agrega = await order[0].addProduct(idProduct, {
+            through: { price: price, quantity: quantity },
+          });
+        }
       }
-      //Metodo que me devuelve todos los productos en el carrito
-      return resOrder.getProducts();
+      isInCart();
+      //Metodo que devuelve todos los productos de esa orden;
+      return order[0].getProducts();
     })
     .then((productos) => {
       res.send(productos);
