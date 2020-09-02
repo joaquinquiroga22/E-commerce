@@ -7,7 +7,8 @@ import defaultImg from "../../img/default.jpg";
 import ReviewCard from "../reviews/ReviewCard";
 import Review from "../view_review/Review.jsx";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
-import Alert from "@material-ui/lab/Alert";
+import ImgSlider from "../images_slider/ImgSlider.jsx";
+
 //Helper
 import replaceChars from "../../helpers/replaceChars";
 
@@ -20,12 +21,13 @@ import { addToCart } from "../../actions/cart";
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
-    
+
   },
 }));
 
 export default function Product({ id }) {
   const [renderUpdate, setRenderUpdate] = useState(false);
+  const [images, setImages] = useState([])
   const user = useSelector((state) => state.authentication.user);
 
   const classes = useStyles();
@@ -37,6 +39,15 @@ export default function Product({ id }) {
   useEffect(() => {
     dispatch(getProduct(id));
   }, [getProduct]);
+
+  useEffect(() => {
+    var array = product.image;
+    var newArray = [];
+    if(array){
+      newArray = array.split("ImageSeparator");
+    }
+      setImages(newArray)
+  },[product])
 
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cart));
@@ -66,11 +77,8 @@ export default function Product({ id }) {
       )}
       <Box display="flex" justifyContent="center">
         <Box className={s.img}>
-          <img
-            className={s.imagen}
-            alt={product.name}
-            src={product.image === "" ? defaultImg : product.image}
-          />
+          {images.length > 0 && <ImgSlider images={images}/>}
+
         </Box>
         <Box
           display="flex"

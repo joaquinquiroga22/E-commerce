@@ -23,10 +23,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 //Redux
-
-import { useSelector, useDispatch } from "react-redux";
-import { getCart } from "../../actions/cart.js";
-// import { userActions } from "../../actions/user";
+import { useSelector } from "react-redux";
 
 const StyledMenu = withStyles({
   paper: {
@@ -60,7 +57,6 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 export default function Navbar({ onSearch, botonNav }) {
-  const dispatch = useDispatch();
   const Cart = useSelector((state) => state.cart);
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -87,9 +83,6 @@ export default function Navbar({ onSearch, botonNav }) {
       </div>
     );
   }
-  const updateCart = function () {
-    dispatch(getCart());
-  };
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -108,25 +101,16 @@ export default function Navbar({ onSearch, botonNav }) {
         </Link>
         <SearchInput onSearch={onSearch} />
         <div>
-          <button
-            className={s.buttons}
-            // onClick={() => {
-            //   botonNav(true);
-            // }}
-          >
+          <button className={s.buttons}>
             {loggedIn ? (
               <>
-                {/* <IconButton
-                  // aria-label="account of current user"
-                  // aria-controls="menu-appbar"
-                  style={{ color: green[500] }}
+                <IconButton
                   aria-haspopup="true"
                   onClick={handleMenu}
                   zIndex="modal"
-                  // color="inherit"
-                  style={{ fontSize: 16 }}
+                  style={{ fontSize: 14, color: green[500] }}
                 >
-                  <AccountCircle style={{ fontSize: 16 }} />
+                  <AccountCircle style={{ fontSize: 18 }} />
                   <p> {user.name}</p>
                 </IconButton> */}
                 <Button
