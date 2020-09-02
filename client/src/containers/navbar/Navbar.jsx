@@ -112,7 +112,7 @@ export default function Navbar({ onSearch, botonNav }) {
                 >
                   <AccountCircle style={{ fontSize: 18 }} />
                   <p> {user.name}</p>
-                </IconButton> */}
+                </IconButton> 
                 <Button
                    aria-controls="customized-menu"
                    aria-haspopup="true"
