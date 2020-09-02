@@ -6,6 +6,20 @@ const { Category_Products } = require("../db.js");
 //Hacemos un get a / products
 
 server.get("/", (req, res, next) => {
+  Product.findAll({ include: Category }) // Traemos todos los productos con sus categorias asociadas
+    .then((products) => {
+      if (products.length === 0) {
+        return res.status(200).send([]);
+        //.send({ message: `Todavia no se ha creado ningun Producto` });
+      }
+      res.send(products);
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
+
+server.get("/paginated", (req, res, next) => {
 
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
