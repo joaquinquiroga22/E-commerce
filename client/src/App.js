@@ -15,6 +15,7 @@ import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
 import { HomePage } from "./containers/home/HomePage.jsx";
 
+
 function App() {
   const [setRenderAddUser] = useState(false);
 
@@ -39,6 +40,7 @@ function App() {
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
           <Route path="/" component={Footer} />
+
         </div>
       </Switch>
     </Router>
