@@ -1,6 +1,7 @@
 const server = require("express").Router();
 const bcrypt = require("bcryptjs");
 const { User, Order, Productsorder, Product, Reviews } = require("../db.js");
+const { response } = require("../app.js");
 
 server.post("/", (req, res, next) => {
   let { email, name, lastname, password, role } = req.body;
@@ -95,99 +96,57 @@ server.delete("/:id", (req, res, next) => {
 
 server.post("/:userid/cart", (req, res, next) => {
   const idUser = req.params.userid;
-  const { idProduct, state, address, quantity, description } = req.body;
+  const { idProduct, quantity, price } = req.body;
 
-  const product = Product.findOne({ where: { id: idProduct } });
-
-  Order.findAll({ where: { userId: idUser, state: "cart" } })
-    .then((orders) => {
-      //Si no hay ninguna orden del usuario en estado cart, creamos una.
-      if (orders.length === 0) {
-        console.log("no hay nah");
-        const newOrder = Order.create({
-          userId: idUser,
-          state: "cart",
-          address: "general pico",
-        });
-
-        Promise.all([product, newOrder]).then((values) => {
-          let productToAdd = values[0].dataValues;
-          let orderData = values[1].dataValues;
-          Productsorder.create({
-            price: productToAdd.price,
-            quantity: quantity,
-            description: productToAdd.description,
-            orderId: orderData.id,
-            productId: productToAdd.id,
-          });
-          return orders;
+  var resOrder;
+  var prodFound;
+  //VALIDA UE PRODUCTO EXISTA
+  Product.findOne({ where: { id: idProduct } })
+    .then((product) => {
+      if (!product) {
+        return res.send({
+          message: `El producto ID: ${req.params.id} no esta en la base de datos `,
         });
       }
-      let updateOrder = orders[0].dataValues;
-      const productInOrder = Productsorder.findOne({
-        where: { productId: idProduct, orderId: updateOrder.id },
+      //Guardo el producto en la variable
+      prodFound = product;
+      //Busca sino crea ORDEN con (userid y state == "cart")
+      return Order.findOrCreate({
+        where: { userId: idUser, state: "cart" },
+        include: Product,
       });
-      //Si no hay ningun producto en esa orden lo agrega (devuelve null)
-      Promise.all([product, productInOrder])
-        .then((values) => {
-          let productToAdd = values[0].dataValues;
-          if (values[1] === null) {
-            Productsorder.create({
-              price: productToAdd.price,
-              quantity: quantity,
-              description: productToAdd.description,
-              orderId: updateOrder.id,
-              productId: productToAdd.id,
-            });
-            return values;
-          }
-          Productsorder.update(
-            {
-              price: productToAdd.price,
-              quantity: quantity,
-              description: productToAdd.description,
-              productId: productToAdd.id,
-            },
-            { where: { productId: productToAdd.id } }
-          );
-          return orders;
-        })
-        .then((values) => {
-          return values;
-        });
     })
     .then((order) => {
-      res.send(order);
+      resOrder = order[0];
+      return order[0].hasProduct(prodFound);
     })
-    .catch((err) => {
-      return res.send(err);
-    });
-
-  //Fin del POST
+    .then((answ) => {
+      //Si el producto no esta en la order, lo agrego
+      if (!answ) {
+        resOrder.addProduct(idProduct, {
+          through: { price: price, quantity: quantity },
+        });
+      }
+      //Metodo que me devuelve todos los productos en el carrito
+      return resOrder.getProducts();
+    })
+    .then((productos) => {
+      res.send(productos);
+    })
+    .catch((err) => res.send(err));
 });
 
 server.get("/:idUser/cart", (req, res, next) => {
-  var orderId;
-  Order.findAll({
-    where: { userId: req.params.idUser },
-    include: User,
+  Order.findOne({
+    where: { userId: req.params.idUser, state: "cart" },
+    include: Product,
   })
-    .then((orders) => {
-      if (orders && orders.length === 0) {
-        return res.status(400).json({
-          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-        });
-      } else {
-        orderId = orders[0].dataValues.id;
-        return Productsorder.findAll({
-          where: { orderId: orderId },
-        });
-      }
+    .then((order) => {
+      console.log(order);
+      let orderId = order.dataValues.id;
+      res.send(order);
     })
-    .then((products) => {
-      res.send(products);
-    })
-    .catch((error) => next(error));
+    .catch((err) => res.send(err));
 });
 
 server.delete("/:idUser/cart/", (req, res, next) => {
@@ -217,23 +176,25 @@ server.delete("/:idUser/cart/", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-server.delete("/:iduser/cart/:idproduct",(req,res,next) => {
+server.delete("/:iduser/cart/:idproduct", (req, res, next) => {
   const idUser = req.params.iduser;
   const idProduct = req.params.idproduct;
 
-  findOrder = Order.findOne({where: {userId: idUser, state: "cart"}});
-  Promise.all([findOrder]).then((values) => {
-    let order = values[0].dataValues;
+  findOrder = Order.findOne({ where: { userId: idUser, state: "cart" } });
+  Promise.all([findOrder])
+    .then((values) => {
+      let order = values[0].dataValues;
 
-    return order;
-  })
-  .then((order) => {
-    Productsorder.destroy({where: {orderId: order.id, productId: idProduct}})
-    return res.send("Producto eliminado del carrito")
-  })
-  .catch((err) => res.send(err))
-
-})
+      return order;
+    })
+    .then((order) => {
+      Productsorder.destroy({
+        where: { orderId: order.id, productId: idProduct },
+      });
+      return res.send("Producto eliminado del carrito");
+    })
+    .catch((err) => res.send(err));
+});
 
 server.put("/:idUser/cart", (req, res, next) => {
   console.log(`EL ID DE USUARIO QUE LLEGA ES: ${req.params.idUser}`);
@@ -273,7 +234,6 @@ server.put("/:idUser/cart", (req, res, next) => {
 
 // Esta en verdad vendria a ser la password update
 
-
 server.put("/:id/passwordUpdate", (req, res, next) => {
   let { password } = req.body;
   console.log(password);
@@ -295,7 +255,6 @@ server.put("/:id/passwordUpdate", (req, res, next) => {
     });
   });
 });
-
 
 server.put("/:id/passwordReset", (req, res, next) => {
   let password2 = " ";

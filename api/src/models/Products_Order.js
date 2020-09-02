@@ -21,10 +21,7 @@ module.exports = (sequelize) => {
     },
     description: {
       type: DataTypes.TEXT,
-      // allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+      allowNull: true,
     },
   });
 };
