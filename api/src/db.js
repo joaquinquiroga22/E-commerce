@@ -35,14 +35,20 @@ modelDefiners.forEach((model) => {
 let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [
   entry[0][0].toUpperCase() + entry[0].slice(1),
-  entry[1] 
+  entry[1],
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 // console.log(sequelize.models);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category, User, Order, Reviews } = sequelize.models;
-
+const {
+  Product,
+  Category,
+  User,
+  Order,
+  Reviews,
+  Productsorder,
+} = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -50,8 +56,8 @@ const { Product, Category, User, Order, Reviews } = sequelize.models;
 Category.belongsToMany(Product, { through: "category_products" });
 Product.belongsToMany(Category, { through: "category_products" });
 
-Order.belongsToMany(Product, { through: "productsorder" });
-Product.belongsToMany(Order, { through: "productsorder" });
+Order.belongsToMany(Product, { through: Productsorder });
+Product.belongsToMany(Order, { through: Productsorder });
 
 User.hasMany(Order);
 Order.belongsTo(User);
