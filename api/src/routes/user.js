@@ -94,46 +94,33 @@ server.delete("/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-server.post("/:userid/cart", (req, res, next) => {
+server.post("/:userid/cart", async (req, res, next) => {
   const idUser = req.params.userid;
   const { idProduct, quantity, price } = req.body;
-  var resOrder;
-  var prodFound;
-  //VALIDA QUE PRODUCTO EXISTA
-  Product.findOne({ where: { id: idProduct } })
-    .then((product) => {
-      if (!product) {
-        return res.send({
-          message: `El producto ID: ${req.params.id} no esta en la base de datos `,
-        });
-      }
-      //Guardo el producto en la variable
-      prodFound = product;
-      //Busca sino crea ORDEN con (userid y state == "cart")
-      return Order.findOrCreate({
-        where: { userId: idUser, state: "cart" },
+  try {
+    //Buscamos si el producto Existe
+    const product = await Product.findOne({ where: { id: idProduct } });
+    if (!product) {
+      return res.send({ message: "no existe el producto a agregar" });
+    }
+    //Buscamos o creamos orden tipo carrito
+    const order = await Order.findOrCreate({
+      where: { userId: idUser, state: "cart" },
+    });
+    //Chequeamos que el producto no este en la orden, sino lo agregamos
+    const inCart = await order[0].hasProduct(product);
+    if (!inCart) {
+      const add = await order[0].addProduct(idProduct, {
+        through: { price: price, quantity: quantity },
       });
-    })
-    .then((order) => {
-      async function isInCart() {
-        //Metodo que verifica si existe el producto en la orden
-        const exist = await order[0].hasProduct(prodFound);
-
-        //Si no existe lo agrega
-        if (!exist) {
-          const agrega = await order[0].addProduct(idProduct, {
-            through: { price: price, quantity: quantity },
-          });
-        }
-      }
-      isInCart();
-      //Metodo que devuelve todos los productos de esa orden;
-      return order[0].getProducts();
-    })
-    .then((productos) => {
-      res.send(productos);
-    })
-    .catch((err) => res.send(err));
+    }
+    //Buscamos los productos asociados a esa orden y los resp
+    const productsInOrder = await order[0].getProducts();
+    console.log(productsInOrder);
+    res.send(productsInOrder);
+  } catch (error) {
+    next(error);
+  }
 });
 
 server.get("/:idUser/cart", (req, res, next) => {
@@ -142,94 +129,79 @@ server.get("/:idUser/cart", (req, res, next) => {
     include: Product,
   })
     .then((order) => {
-      console.log(order);
-      let orderId = order.dataValues.id;
       res.send(order);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => next(err));
 });
 
+//Esto resetea el carrito
 server.delete("/:idUser/cart/", (req, res, next) => {
-  var orderId;
-  Order.findAll({
-    where: { userId: req.params.idUser },
-    include: User,
+  var userId = req.params.idUser;
+  Order.findOne({
+    where: { userId: userId, state: "cart" },
   })
-    .then((orders) => {
-      if (orders && orders.length === 0) {
-        res.status(400).json({
-          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
-        });
-      }
-      orderId = orders[0].dataValues.id;
-      return Productsorder.destroy({
-        where: { orderId: orderId },
-      });
-    })
-    .then((orders) => {
-      if (orders > 0) {
-        res
-          .status(200)
-          .json({ message: "El Carrito se ha vaciado satisfactoriamente." });
-      }
+    .then((order) => {
+      order.setProducts([]);
+      res.send({ message: "Se limpio el carrito" });
     })
     .catch((error) => next(error));
 });
 
-server.delete("/:iduser/cart/:idproduct", (req, res, next) => {
+server.delete("/:iduser/cart/:idproduct", async (req, res, next) => {
   const idUser = req.params.iduser;
   const idProduct = req.params.idproduct;
 
-  findOrder = Order.findOne({ where: { userId: idUser, state: "cart" } });
-  Promise.all([findOrder])
-    .then((values) => {
-      let order = values[0].dataValues;
+  try {
+    //busco producto y orden a eliminar
+    const product = await Product.findOne({ where: { id: idProduct } });
+    const order = await Order.findOne({
+      where: { userId: idUser, state: "cart" },
+    });
 
-      return order;
-    })
-    .then((order) => {
-      Productsorder.destroy({
-        where: { orderId: order.id, productId: idProduct },
-      });
-      return res.send("Producto eliminado del carrito");
-    })
-    .catch((err) => res.send(err));
+    if (product && order) {
+      const rm = await order.removeProduct(product);
+      if (rm > 0) {
+        return res.send({ message: "Producto eliminado del carrito", rm });
+      } else {
+        return res.send({ message: "No se elimino producto del carrito", rm });
+      }
+    } else {
+      return res.send({ message: "No se encontreo el product o la order" });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
-server.put("/:idUser/cart", (req, res, next) => {
-  console.log(`EL ID DE USUARIO QUE LLEGA ES: ${req.params.idUser}`);
+server.put("/:idUser/cart", async (req, res, next) => {
   const { quantity, idProducto } = req.body;
-  var idUser = req.params.idUser;
-  var orderId;
+  const idUser = req.params.idUser;
   if (quantity && idProducto) {
-    Order.findAll({
-      where: { userId: idUser },
-      include: User,
-    }).then((orders) => {
-      if (orders && orders.length === 0) {
-        return res.status(400).json({
-          message: `No hay ningun usuario con el id: ${req.params.idUser}`,
+    try {
+      //Obtengo producto y orden a modificar
+      const product = await Product.findOne({ where: { id: idProducto } });
+      const order = await Order.findOne({
+        where: { userId: idUser, state: "cart" },
+      });
+
+      if (product && order) {
+        const price = product.dataValues.price;
+        //Elimino producto de la tabla ordersproduct
+        const rm = await order.removeProduct(product);
+        //Agrego prodcuto en la tabla con quantity nueva
+        const add = await order.addProduct(idProducto, {
+          through: { price: price, quantity: quantity },
         });
+        return res.send({ message: "Producto modificado" });
+      } else {
+        return res.send({ message: "No se encontreo el product o la order" });
       }
-      // if (orders[0].dataValues.productId !== idProducto) {
-      //   return res
-      //     .status(400)
-      //     .json({ message: `No hay ningun producto con el id: ${idProducto}` });
-      // }
-      orderId = orders[0].dataValues.id;
-      return Productsorder.update(
-        { quantity },
-        { where: { productId: idProducto, orderId: orderId }, returning: true }
-      )
-        .then((productsorders) => {
-          res.send(productsorders[1][0]);
-        })
-        .catch((error) => next(error));
-    });
+    } catch (error) {
+      next(error);
+    }
   } else {
     res.status(400).json({ message: "Debe pasar los parametros necesarios" });
   }
-  // Lo que le faltaria a este es que tire un mensaje cuando el idPrdocut que le pasas no coincide con ningun product.
 });
 
 // Esta en verdad vendria a ser la password update
