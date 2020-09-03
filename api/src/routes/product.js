@@ -19,6 +19,28 @@ server.get("/", (req, res, next) => {
     });
 });
 
+server.get("/paginated", (req, res, next) => {
+
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 1;
+
+  Product.findAndCountAll({
+    offset: limit * (page - 1),
+    limit: limit,
+    order: [['createdAt','DESC']],
+    include: Category
+  }).then((values) => {
+    //Items => values.rows
+    //Contador de total => values.count
+    res.status(200).send(values);
+  })
+  .catch((error) => {
+    next(error);
+  });
+
+
+});
+
 //Hcemos un post a / products
 
 server.post("/", (req, res, next) => {
@@ -283,4 +305,24 @@ server.delete("/:id/review/:idReview", (req, res, next) => {
       next(error);
     });
 });
+
+server.get("/:id/reviews",(req,res,next) => {
+
+  const idProduct = req.params.id;
+
+  Reviews.findAll({where: {productId: idProduct},
+    attributes: ['productId', [Reviews.sequelize.fn('AVG',
+    Reviews.sequelize.col('stars')), 'rating']],
+    group: ['productId'],
+    order: [[Reviews.sequelize.fn('AVG', Reviews.sequelize.col('stars')), 'DESC']]
+}).then(function(response) {
+  let rating = Number(response[0].dataValues.rating);
+  res.status(200).send(rating.toFixed(1))
+})
+.catch((error) => {
+  next(error);
+});
+
+})
+
 module.exports = server;

@@ -6,14 +6,20 @@ import CloseBtn from "../../close_btn/CloseBtn.jsx";
 import CategoryItem from "../../category_item/CategoryItem.jsx";
 import CancelBtn from "../../cancel_btn/CancelBtn.jsx";
 import SuccessBtn from "../../success_btn/SuccessBtn.jsx";
+import ImgSlider from '../../images_slider/ImgSlider.jsx';
 
 import { useSelector, useDispatch } from "react-redux";
 //Actions REDUX
 import { getCategories } from "../../../actions/categories";
 import { addProduct, editProduct } from "../../../actions/products";
 
+// const images=[{image:"https://i.pinimg.com/474x/fd/92/9c/fd929cf759206d1ee6d2266fb3878016.jpg"},
+// {image: "https://pbs.twimg.com/profile_images/446356636710363136/OYIaJ1KK.png"},
+// {image: "https://i.pinimg.com/564x/03/b0/f3/03b0f3130779989bf6e6b27f3e354cd0.jpg"}]
+
 export default function CrudAddProduct(props) {
   const [success, setSuccess] = useState(false);
+  const [images, setImages] = useState([]);
 
   const [input, setInput] = useState({
     name: "",
@@ -42,14 +48,20 @@ export default function CrudAddProduct(props) {
       // if (product) {
       //   setInput({ ...product });
       // }
+      var array = product.image;
+      var newArray = [];
+      if(array){
+        newArray = array.split("ImageSeparator");
+      }
       setInput({
         name: replaceChars(product.name),
         price: product.price,
         description: product.description,
         stock: product.stock,
-        image: product.image,
+        image: newArray,
         categories: [],
       });
+      setImages(newArray)
     }
   }, [product]);
 
@@ -65,12 +77,14 @@ export default function CrudAddProduct(props) {
 
   const onSubmitHandle = function (event) {
     event.preventDefault();
+    let array = images;
+    let newArray = array.join("ImageSeparator");
     const data = {
       name: input.name,
       price: input.price,
       description: input.description,
       stock: input.stock,
-      image: input.image,
+      image: newArray,
       idCategoria: input.categories,
     };
     //Para agregar dispatcheo action add
@@ -88,12 +102,18 @@ export default function CrudAddProduct(props) {
   //Funcion para convertir imagen a base64 obtenida de:
   //https://github.com/Rinlama/react-howtoseries
   const uploadImg = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    setInput({
-      ...input,
-      image: base64,
-    });
+    const files = e.target.files;
+    var newImages = [];
+
+    for(let i=0;i < files.length; i++){
+      const base64 = await convertBase64(files[i]);
+      newImages.push(base64);
+    }
+    setImages(newImages);
+    // setInput({
+    //   ...input,
+    //   image: base64,
+    // });
   };
 
   const convertBase64 = (file) => {
@@ -130,7 +150,6 @@ export default function CrudAddProduct(props) {
       <div className={s.content}>
         <CloseBtn close={props.onClose} />
 
-
         <h3>
           {props.type === "Edit"
             ? "Actualizar un producto"
@@ -138,15 +157,11 @@ export default function CrudAddProduct(props) {
         </h3>
 
         <div className={s.image}>
-          <img src={input.image !== "" ? input.image : defaultImage} />
-          <label htmlFor="imagen">Imagen del producto</label>
-          <input
-            type="file"
-            name="imagen"
-            onChange={(e) => {
-              uploadImg(e);
-            }}
-          />
+          <div className={s.slider}>
+
+          {images.length > 0 && <ImgSlider images={images}/>}
+          </div>
+          <input type="file" name="imagen" onChange={(e) => {uploadImg(e);}} accept="image/*" multiple/>
         </div>
         <div className={s.inputs}>
           <fieldset>

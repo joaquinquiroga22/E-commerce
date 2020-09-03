@@ -108,12 +108,16 @@ function LoginPage(props) {
         }
         dispatch(userActions.login(email, password));
         dispatch(alertActions.clear());
-
         return console.log("safe fiuf");
       });
     }
     setSuccess(true);
   };
+
+  // function doLogin() {
+  //   console.log("en el login: " + loginWithGoogleAction());
+  //   loginWithGoogleAction();
+  // }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -207,6 +211,7 @@ function LoginPage(props) {
               </Grid>
             </Grid>
           </form>
+          {/* <button onClick={doLogin}>Iniciar Sesion con Google</button> */}
         </Typography>
       </div>
     </Container>

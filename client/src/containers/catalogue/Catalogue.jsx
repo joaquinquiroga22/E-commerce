@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import s from "./Catalogue.module.css";
 import FilterItem from "../../components/filter_item/FilterItem.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -104,6 +104,11 @@ export default function Catalogue() {
         <div className={s.listproducts}>
           {products.length > 0 ? (
             products.map(function (product) {
+              var array = product.image;
+              var newArray = [];
+              if(array){
+                newArray = array.split("ImageSeparator");
+              }
               if (product.stock <= 0) {
                 return "EL PRODUCTO NO ESTA DISPONIBLE";
               } else {
@@ -115,7 +120,7 @@ export default function Catalogue() {
                     stock={product.stock}
                     price={product.price}
                     description={product.description}
-                    image={product.image}
+                    image={newArray[0]}
                     product={product}
                   />
                 );

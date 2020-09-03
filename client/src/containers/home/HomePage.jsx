@@ -14,16 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../actions/cart";
 
 const useStyles = makeStyles((theme) => ({
-  //   icon: {
-  //     marginRight: theme.spacing(2),
-  //   },
-  //   heroContent: {
-  //     backgroundColor: theme.palette.background.paper,
-  //     padding: theme.spacing(8, 0, 6),
-  //   },
-  //   heroButtons: {
-  //     marginTop: theme.spacing(4),
-  //   },
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
@@ -38,10 +28,6 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
   },
 }));
 
@@ -72,16 +58,11 @@ function HomePage() {
               <CardMedia
                 className={classes.cardMedia}
                 image="https://d26lpennugtm8s.cloudfront.net/stores/032/245/themes/material/img-1032456563-1504803228-f39d9f57f5472d4621d5e9fd385255fb1512619566-1920-1920.jpg"
-                // title="Image title"
               />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
                   Bienvenido
                 </Typography>
-                {/* <Typography>
-                  This is a media card. You can use this section to describe the
-                  content.
-                </Typography> */}
               </CardContent>
               <CardActions>
                 <Button size="small" color="primary">
