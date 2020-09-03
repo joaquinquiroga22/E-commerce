@@ -19,8 +19,6 @@ export const getCart = (localCart) => {
 export const fetchCartFromDb = (idUser) => {
   return (dispatch) => {
     axios.get(`http://localhost:3000/users/${idUser}/cart`).then((res) => {
-      console.log("ESTOY EN EL ACTION");
-      console.log(res.data);
       dispatch({
         type: FETCH_FROM_DB,
         products: res.data.products,

@@ -39,16 +39,6 @@ function HomePage() {
   const user = useSelector((state) => state.authentication.user);
   const cart = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (user && cart.products.length > 0) {
-      cart.products.forEach((product) => {
-        dispatch(addToCart(product, user.id));
-      });
-    }
-  }, []);
-
   return (
     <main>
       <Grid container spacing={4}>

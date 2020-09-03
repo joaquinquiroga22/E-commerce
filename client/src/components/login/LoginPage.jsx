@@ -14,7 +14,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
-import { addToCart } from "../../actions/cart";
+import { getCart, emptyCart } from "../../actions/cart";
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 //class
 import s from "./ResetPw.module.css";
 
@@ -68,9 +69,17 @@ function ResetPw(props) {
 }
 
 function LoginPage(props) {
+  // Traigo el usuario del Local Storage
+  const user = useSelector((state) => state.authentication.user);
   useEffect(() => {
+    //Si venis de estar logueado borra lo que este en el carrito
+    if (user) {
+      //Borramos lo que este en el carrito
+      dispatch(emptyCart());
+    }
     dispatch(userActions.logout());
   }, []);
+
   useEffect(() => {
     dispatch(alertActions.clear());
   }, []);
@@ -81,13 +90,12 @@ function LoginPage(props) {
   const { email, password } = inputs;
   const [renderReset, setRenderReset] = useState(false);
 
-  // Traigo el usuario del Local Storage
-  const user = JSON.parse(localStorage.getItem("user"));
   //Selectores de estados en redux
   const loggingIn = useSelector((state) => state.authentication.loggingIn);
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
   const alert = useSelector((state) => state.alert.message);
 
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   // reset login status
 
@@ -108,6 +116,7 @@ function LoginPage(props) {
         }
         dispatch(userActions.login(email, password));
         dispatch(alertActions.clear());
+
         return console.log("safe fiuf");
       });
     }

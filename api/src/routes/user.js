@@ -116,7 +116,7 @@ server.post("/:userid/cart", async (req, res, next) => {
     }
     //Buscamos los productos asociados a esa orden y los resp
     const productsInOrder = await order[0].getProducts();
-    console.log(productsInOrder);
+
     res.send(productsInOrder);
   } catch (error) {
     next(error);

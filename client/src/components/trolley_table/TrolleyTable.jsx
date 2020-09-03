@@ -26,13 +26,13 @@ export default function TrolleyTable() {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authentication.user);
 
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchCartFromDb(user.id));
-    } else {
-      dispatch(getCart(getOrCreateLocalStorage()));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(fetchCartFromDb(user.id));
+  //   } else {
+  //     dispatch(getCart(getOrCreateLocalStorage()));
+  //   }
+  // }, []);
 
   useEffect(() => {
     sumTotal();

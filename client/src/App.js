@@ -22,8 +22,6 @@ import { useHistory } from "react-router-dom";
 function App() {
   let history = useHistory();
 
-  const dispatch = useDispatch();
-
   const [renderAddUser, setRenderAddUser] = useState(false);
 
   return (
