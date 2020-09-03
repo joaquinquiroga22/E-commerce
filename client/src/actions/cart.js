@@ -17,14 +17,14 @@ export const getCart = (localCart) => {
 
 //Esto se puede hacer con dos promesas y hacer promise all
 export const fetchCartFromDb = (idUser) => {
-  const orderPromise = axios.get(`http://localhost:3000/users/${idUser}/cart`);
-  const productsPromise = axios.get(`http://localhost:3000/products`);
   return (dispatch) => {
-    Promise.all([orderPromise, productsPromise]).then((values) => {
+    axios.get(`http://localhost:3000/users/${idUser}/cart`).then((res) => {
+      console.log("ESTOY EN EL ACTION");
+      console.log(res.data);
       dispatch({
         type: FETCH_FROM_DB,
-        order: values[0].data,
-        products: values[1].data,
+        products: res.data.products,
+        orderId: res.data.id,
       });
     });
   };
@@ -35,9 +35,8 @@ export const addToCart = (product, idUser) => {
   if (idUser) {
     let data = {
       idProduct: product.id,
-      description: "hola desde redux",
       quantity: 1,
-      address: "chau desde redux",
+      price: product.price,
     };
     axios.post(`http://localhost:3000/users/${idUser}/cart`, data);
   }

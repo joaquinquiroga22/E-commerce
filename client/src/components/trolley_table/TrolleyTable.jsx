@@ -8,6 +8,7 @@ import {
   getCart,
   emptyCart,
   fetchCartFromDb,
+  addToCart,
 } from "../../actions/cart";
 import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";

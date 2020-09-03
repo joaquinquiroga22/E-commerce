@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from 'axios';
+import axios from "axios";
 // Material-UI
 import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
@@ -14,65 +14,66 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
-import { fetchCartFromDb } from "../../actions/cart";
-
+import { addToCart } from "../../actions/cart";
 //class
-import s from './ResetPw.module.css'
+import s from "./ResetPw.module.css";
 
-
-function ResetPw(props){
-  const [input,setInput] = useState({
-    password: ""
+function ResetPw(props) {
+  const [input, setInput] = useState({
+    password: "",
   });
-  const resetpassword = function(e){
+  const resetpassword = function (e) {
     const data = {
       email: props.info,
       password: input.password,
       adminReset: true,
-    }
-    console.log(data)
+    };
+    console.log(data);
     e.preventDefault();
 
-    axios.put("http://localhost:3000/reset/passwordupdate",data)
-    .then((res) => {
-      alert("Contraseña actualizada Correctamente")
-      props.onClose(false);
-    })
-
+    axios
+      .put("http://localhost:3000/reset/passwordupdate", data)
+      .then((res) => {
+        alert("Contraseña actualizada Correctamente");
+        props.onClose(false);
+      });
   };
 
-  const handleInputChange = function(e){
+  const handleInputChange = function (e) {
     setInput({
-      password: e.target.value
-    })
-  }
+      password: e.target.value,
+    });
+  };
 
-
-  return (<form className={s.resetPw} onSubmit={resetpassword}>
-    <div className={s.content}>
-      <h3>Resetear contraseña</h3>
-      <label htmlFor="resetpassword">Nueva contraseña</label>
-      <input id="resetpassword" type="password" value={input.password} onChange={handleInputChange} required/>
-      <label htmlFor="confirmresetpassword">Confirme la nueva contraseña</label>
-      <input id="confirmresetpassword" type="password" required/>
-      <input type="submit"/>
-    </div>
-  </form>)
+  return (
+    <form className={s.resetPw} onSubmit={resetpassword}>
+      <div className={s.content}>
+        <h3>Resetear contraseña</h3>
+        <label htmlFor="resetpassword">Nueva contraseña</label>
+        <input
+          id="resetpassword"
+          type="password"
+          value={input.password}
+          onChange={handleInputChange}
+          required
+        />
+        <label htmlFor="confirmresetpassword">
+          Confirme la nueva contraseña
+        </label>
+        <input id="confirmresetpassword" type="password" required />
+        <input type="submit" />
+      </div>
+    </form>
+  );
 }
 
 function LoginPage(props) {
   useEffect(() => {
     dispatch(userActions.logout());
-
-    //Borro el carrito que esta en localstorage
-    localStorage.setItem("Cart", JSON.stringify([]));
-
   }, []);
   useEffect(() => {
     dispatch(alertActions.clear());
   }, []);
-
-
 
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
@@ -99,23 +100,24 @@ function LoginPage(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email && password) {
-      axios.post("http://localhost:3000/reset/user", {email}).then((res) => {
-        if(res.data){
+      axios.post("http://localhost:3000/reset/user", { email }).then((res) => {
+        if (res.data) {
           //renderizar componente resetear
           setRenderReset(true);
-          return console.log("tengo que resetear")
+          return console.log("tengo que resetear");
         }
         dispatch(userActions.login(email, password));
         dispatch(alertActions.clear());
-        return console.log("safe fiuf")
-      })
+
+        return console.log("safe fiuf");
+      });
     }
     setSuccess(true);
   };
 
   return (
     <Container component="main" maxWidth="xs">
-      {renderReset && <ResetPw info={email} onClose={setRenderReset}/>}
+      {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
       <div>
         <Typography
           component="div"
@@ -173,7 +175,7 @@ function LoginPage(props) {
                 setTimeout(function () {
                   setSuccess(false);
                   props.history.push("/home");
-                }, 2500) && (
+                }, 1500) && (
                   <Alert severity="success">
                     Hola {user && user.name}!<p>Se ha logueado Correctamente</p>
                   </Alert>

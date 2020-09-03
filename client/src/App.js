@@ -17,9 +17,6 @@ import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import AddUser from "./components/add_user/AddUser.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
-import Review from "./components/view_review/Review.jsx";
-import ProductCard from "./components/product_card/ProductCard";
-import { getCategories } from "./actions/categories";
 
 import { alertActions } from "./actions/alert";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
@@ -33,10 +30,9 @@ import { useHistory } from "react-router-dom";
 
 function App() {
   let history = useHistory();
-  const alert = useSelector((state) => state.alert);
+
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
-  const categories = useSelector((state) => state.categories.categories);
+
   const [renderAddUser, setRenderAddUser] = useState(false);
 
   useEffect(() => {
@@ -45,11 +41,6 @@ function App() {
       dispatch(alertActions.clear());
     });
   }, []);
-
-  // useEffect(() => {
-  //   dispatch(getProducts());
-  //   dispatch(getCategories());
-  // }, [getCategories, getProducts]);
 
   return (
     <Router history={history}>
