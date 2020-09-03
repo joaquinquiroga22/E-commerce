@@ -74,7 +74,8 @@ function LoginPage(props) {
   useEffect(() => {
     //Si venis de estar logueado borra lo que este en el carrito
     if (user) {
-      //Borramos lo que este en el carrito
+      //Borramos lo que este en el carrito de localst y redux
+      localStorage.setItem("Cart", JSON.stringify([]));
       dispatch(emptyCart());
     }
     dispatch(userActions.logout());

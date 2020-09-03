@@ -25,7 +25,7 @@ export default function Navbar({ onSearch, botonNav }) {
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = useSelector((state) => state.authentication.user);
   //const loggedIn = user ? true : false;
 
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
@@ -47,7 +47,9 @@ export default function Navbar({ onSearch, botonNav }) {
           dispatch(addToCart(product, user.id));
         });
       }
-      dispatch(fetchCartFromDb(user.id));
+      setTimeout(function () {
+        dispatch(fetchCartFromDb(user.id));
+      }, 1500);
     } else {
       dispatch(getCart(getOrCreateLocalStorage()));
     }
