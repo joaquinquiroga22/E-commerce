@@ -5,6 +5,7 @@ import {
   EMPTY_CART,
   GET_CART,
   FETCH_FROM_DB,
+  REMOVE_MESSAGE,
 } from "../actions/cart";
 
 const initialState = {
@@ -19,21 +20,22 @@ export default (state = initialState, action) => {
       };
 
     case FETCH_FROM_DB:
-      console.log("ESTOY EN EL REDUCER");
       //Dandole formato a lo que devuelve axios:
       var toAdd = [];
-      action.products.forEach((product) => {
-        let item = {
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          price: product.productsorder.price,
-          image: product.image,
-          stock: product.stock,
-          quantity: product.productsorder.quantity,
-        };
-        toAdd.push(item);
-      });
+      if (action.products && action.products.length > 0) {
+        action.products.forEach((product) => {
+          let item = {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.productsorder.price,
+            image: product.image,
+            stock: product.stock,
+            quantity: product.productsorder.quantity,
+          };
+          toAdd.push(item);
+        });
+      }
       return {
         ...state,
         products: toAdd,
@@ -87,6 +89,13 @@ export default (state = initialState, action) => {
         products: [],
         total: 0,
       };
+
+    case REMOVE_MESSAGE:
+      return {
+        ...state,
+        message: undefined,
+      };
+
     default:
       return state;
   }
