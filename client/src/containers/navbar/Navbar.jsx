@@ -16,23 +16,44 @@ import Menu from "@material-ui/core/Menu";
 import { green } from "@material-ui/core/colors";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-import { getCart } from "../../actions/cart.js";
-// import { userActions } from "../../actions/user";
+
+import { addToCart, getCart, fetchCartFromDb } from "../../actions/cart";
+
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 export default function Navbar({ onSearch, botonNav }) {
-  const dispatch = useDispatch();
-  const Cart = useSelector((state) => state.cart);
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const loggedIn = user ? true : false;
+  const user = useSelector((state) => state.authentication.user);
+  //const loggedIn = user ? true : false;
+
+  const loggedIn = useSelector((state) => state.authentication.loggedIn);
+
+  const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Cart) {
-      setCount(Cart.products.length);
+    if (cart) {
+      setCount(cart.products.length);
     }
-  }, [Cart]);
+  }, [cart]);
+
+  useEffect(() => {
+    if (user) {
+      if (cart.products.length > 0) {
+        cart.products.forEach((product) => {
+          dispatch(addToCart(product, user.id));
+        });
+      }
+      setTimeout(function () {
+        dispatch(fetchCartFromDb(user.id));
+      }, 1500);
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
+  }, [loggedIn]);
 
   if (window.location.pathname === "/admin") {
     return (
@@ -47,9 +68,6 @@ export default function Navbar({ onSearch, botonNav }) {
       </div>
     );
   }
-  const updateCart = function () {
-    dispatch(getCart());
-  };
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,25 +83,16 @@ export default function Navbar({ onSearch, botonNav }) {
         </Link>
         <SearchInput onSearch={onSearch} />
         <div>
-          <button
-            className={s.buttons}
-            // onClick={() => {
-            //   botonNav(true);
-            // }}
-          >
+          <button className={s.buttons}>
             {loggedIn ? (
               <>
                 <IconButton
-                  // aria-label="account of current user"
-                  // aria-controls="menu-appbar"
-                  style={{ color: green[500] }}
                   aria-haspopup="true"
                   onClick={handleMenu}
                   zIndex="modal"
-                  // color="inherit"
-                  style={{ fontSize: 16 }}
+                  style={{ fontSize: 14, color: green[500] }}
                 >
-                  <AccountCircle style={{ fontSize: 16 }} />
+                  <AccountCircle style={{ fontSize: 18 }} />
                   <p> {user.name}</p>
                 </IconButton>
                 <Menu
@@ -119,7 +128,7 @@ export default function Navbar({ onSearch, botonNav }) {
               </>
             ) : (
               <Link to="/loginpage" className={s.login}>
-                Iniciar Sesion
+                <span>Iniciar Sesion</span>
               </Link>
             )}
           </button>

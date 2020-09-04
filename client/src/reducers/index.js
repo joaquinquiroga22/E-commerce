@@ -2,6 +2,8 @@ import { combineReducers } from "redux";
 import products from "./product_reducer";
 import categories from "./category_reducers";
 
+import user from "../store/userDuck";
+
 import cart from "./cart_reducer";
 import order from "./order_reducer";
 import { authentication } from "./authentication.reducer";
@@ -16,6 +18,9 @@ const rootReducer = combineReducers({
   authentication,
   registration,
   users,
+
+  user,
+
   alert,
   order
 });
