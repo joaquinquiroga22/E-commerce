@@ -6,6 +6,7 @@ export const SET_QUANTITY = "SET_QUANTITY";
 export const EMPTY_CART = "EMPTY_CART";
 export const GET_CART = "GET_CART";
 export const FETCH_FROM_DB = "FETCH_FROM_DB";
+export const REMOVE_MESSAGE = "REMOVE_MESSAGE";
 
 //Action para mandar al reducer lo que este en DB (Si esta logueado) o lo que este en LocalStorage
 export const getCart = (localCart) => {
@@ -19,6 +20,7 @@ export const getCart = (localCart) => {
 export const fetchCartFromDb = (idUser) => {
   return (dispatch) => {
     axios.get(`http://localhost:3000/users/${idUser}/cart`).then((res) => {
+      console.log(res);
       dispatch({
         type: FETCH_FROM_DB,
         products: res.data.products,
@@ -78,5 +80,11 @@ export const emptyCart = (idUser) => {
   }
   return {
     type: EMPTY_CART,
+  };
+};
+
+export const cleanMessage = () => {
+  return {
+    type: REMOVE_MESSAGE,
   };
 };

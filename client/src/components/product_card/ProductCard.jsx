@@ -7,7 +7,7 @@ import s from "./ProductCard.module.css";
 import replaceChars from "../../helpers/replaceChars";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../actions/cart";
+import { addToCart, REMOVE_MESSAGE, cleanMessage } from "../../actions/cart";
 
 const shortText = function (text) {
   var newText = text.substring(0, 50);
@@ -31,9 +31,15 @@ export default function ProductCard(props) {
   const addToCarrito = function () {
     if (user) {
       dispatch(addToCart(props.product, user.id));
+      setTimeout(() => {
+        dispatch(cleanMessage());
+      }, 2000);
       return;
     }
     dispatch(addToCart(props.product));
+    setTimeout(() => {
+      dispatch(cleanMessage());
+    }, 2000);
   };
 
   return (
