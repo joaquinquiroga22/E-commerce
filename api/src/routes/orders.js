@@ -1,4 +1,8 @@
 const server = require("express").Router();
+const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
+const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
+const mailgun = require("mailgun-js");
+const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 const { Product } = require("../db.js");
 const { Category } = require("../db.js");
 const { Order, User, Productsorder } = require("../db.js");
@@ -67,18 +71,21 @@ server.put("/:id", (req, res, next) => {
       { where: { id: req.params.id }, returning: true }
     )
       .then((orders) => {
+        sendEmail();
         res.send(orders[1][0].dataValues);
       })
       .catch((error) => next(error));
   } else if (state) {
     Order.update({ state }, { where: { id: req.params.id }, returning: true })
       .then((orders) => {
+        sendEmail();
         res.send(orders[1][0].dataValues);
       })
       .catch((error) => next(error));
   } else if (address) {
     Order.update({ address }, { where: { id: req.params.id }, returning: true })
       .then((orders) => {
+        sendEmail();
         res.send(orders[1][0].dataValues);
       })
       .catch((error) => next(error));
@@ -100,6 +107,37 @@ server.get("/mercadopago", (req, res, next) => {
     console.log(values);
     res.send(values);
   });
+});
+
+//mailgun
+
+sendEmail = () =>
+  new Promise((resolve, reject) => {
+    const data = {
+      from: "cailletn@northlands.edu.ar",
+      to: "cailletn@northlands.edu.ar",
+      subject: "Viverooooo",
+      text: "Estamos enviando el mail del checkout",
+    };
+
+    mg.messages().send(data, (error, body) => {
+      if (error) {
+        return reject(error);
+      }
+      console.log(body);
+      return resolve();
+    });
+  });
+
+server.post("/mailgun", (req, res, next) => {
+  sendEmail()
+    .then((values) => {
+      console.log(values);
+      res.json({ message: "Your query has been sent" });
+    })
+    .catch((e) => {
+      next(e);
+    });
 });
 
 module.exports = server;

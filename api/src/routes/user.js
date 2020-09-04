@@ -129,7 +129,7 @@ server.get("/:idUser/cart", (req, res, next) => {
     include: Product,
   })
     .then((order) => {
-      res.send(order);
+      res.send(order[0]);
     })
     .catch((err) => next(err));
 });
