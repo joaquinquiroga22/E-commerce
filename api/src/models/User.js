@@ -40,6 +40,11 @@ module.exports = (sequelize) => {
       defaultValue: "user",
       allowNull: true,
     },
+    googleId: {
+      type: DataTypes.STRING,
+     
+    }
+      
   
   });
 };

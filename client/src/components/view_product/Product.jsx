@@ -8,7 +8,7 @@ import ReviewCard from "../reviews/ReviewCard";
 import Review from "../view_review/Review.jsx";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
 import ImgSlider from "../images_slider/ImgSlider.jsx";
-
+import Alert from '@material-ui/lab/Alert';
 //Helper
 import replaceChars from "../../helpers/replaceChars";
 

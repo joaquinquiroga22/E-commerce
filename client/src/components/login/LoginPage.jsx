@@ -14,6 +14,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import PersonIcon from '@material-ui/icons/Person';
+
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
@@ -21,13 +23,14 @@ import { loginWithGoogleAction } from "../../store/userDuck";
 //class
 import s from './ResetPw.module.css'
 
+
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
     
   },
 }));
-function ResetPw(props){
+function ResetPw(props){ 
   const [input,setInput] = useState({
     password: ""
   });
@@ -47,14 +50,11 @@ function ResetPw(props){
     })
     
   };
-  
   const handleInputChange = function(e){
     setInput({
       password: e.target.value
     })
   }
-  
-  
     const classes = useStyles();
   return (<form className={s.resetPw} onSubmit={resetpassword}>
     <div className={s.content}>
@@ -128,7 +128,6 @@ function LoginPage(props) {
   //   console.log("en el login: " + loginWithGoogleAction());
   //   loginWithGoogleAction();
   // }
-
   return (
     <Container component="main" maxWidth="xs">
       {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
@@ -197,7 +196,7 @@ function LoginPage(props) {
               {alert &&
                 setTimeout(function () {
                   setFailure(true);
-                }, 20) && <></>}
+                }, 5) && <></>}
               {failure && (
                 <Alert severity="error">
                   <p>Ingrese los datos correctamente</p>
@@ -221,7 +220,6 @@ function LoginPage(props) {
               </Grid>
             </Grid>
           </form>
-          {/* <button onClick={doLogin}>Iniciar Sesion con Google</button> */}
         </Typography>
       </div>
     </Container>

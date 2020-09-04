@@ -105,7 +105,7 @@ function RegisterPage(props) {
     //   }, 1300);
     // }
   }
-
+  
   return (
     <Container component="main" maxWidth="xs">
       <div className={s.contenedor}>
@@ -194,8 +194,9 @@ function RegisterPage(props) {
                   show: true,
                   type: "success",
                   msg: "Cuenta creada con exito",
+                  
                 });
-              }, 100) && <Alert severity={info.type}>{info.msg}</Alert> && (
+              },100) && <Alert severity={info.type}>{info.msg}</Alert> && (
                 <></>
               )}
 

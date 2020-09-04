@@ -9,19 +9,20 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+//import IconButton from "@material-ui/core/IconButton";
+//import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { green } from "@material-ui/core/colors";
+//import { green } from "@material-ui/core/colors";
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
+//import InboxIcon from '@material-ui/icons/MoveToInbox';
+//import DraftsIcon from '@material-ui/icons/Drafts';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PersonIcon from '@material-ui/icons/Person';
 //Redux
 import { useSelector } from "react-redux";
 
@@ -104,7 +105,7 @@ export default function Navbar({ onSearch, botonNav }) {
           <button className={s.buttons}>
             {loggedIn ? (
               <>
-                <IconButton
+                {/* <IconButton
                   aria-haspopup="true"
                   onClick={handleMenu}
                   zIndex="modal"
@@ -112,13 +113,14 @@ export default function Navbar({ onSearch, botonNav }) {
                 >
                   <AccountCircle style={{ fontSize: 18 }} />
                   <p> {user.name}</p>
-                </IconButton> 
+                </IconButton>  */}
                 <Button
                    aria-controls="customized-menu"
                    aria-haspopup="true"
                    variant="contained"
                    color="default"
                    onClick={handleClick}
+                   startIcon = {<PersonIcon/>}
                    >
                    Usuario
                    </Button>
