@@ -9,6 +9,7 @@ import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
+import Checkout from "./components/checkout/Checkout.jsx"
 
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
 import Profile from "./components/Profile/ProfileCard";
@@ -43,6 +44,11 @@ function App() {
           <Route exact path="/me" component={Profile} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
+          <Route exact path="/checkout" component={Checkout}/>
+          {/* <Redirect from="*" to="/" /> */}
+          {/* <Route exact path="/">
+            {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}
+          </Route> */}
           <Route path="/" component={Footer} />
         </div>
       </Switch>

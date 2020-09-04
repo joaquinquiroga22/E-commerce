@@ -14,6 +14,7 @@ import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Checkout from "../checkout/Checkout.jsx"
 
 //HELPERS
 import replaceChars from "../../helpers/replaceChars";
@@ -21,7 +22,7 @@ import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 export default function TrolleyTable() {
   const dispatch = useDispatch();
-
+  const [renderCheck, setRenderCheck] = useState(false)
   const [total, setTotal] = useState(0);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authentication.user);
@@ -79,8 +80,15 @@ export default function TrolleyTable() {
     });
     setTotal(suma);
   };
+
+  const renderCheckout = function (){
+    setRenderCheck(true);
+
+  }
+
   return (
     <div className={s.table}>
+      {renderCheck && <Checkout onClose={setRenderCheck} />}
       <table className={s.title}>
         <caption>Carrito</caption>
         <thead>
@@ -96,6 +104,7 @@ export default function TrolleyTable() {
           {cart && cart.products.length > 0 ? (
             cart.products.map((producto) => {
               return (
+                
                 <tr key={producto.id}>
                   <td>
                     <IconButton
@@ -147,13 +156,23 @@ export default function TrolleyTable() {
                 size="small"
                 variant="outlined"
                 color="primary"
-                onClick={emptyCarrito}
+                
               >
                 Vaciar Carrito
               </Button>
             </td>
-            <td></td>
-            <td></td>
+            <td> 
+            <Link to="/checkout"> 
+              <Button
+                size="small"
+                variant="outlined"
+                color="primary"
+              >
+                Checkout
+              </Button>
+            </Link>
+            </td>
+            
             <td className={s.totalspan} colSpan="2">
               <span className={s.total}>Total:</span>
               {total.toFixed(2)}

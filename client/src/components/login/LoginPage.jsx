@@ -215,8 +215,11 @@ function LoginPage(props) {
                     <Link href="#" variant="body2">
                       Olvido su contraseña?
                     </Link>
+                  
                   </Grid>
+                 
                 </Grid>
+                <button > Sign in with Google </button>
               </Grid>
             </Grid>
           </form>
