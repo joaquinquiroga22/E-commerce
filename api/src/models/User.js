@@ -4,43 +4,45 @@ module.exports = (sequelize) => {
   sequelize.define("user", {
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        args: true,
-        message: "Username must be unique.",
-      },
-      validate: {
-        isEmail: true,
-      },
+      // allowNull: false,
+      // unique: {
+      //   args: true,
+      //   message: "Username must be unique.",
+      // },
+      // validate: {
+      //   isEmail: true,
+      // },
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "Ingresa tu nombre",
-        },
-      },
+      // allowNull: false,
+      // validate: {
+      //   notNull: {
+      //     msg: "Ingresa tu nombre",
+      //   },
+      // },
     },
     lastname: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "Ingresa tu apellido",
-        },
-      },
+      // allowNull: false,
+      // validate: {
+      //   notNull: {
+      //     msg: "Ingresa tu apellido",
+      //   },
+      // },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     role: {
       type: DataTypes.ENUM("admin", "user"),
       defaultValue: "user",
       allowNull: true,
     },
-  
+    googleId: {
+      type: DataTypes.STRING,
+    },
   });
 };
 

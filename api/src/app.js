@@ -37,7 +37,7 @@ passport.use(
         }
         bcrypt.compare(password, user.password).then((res) => {
           // res === true
-          console.log(res);
+          // console.log(res);
           if (res) {
             return done(null, user);
           }
@@ -45,11 +45,12 @@ passport.use(
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         return done(err);
       });
   })
 );
+
 function extractProfile(profile) {
   let imageUrl = "";
   if (profile.photos && profile.photos.length) {
@@ -71,24 +72,75 @@ passport.use(
       accessType: "offline",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
-    (accessToken, refreshToken, profile, cb) => {
-      cb(null, extractProfile(profile));
+    function (token, tokenSecret, profile, done) {
+      // console.log(profile);
+      User.findOrCreate({
+        where: {
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          lastname: profile.name.familyName,
+          name: profile.name.givenName,
+          password: profile._json.sub,
+        },
+      })
+        .then((user) => {
+          if (!user) {
+            return done(null, false);
+          }
+          return done(null, user);
+        })
+        .catch((err) => {
+          // console.log(err);
+          return done(err);
+        });
+
+      // .then(function (err, user) {
+      //   // res.send(user[0]);
+      //   return done(err, user);
+      // });
     }
+
+    // (accessToken, refreshToken, profile, cb) => {
+    //   User.findOne({ where: { googleId: profile.id } }).then((user) => {
+    //     if (user) {
+    //       return cb(err, user);
+    //     }
+    //     return User.create({
+    //       email: profile.emails[0].value,
+    //       googleId: profile.id,
+    //       lastname: profile.name.familyName,
+    //       name: profile.name.givenName,
+    //       password: profile._json.sub,
+    //     }).then((user) => console.log(user));
+    //   }),
+    //     function (err, user) {
+    //       console.log(err, user);
+    //       return cb(err, user);
+    //     };
+    // }
   )
 );
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findOne({ where: { id: id } })
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((err) => {
-      return done(err);
-    });
+passport.deserializeUser(function (user, done) {
+  done(null, user);
 });
+
+// passport.serializeUser(function (user, done) {
+//   done(null, user.id);
+// });
+
+// passport.deserializeUser(function (id, done) {
+//   User.findOne({ where: { id: id } })
+//     .then((user) => {
+//       done(null, user);
+//     })
+//     .catch((err) => {
+//       return done(err);
+//     });
+// });
 
 const server = express();
 //Middlewares
@@ -130,6 +182,7 @@ server.use((req, res, next) => {
   // console.log(req.user);
   next();
 });
+
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     next();
@@ -157,6 +210,7 @@ server.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
   const status = err.status || 500;
   const message = err.message || err;
+  console.error("errrrorrrr");
   console.error(err);
   res.status(status).send(message);
 });
@@ -247,17 +301,18 @@ server.post("/mailgun", (req, res, next) => {
 
 // const app = express();
 // Api call for google
-server.get(
-  "/",
-  passport.authenticate("google", { scope: ["email", "profile"] })
-);
 
-server.get(
-  "/callback",
-  passport.authenticate("google", { scope: ["email", "profile"] }),
-  (req, res) => {
-    return res.send("Congrats");
-  }
-);
+// server.get(
+//   "/",
+//   passport.authenticate("google", { scope: ["email", "profile"] })
+// );
+
+// server.get(
+//   "/callback",
+//   passport.authenticate("google", { scope: ["email", "profile"] }),
+//   (req, res) => {
+//     return res.send("Congrats");
+//   }
+// );
 
 module.exports = server;

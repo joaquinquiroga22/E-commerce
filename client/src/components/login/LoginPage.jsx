@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { connect } from "react-redux";
 // Material-UI
 import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
@@ -15,7 +14,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
-import { loginWithGoogleAction } from "../../store/userDuck";
 //class
 import s from "./ResetPw.module.css";
 
@@ -71,10 +69,10 @@ function ResetPw(props) {
 function LoginPage(props) {
   useEffect(() => {
     dispatch(userActions.logout());
-
     //Borro el carrito que esta en localstorage
     localStorage.setItem("Cart", JSON.stringify([]));
   }, []);
+
   useEffect(() => {
     dispatch(alertActions.clear());
   }, []);
@@ -118,10 +116,12 @@ function LoginPage(props) {
     setSuccess(true);
   };
 
-  // function doLogin() {
-  //   console.log("en el login: " + loginWithGoogleAction());
-  //   loginWithGoogleAction();
-  // }
+  const google = (e) => {
+    e.preventDefault();
+    // href="http://localhost:3000/auth/google"
+    dispatch(userActions.loginWithGoogle());
+    setSuccess(true);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -207,14 +207,15 @@ function LoginPage(props) {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Olvido su contraseña?
-                    </Link>
+                    <Link variant="body2">Olvido su contraseña?</Link>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </form>
+          <button type="button" onClick={(e) => google(e)}>
+            Login con google
+          </button>
           {/* <button onClick={doLogin}>Iniciar Sesion con Google</button> */}
         </Typography>
       </div>
