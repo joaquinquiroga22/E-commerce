@@ -3,6 +3,7 @@ import products from "./product_reducer";
 import categories from "./category_reducers";
 
 import cart from "./cart_reducer";
+import order from "./order_reducer";
 import { authentication } from "./authentication.reducer";
 import { registration } from "./registration.reducer";
 import { users } from "./users.reducer";
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   registration,
   users,
   alert,
+  order
 });
 
 export default rootReducer;

@@ -20,6 +20,7 @@ import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import Review from "./components/view_review/Review.jsx";
 import ProductCard from "./components/product_card/ProductCard";
 import { getCategories } from "./actions/categories";
+import Checkout from "./components/checkout/Checkout.jsx"
 
 import { alertActions } from "./actions/alert";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
@@ -38,6 +39,8 @@ function App() {
   const products = useSelector((state) => state.products.products);
   const categories = useSelector((state) => state.categories.categories);
   const [renderAddUser, setRenderAddUser] = useState(false);
+
+  
 
   useEffect(() => {
     createBrowserHistory().listen((location, action) => {
@@ -74,6 +77,7 @@ function App() {
           <Route exact path="/me" component={Profile} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
+          <Route exact path="/checkout" component={Checkout}/>
           {/* <Redirect from="*" to="/" /> */}
           {/* <Route exact path="/">
             {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}
