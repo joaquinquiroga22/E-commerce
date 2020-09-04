@@ -7,11 +7,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import { addToCart } from "../../actions/cart";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -35,9 +30,6 @@ const cards = [1];
 
 function HomePage() {
   const classes = useStyles();
-
-  const user = useSelector((state) => state.authentication.user);
-  const cart = useSelector((state) => state.cart);
 
   return (
     <main>

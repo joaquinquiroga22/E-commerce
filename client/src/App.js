@@ -10,7 +10,6 @@ import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
 
-import { alertActions } from "./actions/alert";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
 import Profile from "./components/Profile/ProfileCard";
 import { LoginPage } from "./components/login/LoginPage";
