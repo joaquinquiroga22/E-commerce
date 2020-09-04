@@ -8,6 +8,7 @@ import {
   getCart,
   emptyCart,
   fetchCartFromDb,
+  addToCart,
 } from "../../actions/cart";
 import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";
@@ -25,13 +26,13 @@ export default function TrolleyTable() {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authentication.user);
 
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchCartFromDb(user.id));
-    } else {
-      dispatch(getCart(getOrCreateLocalStorage()));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(fetchCartFromDb(user.id));
+  //   } else {
+  //     dispatch(getCart(getOrCreateLocalStorage()));
+  //   }
+  // }, []);
 
   useEffect(() => {
     sumTotal();

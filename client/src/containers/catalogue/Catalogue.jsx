@@ -43,11 +43,6 @@ export default function Catalogue() {
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getCategories());
-    if (user) {
-      dispatch(fetchCartFromDb(user.id));
-    } else {
-      dispatch(getCart(getOrCreateLocalStorage()));
-    }
   }, []);
 
   useEffect(() => {
@@ -106,7 +101,7 @@ export default function Catalogue() {
             products.map(function (product) {
               var array = product.image;
               var newArray = [];
-              if(array){
+              if (array) {
                 newArray = array.split("ImageSeparator");
               }
               if (product.stock <= 0) {

@@ -15,21 +15,45 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { green } from "@material-ui/core/colors";
 //Redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { addToCart, getCart, fetchCartFromDb } from "../../actions/cart";
+
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 export default function Navbar({ onSearch, botonNav }) {
-  const Cart = useSelector((state) => state.cart);
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const loggedIn = user ? true : false;
+  const user = useSelector((state) => state.authentication.user);
+  //const loggedIn = user ? true : false;
+
+  const loggedIn = useSelector((state) => state.authentication.loggedIn);
+
+  const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Cart) {
-      setCount(Cart.products.length);
+    if (cart) {
+      setCount(cart.products.length);
     }
-  }, [Cart]);
+  }, [cart]);
+
+  useEffect(() => {
+    if (user) {
+      if (cart.products.length > 0) {
+        cart.products.forEach((product) => {
+          dispatch(addToCart(product, user.id));
+        });
+      }
+      setTimeout(function () {
+        dispatch(fetchCartFromDb(user.id));
+      }, 1500);
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
+  }, [loggedIn]);
 
   if (window.location.pathname === "/admin") {
     return (
@@ -104,7 +128,7 @@ export default function Navbar({ onSearch, botonNav }) {
               </>
             ) : (
               <Link to="/loginpage" className={s.login}>
-                Iniciar Sesion
+                <span>Iniciar Sesion</span>
               </Link>
             )}
           </button>
