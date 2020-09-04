@@ -95,7 +95,7 @@ function getStepContent(step, changeInput) {
 export default function Checkout() {
   const [inputs, setInputs] = useState({})
   
-  const order = useSelector((state) => state.order.order)
+  const cart = useSelector((state) => state.cart)
   // const products = useSelector((state) => state.products.products);
   // const message = useSelector((state) => state.cart.message);
   const user = useSelector((state) => state.authentication.user);
@@ -137,7 +137,7 @@ export default function Checkout() {
     }
 
     if(activeStep === steps.length - 1){
-      dispatch(editOrder(data, user.id))
+      dispatch(editOrder(data, cart.orderId))
       console.log(editOrder)
       console.log("Estoy haciendo el put")
     }
