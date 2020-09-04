@@ -6,6 +6,7 @@ export const SET_QUANTITY = "SET_QUANTITY";
 export const EMPTY_CART = "EMPTY_CART";
 export const GET_CART = "GET_CART";
 export const FETCH_FROM_DB = "FETCH_FROM_DB";
+export const REMOVE_MESSAGE = "REMOVE_MESSAGE";
 
 //Action para mandar al reducer lo que este en DB (Si esta logueado) o lo que este en LocalStorage
 export const getCart = (localCart) => {
@@ -17,14 +18,13 @@ export const getCart = (localCart) => {
 
 //Esto se puede hacer con dos promesas y hacer promise all
 export const fetchCartFromDb = (idUser) => {
-  const orderPromise = axios.get(`http://localhost:3000/users/${idUser}/cart`);
-  const productsPromise = axios.get(`http://localhost:3000/products`);
   return (dispatch) => {
-    Promise.all([orderPromise, productsPromise]).then((values) => {
+    axios.get(`http://localhost:3000/users/${idUser}/cart`).then((res) => {
+      console.log(res);
       dispatch({
         type: FETCH_FROM_DB,
-        order: values[0].data,
-        products: values[1].data,
+        products: res.data.products,
+        orderId: res.data.id,
       });
     });
   };
@@ -35,9 +35,8 @@ export const addToCart = (product, idUser) => {
   if (idUser) {
     let data = {
       idProduct: product.id,
-      description: "hola desde redux",
       quantity: 1,
-      address: "chau desde redux",
+      price: product.price,
     };
     axios.post(`http://localhost:3000/users/${idUser}/cart`, data);
   }
@@ -81,5 +80,11 @@ export const emptyCart = (idUser) => {
   }
   return {
     type: EMPTY_CART,
+  };
+};
+
+export const cleanMessage = () => {
+  return {
+    type: REMOVE_MESSAGE,
   };
 };

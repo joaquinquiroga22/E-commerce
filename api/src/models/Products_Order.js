@@ -19,12 +19,5 @@ module.exports = (sequelize) => {
         isInt: true,
       },
     },
-    description: {
-      type: DataTypes.TEXT,
-      // allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
   });
 };

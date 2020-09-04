@@ -50,12 +50,13 @@ const {
   Productsorder,
 } = sequelize.models;
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+// Relaciones :
 
+// Aca category_products se define automaticamente (con productid y categoryid)
 Category.belongsToMany(Product, { through: "category_products" });
 Product.belongsToMany(Category, { through: "category_products" });
 
+//Aca usamos una tabla ya definida (le agrega price, quantity y description a (productid y orderid))
 Order.belongsToMany(Product, { through: Productsorder });
 Product.belongsToMany(Order, { through: Productsorder });
 

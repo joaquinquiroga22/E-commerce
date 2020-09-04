@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { connect } from "react-redux";
 // Material-UI
 import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
@@ -19,7 +18,8 @@ import PersonIcon from '@material-ui/icons/Person';
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
-import { loginWithGoogleAction } from "../../store/userDuck";
+import { getCart, emptyCart } from "../../actions/cart";
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 //class
 import s from './ResetPw.module.css'
 
@@ -75,12 +75,18 @@ function ResetPw(props){
 }
 
 function LoginPage(props) {
+  // Traigo el usuario del Local Storage
+  const user = useSelector((state) => state.authentication.user);
   useEffect(() => {
+    //Si venis de estar logueado borra lo que este en el carrito
+    if (user) {
+      //Borramos lo que este en el carrito de localst y redux
+      localStorage.setItem("Cart", JSON.stringify([]));
+      dispatch(emptyCart());
+    }
     dispatch(userActions.logout());
-
-    //Borro el carrito que esta en localstorage
-    localStorage.setItem("Cart", JSON.stringify([]));
   }, []);
+
   useEffect(() => {
     dispatch(alertActions.clear());
   }, []);
@@ -91,13 +97,12 @@ function LoginPage(props) {
   const { email, password } = inputs;
   const [renderReset, setRenderReset] = useState(false);
 
-  // Traigo el usuario del Local Storage
-  const user = JSON.parse(localStorage.getItem("user"));
   //Selectores de estados en redux
   const loggingIn = useSelector((state) => state.authentication.loggingIn);
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
   const alert = useSelector((state) => state.alert.message);
 
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   // reset login status
 
@@ -118,6 +123,7 @@ function LoginPage(props) {
         }
         dispatch(userActions.login(email, password));
         dispatch(alertActions.clear());
+
         return console.log("safe fiuf");
       });
     }
@@ -188,7 +194,7 @@ function LoginPage(props) {
                 setTimeout(function () {
                   setSuccess(false);
                   props.history.push("/home");
-                }, 2500) && (
+                }, 1500) && (
                   <Alert severity="success">
                     Hola {user && user.name}!<p>Se ha logueado Correctamente</p>
                   </Alert>
@@ -215,8 +221,11 @@ function LoginPage(props) {
                     <Link href="#" variant="body2">
                       Olvido su contraseña?
                     </Link>
+                  
                   </Grid>
+                 
                 </Grid>
+                <button > Sign in with Google </button>
               </Grid>
             </Grid>
           </form>

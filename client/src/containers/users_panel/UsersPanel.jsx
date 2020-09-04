@@ -62,6 +62,7 @@ export default function UsersPanel() {
     <div className={s.container}>
       {renderViewUser && <ViewUser id={viewId} onClose={setRenderViewUser} />}
       {renderReset && <ViewReset id={reset} onClose={setRenderReset} />}
+      
       <table className={s.usersTable}>
         <caption>Administración de usuarios</caption>
         <thead>
