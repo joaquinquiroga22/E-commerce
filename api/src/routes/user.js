@@ -124,7 +124,7 @@ server.post("/:userid/cart", async (req, res, next) => {
 });
 
 server.get("/:idUser/cart", (req, res, next) => {
-  Order.findOne({
+  Order.findOrCreate({
     where: { userId: req.params.idUser, state: "cart" },
     include: Product,
   })

@@ -21,13 +21,12 @@ import { addToCart } from "../../actions/cart";
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
-
   },
 }));
 
 export default function Product({ id }) {
   const [renderUpdate, setRenderUpdate] = useState(false);
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
   const user = useSelector((state) => state.authentication.user);
 
   const classes = useStyles();
@@ -42,11 +41,11 @@ export default function Product({ id }) {
   useEffect(() => {
     var array = product.image;
     var newArray = [];
-    if(array){
+    if (array) {
       newArray = array.split("ImageSeparator");
     }
-      setImages(newArray)
-  },[product])
+    setImages(newArray);
+  }, [product]);
 
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cart));
@@ -76,36 +75,34 @@ export default function Product({ id }) {
       )}
       <Box display="flex" justifyContent="center">
         <Box className={s.img}>
-          {images.length > 0 && <ImgSlider images={images}/>}
-
+          {images.length > 0 && <ImgSlider images={images} />}
         </Box>
         <Box
           display="flex"
           flexDirection="column"
           justifyContent="space-around"
         >
-          <h2 className={s.title}> {product.name} </h2>
+          <h2 className={s.title}>
+            {" "}
+            {product.name && replaceChars(product.name)}{" "}
+          </h2>
           <p className={s.e}> Descripción: {product.description} </p>
           <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
-          <Box className = {s.daropinion}>
-          {user && (
-            <Button
-              onClick={setRenderUpdate}
-              variant="contained"
-              color="default"
-              className={classes.button}
-              endIcon={<RateReviewOutlinedIcon />}
-            >
-              Dar opinion:
-            </Button>
-          )}
+          <Box className={s.daropinion}>
+            {user && (
+              <Button
+                onClick={setRenderUpdate}
+                variant="contained"
+                color="default"
+                className={classes.button}
+                endIcon={<RateReviewOutlinedIcon />}
+              >
+                Dar opinion:
+              </Button>
+            )}
           </Box>
           <Box>
-            {/* <Button variant="contained" color="secondary">
-              Comprar ya
-            </Button>
-            <span> </span> */}
             <Button variant="contained" color="primary" onClick={addToCarrito}>
               Carrito
             </Button>
