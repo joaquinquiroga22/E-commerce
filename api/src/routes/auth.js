@@ -33,7 +33,7 @@ server.post(
 server.use(
   "/google/callback",
   passport.authenticate("google", {
-    // succesRedirect: "/products",
+    succesRedirect: "https://localhost:3001/home",
     failureRedirect: "/auth/login",
   }),
   function (req, res) {
