@@ -14,8 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
-import { getCart, emptyCart } from "../../actions/cart";
-import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
+import { emptyCart } from "../../actions/cart";
 //class
 import s from "./ResetPw.module.css";
 

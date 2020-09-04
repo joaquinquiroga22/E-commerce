@@ -1,57 +1,55 @@
 import s from "./Checkoutcss.module.css";
 import { useHistory } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import AddressForm from './AddressForm.jsx';
-import PaymentForm from './PaymentForm';
-import Review from './Review';
-import CloseBtn from '../close_btn/CloseBtn.jsx';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
+import AddressForm from "./AddressForm.jsx";
+import PaymentForm from "./PaymentForm";
+import Review from "./Review";
+import CloseBtn from "../close_btn/CloseBtn.jsx";
 
 // import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  editOrder,
-} from "../../actions/orders";
+import { editOrder } from "../../actions/orders";
+import { emptyCart } from "../../actions/cart";
 
 // import { getCart, fetchCartFromDb } from "../../actions/cart";
-
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
         Vivero Online
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    position: 'relative',
+    position: "relative",
   },
   layout: {
-    width: 'auto',
+    width: "auto",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      marginLeft: "auto",
+      marginRight: "auto",
     },
   },
   paper: {
@@ -68,8 +66,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 0, 5),
   },
   buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   button: {
     marginTop: theme.spacing(3),
@@ -77,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ["Shipping address", "Payment details", "Review your order"];
 
 function getStepContent(step, changeInput) {
   switch (step) {
@@ -88,14 +86,14 @@ function getStepContent(step, changeInput) {
     case 2:
       return <Review />;
     default:
-      throw new Error('Unknown step');
+      throw new Error("Unknown step");
   }
 }
 
 export default function Checkout() {
-  const [inputs, setInputs] = useState({})
-  
-  const cart = useSelector((state) => state.cart)
+  const [inputs, setInputs] = useState({});
+
+  const cart = useSelector((state) => state.cart);
   // const products = useSelector((state) => state.products.products);
   // const message = useSelector((state) => state.cart.message);
   const user = useSelector((state) => state.authentication.user);
@@ -103,43 +101,38 @@ export default function Checkout() {
 
   const dispatch = useDispatch();
 
- 
   const classes = useStyles();
   let history = useHistory();
-  const onSubmitHistory = function(e) {
+  const onSubmitHistory = function (e) {
     e.preventDefault();
-    history.push(`/carrito`)
-    
+    history.push(`/carrito`);
   };
 
-
-  
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleInputChange = (e) => {
     e.preventDefault();
-    
+
     setInputs({
       ...inputs,
       [e.target.name]: e.target.value,
     });
-    
-  }
-
+  };
 
   const handleNext = () => {
-    // Si esta logeado que siga con este: 
+    // Si esta logeado que siga con este:
 
     // Sino, redigirlo al login y que despues se guarde con la funcion de albert
-    const data= {
+    const data = {
       address: inputs.address,
-      state: "completed"
-    }
+      state: "completed",
+    };
 
-    if(activeStep === steps.length - 1){
-      dispatch(editOrder(data, cart.orderId))
-      console.log(editOrder)
-      console.log("Estoy haciendo el put")
+    if (activeStep === steps.length - 1) {
+      dispatch(editOrder(data, cart.orderId));
+      dispatch(emptyCart());
+      console.log(editOrder);
+      console.log("Estoy haciendo el put");
     }
 
     setActiveStep(activeStep + 1);
@@ -151,13 +144,13 @@ export default function Checkout() {
 
   return (
     <React.Fragment>
-        
-      
-      <AppBar position="absolute" color="default" className={classes.appBar}>
-      </AppBar>
+      <AppBar
+        position="absolute"
+        color="default"
+        className={classes.appBar}
+      ></AppBar>
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-        
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (
               <Step key={label}>
@@ -165,7 +158,7 @@ export default function Checkout() {
               </Step>
             ))}
           </Stepper>
-          
+
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
@@ -173,8 +166,9 @@ export default function Checkout() {
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped. 
+                  Your order number is #2001539. We have emailed your order
+                  confirmation, and will send you an update when your order has
+                  shipped.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -186,31 +180,28 @@ export default function Checkout() {
                       Back
                     </Button>
                   )}
-                  <Link to="/carrito"> 
-                  <Button
-                    variant="contained"
-                    
-                    className={classes.button + " " + s.boton}
-                    onClick={onSubmitHistory}
-                  >
-                    SALIR
-                  </Button>
-                  </Link> 
+                  <Link to="/carrito">
+                    <Button
+                      variant="contained"
+                      className={classes.button + " " + s.boton}
+                      onClick={onSubmitHistory}
+                    >
+                      SALIR
+                    </Button>
+                  </Link>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                    {activeStep === steps.length - 1 ? "Place order" : "Next"}
                   </Button>
-                  
                 </div>
               </React.Fragment>
             )}
           </React.Fragment>
         </Paper>
-        
       </main>
     </React.Fragment>
   );
