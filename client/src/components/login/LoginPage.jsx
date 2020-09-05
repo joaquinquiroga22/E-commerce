@@ -7,20 +7,31 @@ import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import SendIcon from '@material-ui/icons/Send';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import PersonIcon from '@material-ui/icons/Person';
+
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
 import { emptyCart } from "../../actions/cart";
 //class
-import s from "./ResetPw.module.css";
+import s from './ResetPw.module.css'
 
-function ResetPw(props) {
-  const [input, setInput] = useState({
-    password: "",
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    
+  },
+}));
+function ResetPw(props){ 
+  const [input,setInput] = useState({
+    password: ""
   });
   const resetpassword = function (e) {
     const data = {
@@ -30,41 +41,36 @@ function ResetPw(props) {
     };
     console.log(data);
     e.preventDefault();
-
-    axios
-      .put("http://localhost:3000/reset/passwordupdate", data)
-      .then((res) => {
-        alert("Contraseña actualizada Correctamente");
-        props.onClose(false);
-      });
+    
+    axios.put("http://localhost:3000/reset/passwordupdate",data)
+    .then((res) => {
+      alert("Contraseña actualizada Correctamente")
+      props.onClose(false);
+    })
+    
   };
-
-  const handleInputChange = function (e) {
+  const handleInputChange = function(e){
     setInput({
-      password: e.target.value,
-    });
-  };
-
-  return (
-    <form className={s.resetPw} onSubmit={resetpassword}>
-      <div className={s.content}>
-        <h3>Resetear contraseña</h3>
-        <label htmlFor="resetpassword">Nueva contraseña</label>
-        <input
-          id="resetpassword"
-          type="password"
-          value={input.password}
-          onChange={handleInputChange}
-          required
-        />
-        <label htmlFor="confirmresetpassword">
-          Confirme la nueva contraseña
-        </label>
-        <input id="confirmresetpassword" type="password" required />
-        <input type="submit" />
-      </div>
-    </form>
-  );
+      password: e.target.value
+    })
+  }
+    const classes = useStyles();
+  return (<form className={s.resetPw} onSubmit={resetpassword}>
+    <div className={s.content}>
+      <h3 className = {s.title}>Resetear contraseña</h3>
+      <input id="resetpassword" type="password" value={input.password} placeholder = "Nueva Contraseña" onChange={handleInputChange} required/>
+      <input id="confirmresetpassword" type="password" placeholder = "Confirme la nueva contraseña" required/>
+      <Button  
+        type = "submit"
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        endIcon={<SendIcon/>}
+        >
+      Send
+      </Button>
+    </div>
+  </form>)
 }
 
 function LoginPage(props) {
@@ -127,7 +133,6 @@ function LoginPage(props) {
   //   console.log("en el login: " + loginWithGoogleAction());
   //   loginWithGoogleAction();
   // }
-
   return (
     <Container component="main" maxWidth="xs">
       {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
@@ -196,7 +201,7 @@ function LoginPage(props) {
               {alert &&
                 setTimeout(function () {
                   setFailure(true);
-                }, 20) && <></>}
+                }, 5) && <></>}
               {failure && (
                 <Alert severity="error">
                   <p>Ingrese los datos correctamente</p>
@@ -223,7 +228,6 @@ function LoginPage(props) {
               </Grid>
             </Grid>
           </form>
-          {/* <button onClick={doLogin}>Iniciar Sesion con Google</button> */}
         </Typography>
       </div>
     </Container>

@@ -3,14 +3,24 @@ import s from "./UsersPanel.module.css";
 import axios from "axios";
 import ViewUser from "../../components/view_user/ViewUser.jsx";
 import ViewReset from "../../components/view_reset/ViewReset.jsx";
+//Material-ui
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 export default function UsersPanel() {
   const [users, setUsers] = useState();
   const [renderViewUser, setRenderViewUser] = useState(false);
   const [viewId, setViewId] = useState(0);
   const [reset, setReset] = useState(0);
   const [renderReset, setRenderReset] = useState(false);
-
+  const classes = useStyles();
   useEffect(() => {
     getUsers("mounted");
   }, [users]);
@@ -73,15 +83,17 @@ export default function UsersPanel() {
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>
-                    <button id={user.id} onClick={onViewUser}>
-                      Ver usuario
-                    </button>
+                    <Button 
+                    id={user.id} onClick={onViewUser}
+                   color="primary">
+                    Ver Usuario
+                    </Button>
                   </td>
                   <td>
                     {" "}
-                    <button id={user.id} onClick={onViewReset}>
-                      Reset
-                    </button>
+                    <Button size="small" color = "secondary" className={classes.margin} id={user.id} onClick={onViewReset}>
+                    Reset
+                   </Button>
                   </td>
                 </tr>
               );
