@@ -229,6 +229,7 @@ function LoginPage(props) {
               </Grid>
             </Grid>
           </form>
+          <a href="http://localhost:3000/auth/google">GOOGLE</a>
         </Typography>
       </div>
     </Container>
