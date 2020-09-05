@@ -57,8 +57,8 @@ export default function Profile({ id, onClose }) {
     });
   };
 
-  const onViewReset = function (e) {
-    setReset(Number(e.target.id));
+  const onViewReset = function (id) {
+    setReset((id));
     setRenderReset(true);
   };
   return (
@@ -154,7 +154,7 @@ export default function Profile({ id, onClose }) {
           </Button>
           </div>
           <div className = {s.button2} >
-            <Button id={user && user.id} onClick={onViewReset}
+            <Button id={user && user.id} onClick={() => onViewReset (user.id)}
                   variant="contained"
                   color="secondary"
                   className={classes.button}

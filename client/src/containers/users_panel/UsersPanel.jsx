@@ -44,13 +44,13 @@ export default function UsersPanel() {
     }
   };
 
-  const onViewUser = function (e) {
-    setViewId(Number(e.target.id));
+  const onViewUser = function (id) {
+    setViewId(id);
     setRenderViewUser(true);
   };
 
-  const onViewReset = function (e) {
-    setReset(Number(e.target.id));
+  const onViewReset = function (id) {
+    setReset(id);
     setRenderReset(true);
   };
 
@@ -83,15 +83,16 @@ export default function UsersPanel() {
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>
-                    <Button 
-                    id={user.id} onClick={onViewUser}
-                   color="primary">
+                    <Button
+                    id={user.id} onClick={() => onViewUser(user.id)}
+                    color= "primary"
+                   >
                     Ver Usuario
                     </Button>
                   </td>
                   <td>
                     {" "}
-                    <Button size="small" color = "secondary" className={classes.margin} id={user.id} onClick={onViewReset}>
+                    <Button  size="small" color = "secondary" className={classes.margin} id={user.id} onClick={() => onViewReset(user.id)}>
                     Reset
                    </Button>
                   </td>
