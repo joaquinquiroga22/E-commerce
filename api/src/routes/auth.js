@@ -27,10 +27,6 @@ server.post(
           res.json({ message: "Necesitas cambiar tu password." });
         }
       })
-
-
-
-
   }
 );
 

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./RegisterPage.module.css";
 import { userActions } from "../../actions/user";
+import { alertActions } from "../../actions/alert";
 //Material-ui
 import CancelPresentationRoundedIcon from "@material-ui/icons/CancelPresentationRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +16,7 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import PersonIcon from "@material-ui/icons/Person";
 import Alert from "@material-ui/lab/Alert";
 import Container from "@material-ui/core/Container";
+import VisibilityRoundedIcon from '@material-ui/icons/VisibilityRounded';
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +45,8 @@ function RegisterPage(props) {
   const registering = useSelector((state) => state.registration.registering);
   const message = useSelector((state) => state.alert.message);
   const dispatch = useDispatch();
+ 
+  
 
   const checkMatch = function (e) {
     const password = document.getElementById("password");
@@ -102,7 +106,9 @@ function RegisterPage(props) {
     //   }, 1300);
     // }
   }
-
+  useEffect(() => {
+    dispatch(alertActions.clear());
+  }, []);
   return (
     <Container component="main" maxWidth="xs">
       <div className={s.contenedor}>
@@ -165,6 +171,7 @@ function RegisterPage(props) {
                 id="password"
                 onChange={handleChange}
               />
+                
               {submitted && !user.password && (
                 <div className={s.subtitle}>Password is required</div>
               )}
@@ -177,8 +184,8 @@ function RegisterPage(props) {
                 type="password"
                 placeholder="Confirm Password"
                 name="confirmpassword"
-                id="confirmpassword"
-                onChange={checkMatch}
+                id= "confirmpassword"
+                onChange={checkMatch}    
               />
             </div>
             {info.show && <Alert severity={info.type}>{info.msg}</Alert>}
@@ -189,11 +196,11 @@ function RegisterPage(props) {
                   show: true,
                   type: "success",
                   msg: "Cuenta creada con exito",
+                  
                 });
-              }, 100) && <Alert severity={info.type}>{info.msg}</Alert> && (
+              },100) && <Alert severity={info.type}>{info.msg}</Alert> && (
                 <></>
               )}
-
             {message &&
               message === "Error: Request failed with status code 400" &&
               setTimeout(function () {

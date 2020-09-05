@@ -14,8 +14,7 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Strategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const config = require("../config");
+
 
 // const googleStratergy = require("../googleStrategy");
 // const mercadopago = require("mercadopago");
@@ -62,20 +61,8 @@ function extractProfile(profile) {
   };
 }
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: config.clientId,
-      clientSecret: config.secret,
-      callbackURL: config.callback,
-      accessType: "offline",
-      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
-    },
-    (accessToken, refreshToken, profile, cb) => {
-      cb(null, extractProfile(profile));
-    }
-  )
-);
+
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
@@ -245,19 +232,6 @@ server.post("/mailgun", (req, res, next) => {
     });
 });
 
-// const app = express();
-// Api call for google
-server.get(
-  "/",
-  passport.authenticate("google", { scope: ["email", "profile"] })
-);
-
-server.get(
-  "/callback",
-  passport.authenticate("google", { scope: ["email", "profile"] }),
-  (req, res) => {
-    return res.send("Congrats");
-  }
-);
+  
 
 module.exports = server;

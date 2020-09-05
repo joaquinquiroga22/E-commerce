@@ -143,8 +143,16 @@ export default function TrolleyTable() {
             <tr>
               <td></td>
               <td></td>
-              <td className={s.totalspan} colSpan="2">
-                <Alert severity="info"> El carrito esta vacio</Alert>
+              <td className={s.totalspan} colSpan= "2">
+                <Alert 
+                icon = {false} 
+                color = "default" 
+                severity="info"
+                >
+                  
+                  <td className = {s.alert}>Tu carrito está vacío</td>
+                  
+                  </Alert>
               </td>
               <td></td>
               <td></td>
