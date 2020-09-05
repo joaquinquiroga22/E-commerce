@@ -91,7 +91,8 @@ function LoginPage(props) {
   }, []);
 
   const [success, setSuccess] = useState(false);
-  const [failure, setFailure] = useState(false);
+  const [clear, setClear] = useState(false);
+  const [ failure, setFailure] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const { email, password } = inputs;
   const [renderReset, setRenderReset] = useState(false);
@@ -202,8 +203,8 @@ function LoginPage(props) {
                 setTimeout(function () {
                   setFailure(true);
                 }, 5) && <></>}
-              {failure && (
-                <Alert severity="error">
+              {clear && (
+                <Alert severity="clear">
                   <p>Ingrese los datos correctamente</p>
                 </Alert>
               )}
