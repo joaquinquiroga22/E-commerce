@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./RegisterPage.module.css";
 import { userActions } from "../../actions/user";
+import { alertActions } from "../../actions/alert";
 //Material-ui
 import CancelPresentationRoundedIcon from "@material-ui/icons/CancelPresentationRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,7 +45,7 @@ function RegisterPage(props) {
   const registering = useSelector((state) => state.registration.registering);
   const message = useSelector((state) => state.alert.message);
   const dispatch = useDispatch();
-
+ 
   
 
   const checkMatch = function (e) {
@@ -105,7 +106,9 @@ function RegisterPage(props) {
     //   }, 1300);
     // }
   }
-  
+  useEffect(() => {
+    dispatch(alertActions.clear());
+  }, []);
   return (
     <Container component="main" maxWidth="xs">
       <div className={s.contenedor}>
@@ -182,8 +185,7 @@ function RegisterPage(props) {
                 placeholder="Confirm Password"
                 name="confirmpassword"
                 id= "confirmpassword"
-                onChange={checkMatch}
-                             
+                onChange={checkMatch}    
               />
             </div>
             {info.show && <Alert severity={info.type}>{info.msg}</Alert>}
@@ -199,7 +201,6 @@ function RegisterPage(props) {
               },100) && <Alert severity={info.type}>{info.msg}</Alert> && (
                 <></>
               )}
-
             {message &&
               message === "Error: Request failed with status code 400" &&
               setTimeout(function () {
