@@ -11,7 +11,7 @@ export default function AddressForm({onChange}) {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+       Direccion de envío: 
       </Typography>
       <Grid container spacing={3}>
         
@@ -20,18 +20,14 @@ export default function AddressForm({onChange}) {
             required
             id="address"
             name="address"
-            label="Address"
+            label="Direccion"
             fullWidth
             autoComplete="shipping address-line1"
             onChange={(e) => {onChange(e)}}
+
           />
         </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Acepto terminos y condiciones"
-          />
-        </Grid>
+        
       </Grid>
     </React.Fragment>
   );
