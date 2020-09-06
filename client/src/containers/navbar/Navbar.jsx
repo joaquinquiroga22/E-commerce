@@ -9,27 +9,91 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+//import IconButton from "@material-ui/core/IconButton";
+//import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { green } from "@material-ui/core/colors";
+//import { green } from "@material-ui/core/colors";
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+//import InboxIcon from '@material-ui/icons/MoveToInbox';
+//import DraftsIcon from '@material-ui/icons/Drafts';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PersonIcon from '@material-ui/icons/Person';
 //Redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
+import { addToCart, getCart, fetchCartFromDb } from "../../actions/cart";
+
+import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+    borderradius: "8px"
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
 export default function Navbar({ onSearch, botonNav }) {
-  const Cart = useSelector((state) => state.cart);
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const loggedIn = user ? true : false;
+  const user = useSelector((state) => state.authentication.user);
+  //const loggedIn = user ? true : false;
+
+  const loggedIn = useSelector((state) => state.authentication.loggedIn);
+
+  const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Cart) {
-      setCount(Cart.products.length);
+    if (cart) {
+      setCount(cart.products.length);
     }
-  }, [Cart]);
+  }, [cart]);
+
+  useEffect(() => {
+    if (user) {
+      if (cart.products.length > 0) {
+        cart.products.forEach((product) => {
+          dispatch(addToCart(product, user.id));
+        });
+      }
+      setTimeout(function () {
+        dispatch(fetchCartFromDb(user.id));
+      }, 1500);
+    } else {
+      dispatch(getCart(getOrCreateLocalStorage()));
+    }
+  }, [loggedIn]);
 
   if (window.location.pathname === "/admin") {
     return (
@@ -50,6 +114,9 @@ export default function Navbar({ onSearch, botonNav }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <div className={s.navbar}>
@@ -62,7 +129,7 @@ export default function Navbar({ onSearch, botonNav }) {
           <button className={s.buttons}>
             {loggedIn ? (
               <>
-                <IconButton
+                {/* <IconButton
                   aria-haspopup="true"
                   onClick={handleMenu}
                   zIndex="modal"
@@ -70,46 +137,51 @@ export default function Navbar({ onSearch, botonNav }) {
                 >
                   <AccountCircle style={{ fontSize: 18 }} />
                   <p> {user.name}</p>
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  zIndex="modal"
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>
-                    <Link to="/me">
-                      <span>
-                        <FilterVintageIcon className={s.icon} />
-                        Profile
-                      </span>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <Link to="/loginpage" className={s.login}>
-                      <span>Cerrar Sesion</span>
-                    </Link>
-                  </MenuItem>
-                </Menu>
-              </>
+                </IconButton>  */}
+                <Button
+                   aria-controls="customized-menu"
+                   aria-haspopup="true"
+                   variant="contained"
+                   color="default"
+                   onClick={handleClick}
+                   startIcon = {<PersonIcon/>}
+                   >
+                   Usuario
+                   </Button>
+                   <StyledMenu
+                   id="customized-menu"
+                   anchorEl={anchorEl}
+                   keepMounted
+                   open={Boolean(anchorEl)}
+                   onClose={handleClose}
+                   >
+                     <Link to = "/me">
+                     <StyledMenuItem>
+                     <ListItemIcon>
+                     <AccountBoxIcon fontSize="small" />
+                     </ListItemIcon>
+                     <ListItemText secondary="Profile" />
+                     </StyledMenuItem>
+                     </Link>
+                     <Link to = "/loginpage">
+                     <StyledMenuItem>
+                     <ListItemIcon>
+                     <ExitToAppIcon fontSize="small" />
+                     </ListItemIcon>
+                     <ListItemText secondary="Cerrar Sesion" />
+                     </StyledMenuItem>
+                     </Link>
+                     </StyledMenu>
+                  
+               </> 
             ) : (
               <Link to="/loginpage" className={s.login}>
-                Iniciar Sesion
+                <span>Iniciar Sesion</span>
               </Link>
-            )}
-          </button>
-        </div>
-      </div>
+             )} 
+           </button>
+        </div> 
+      </div> 
       <div className={s.nav}>
         <Link to="/home">
           <span>
@@ -135,6 +207,6 @@ export default function Navbar({ onSearch, botonNav }) {
           {loggedIn && user.role === "admin" ? <span>Administrar</span> : <></>}
         </Link>
       </div>
-    </div>
+     </div> 
   );
 }

@@ -14,9 +14,8 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Strategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const config = require("../config");
-
+var GoogleStrategy = require("passport-google-oauth20").Strategy;
+const config = require("../config.js");
 // const googleStratergy = require("../googleStrategy");
 // const mercadopago = require("mercadopago");
 require("./db.js");
@@ -49,6 +48,62 @@ passport.use(
         return done(err);
       });
   })
+);
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: config.clientId,
+      clientSecret: config.secret,
+      callbackURL: config.callback,
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    function (token, tokenSecret, profile, done) {
+      //console.log(profile);
+      //console.log(openid);
+      User.findOrCreate({
+        where: {
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          lastname: profile.name.familyName,
+          name: profile.name.givenName,
+          password: profile._json.sub,
+        },
+      })
+        .then((res) => {
+          //console.log(res[0])
+          return res[0];
+        })
+        .then((user) => {
+          //console.log(user)
+          done(null, user);
+        })
+        .catch((err) => done(err));
+
+      //.then(function (err, user) {
+      // res.send(user[0]);
+      //return done(err, user);
+      //});
+    }
+
+    // (accessToken, refreshToken, profile, cb) => {
+    //   User.findOne({ where: { googleId: profile.id } }).then((user) => {
+    //     if (user) {
+    //       return cb(err, user);
+    //     }
+    //     return User.create({
+    //       email: profile.emails[0].value,
+    //       googleId: profile.id,
+    //       lastname: profile.name.familyName,
+    //       name: profile.name.givenName,
+    //       password: profile._json.sub,
+    //     }).then((user) => console.log(user));
+    //   }),
+    //     function (err, user) {
+    //       console.log(err, user);
+    //       return cb(err, user);
+    //     };
+    // }
+  )
 );
 
 function extractProfile(profile) {
@@ -184,16 +239,18 @@ server.use((req, res, next) => {
 });
 
 function isAuthenticated(req, res, next) {
+  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else {
     // console.log("no logeado")
     res.send("no logeado");
+    //next();
   }
 }
 
 server.get("/me", isAuthenticated, function (req, res) {
-  // console.log(req.user)
+  console.log(req);
   User.findOne({ where: { id: req.user.id }, include: [Order] })
     .then((user) => {
       res.send(user);
@@ -298,21 +355,17 @@ server.post("/mailgun", (req, res, next) => {
       next(e);
     });
 });
+server.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile", "openid"] })
+);
 
-// const app = express();
-// Api call for google
-
-// server.get(
-//   "/",
-//   passport.authenticate("google", { scope: ["email", "profile"] })
-// );
-
-// server.get(
-//   "/callback",
-//   passport.authenticate("google", { scope: ["email", "profile"] }),
-//   (req, res) => {
-//     return res.send("Congrats");
-//   }
-// );
+server.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:3001/catalogo",
+    failureRedirect: "http://localhost:3001/loginpage",
+  })
+);
 
 module.exports = server;

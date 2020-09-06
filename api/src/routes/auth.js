@@ -7,7 +7,6 @@ const { Sequelize } = require("sequelize");
 server.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/auth/login" }),
-
   function (req, res) {
     let { email } = req.body;
     console.log(email);
@@ -27,33 +26,6 @@ server.post(
         res.json({ message: "Necesitas cambiar tu password." });
       }
     });
-  }
-);
-
-server.use(
-  "/google/callback",
-  passport.authenticate("google", {
-    succesRedirect: "https://localhost:3001/home",
-    failureRedirect: "/auth/login",
-  }),
-  function (req, res) {
-    console.log("----------------------------------- req");
-    console.log(req.user[0].dataValues);
-    res.send(req.user[0].dataValues);
-    // console.log("----------------------------------- resssssssssssssssss");
-    // console.log(res);
-    // res.send(req[0].dataValues);
-    // console.log(res);
-    // const user = req[0];
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    // const email = user.dataValues.email;
-
-    // User.findOne({ where: { email: email } }).then((user) => {
-    //   // console.log(user.dataValues);
-    //   // console.log(res);
-    //   // done();
-    //   res.send(user.dataValues);
-    // });
   }
 );
 

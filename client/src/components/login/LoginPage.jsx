@@ -7,16 +7,26 @@ import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import SendIcon from "@material-ui/icons/Send";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import PersonIcon from "@material-ui/icons/Person";
+
 //Actions
 import { userActions } from "../../actions/user";
 import { alertActions } from "../../actions/alert";
+import { emptyCart } from "../../actions/cart";
 //class
 import s from "./ResetPw.module.css";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 function ResetPw(props) {
   const [input, setInput] = useState({
     password: "",
@@ -37,40 +47,55 @@ function ResetPw(props) {
         props.onClose(false);
       });
   };
-
   const handleInputChange = function (e) {
     setInput({
       password: e.target.value,
     });
   };
-
+  const classes = useStyles();
   return (
     <form className={s.resetPw} onSubmit={resetpassword}>
       <div className={s.content}>
-        <h3>Resetear contraseña</h3>
-        <label htmlFor="resetpassword">Nueva contraseña</label>
+        <h3 className={s.title}>Resetear contraseña</h3>
         <input
           id="resetpassword"
           type="password"
           value={input.password}
+          placeholder="Nueva Contraseña"
           onChange={handleInputChange}
           required
         />
-        <label htmlFor="confirmresetpassword">
-          Confirme la nueva contraseña
-        </label>
-        <input id="confirmresetpassword" type="password" required />
-        <input type="submit" />
+        <input
+          id="confirmresetpassword"
+          type="password"
+          placeholder="Confirme la nueva contraseña"
+          required
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          endIcon={<SendIcon />}
+        >
+          Send
+        </Button>
       </div>
     </form>
   );
 }
 
 function LoginPage(props) {
+  // Traigo el usuario del Local Storage
+  const user = useSelector((state) => state.authentication.user);
   useEffect(() => {
+    //Si venis de estar logueado borra lo que este en el carrito
+    if (user) {
+      //Borramos lo que este en el carrito de localst y redux
+      localStorage.setItem("Cart", JSON.stringify([]));
+      dispatch(emptyCart());
+    }
     dispatch(userActions.logout());
-    //Borro el carrito que esta en localstorage
-    localStorage.setItem("Cart", JSON.stringify([]));
   }, []);
 
   useEffect(() => {
@@ -78,18 +103,18 @@ function LoginPage(props) {
   }, []);
 
   const [success, setSuccess] = useState(false);
+  const [clear, setClear] = useState(false);
   const [failure, setFailure] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const { email, password } = inputs;
   const [renderReset, setRenderReset] = useState(false);
 
-  // Traigo el usuario del Local Storage
-  const user = JSON.parse(localStorage.getItem("user"));
   //Selectores de estados en redux
   const loggingIn = useSelector((state) => state.authentication.loggingIn);
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
   const alert = useSelector((state) => state.alert.message);
 
+  const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   // reset login status
 
@@ -110,19 +135,17 @@ function LoginPage(props) {
         }
         dispatch(userActions.login(email, password));
         dispatch(alertActions.clear());
+
         return console.log("safe fiuf");
       });
     }
     setSuccess(true);
   };
 
-  const google = (e) => {
-    e.preventDefault();
-    // href="http://localhost:3000/auth/google"
-    dispatch(userActions.loginWithGoogle());
-    setSuccess(true);
-  };
-
+  // function doLogin() {
+  //   console.log("en el login: " + loginWithGoogleAction());
+  //   loginWithGoogleAction();
+  // }
   return (
     <Container component="main" maxWidth="xs">
       {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
@@ -183,7 +206,7 @@ function LoginPage(props) {
                 setTimeout(function () {
                   setSuccess(false);
                   props.history.push("/home");
-                }, 2500) && (
+                }, 1500) && (
                   <Alert severity="success">
                     Hola {user && user.name}!<p>Se ha logueado Correctamente</p>
                   </Alert>
@@ -191,9 +214,9 @@ function LoginPage(props) {
               {alert &&
                 setTimeout(function () {
                   setFailure(true);
-                }, 20) && <></>}
-              {failure && (
-                <Alert severity="error">
+                }, 5) && <></>}
+              {clear && (
+                <Alert severity="clear">
                   <p>Ingrese los datos correctamente</p>
                 </Alert>
               )}
@@ -210,13 +233,11 @@ function LoginPage(props) {
                     <Link variant="body2">Olvido su contraseña?</Link>
                   </Grid>
                 </Grid>
+                <button> Sign in with Google </button>
               </Grid>
             </Grid>
           </form>
-          <button type="button" onClick={(e) => google(e)}>
-            Login con google
-          </button>
-          {/* <button onClick={doLogin}>Iniciar Sesion con Google</button> */}
+          <a href="http://localhost:3000/auth/google">GOOGLE</a>
         </Typography>
       </div>
     </Container>
