@@ -29,12 +29,12 @@ server.post(
   }
 );
 
-server.use(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-  })
-);
+// server.use(
+//   "/google",
+//   passport.authenticate("google", {
+//     scope: ["email", "profile"],
+//   })
+// );
 
 server.get("/login", function (req, res) {
   res.status(401).send("Fallo el inicio de sesion");
@@ -51,8 +51,30 @@ function isAuthenticated(req, res, next) {
 }
 
 server.get("/logout", function (req, res) {
-  req.logout();
-  res.status(205).send("Deslogeado correctamente");
+  req.session.destroy(function (e) {
+    req.logout();
+    // res.redirect('/');
+    res.status(205).send({ message: "Deslogeado correctamente" });
+  });
+  // req.logout();
+  // res.cookie("connect.sid", "", { expires: new Date(1), path: "/" });
+  // req.logout();
+  // // res.clearCookie("connect.sid", { path: "/" });
+  // // res.redirect("/");
+  // console.log(req.session);
+  // req.session = null;
+  // req.session.destroy((err) => {
+  //   if (!err) {
+  //     res
+  //       .status(200)
+  //       .clearCookie("connect.sid", { path: "/" })
+  //       .json({ status: "Success" });
+  //   } else {
+  //     res.send(err);
+  //   }
+  // });
+  // res.clearCookie("connect.sid");
+  // res.redirect("/");
 });
 
 module.exports = server;

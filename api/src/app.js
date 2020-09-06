@@ -57,16 +57,14 @@ passport.use(
       callbackURL: config.callback,
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
-    function (token, tokenSecret, profile, done) {
-      //console.log(profile);
-      //console.log(openid);
+    function (token, tokenSecret, email, profile, done) {
       User.findOrCreate({
         where: {
           googleId: profile.id,
           email: profile.emails[0].value,
           lastname: profile.name.familyName,
           name: profile.name.givenName,
-          password: profile._json.sub,
+          password: profile.id,
         },
       })
         .then((res) => {
@@ -78,31 +76,7 @@ passport.use(
           done(null, user);
         })
         .catch((err) => done(err));
-
-      //.then(function (err, user) {
-      // res.send(user[0]);
-      //return done(err, user);
-      //});
     }
-
-    // (accessToken, refreshToken, profile, cb) => {
-    //   User.findOne({ where: { googleId: profile.id } }).then((user) => {
-    //     if (user) {
-    //       return cb(err, user);
-    //     }
-    //     return User.create({
-    //       email: profile.emails[0].value,
-    //       googleId: profile.id,
-    //       lastname: profile.name.familyName,
-    //       name: profile.name.givenName,
-    //       password: profile._json.sub,
-    //     }).then((user) => console.log(user));
-    //   }),
-    //     function (err, user) {
-    //       console.log(err, user);
-    //       return cb(err, user);
-    //     };
-    // }
   )
 );
 
@@ -118,84 +92,27 @@ function extractProfile(profile) {
   };
 }
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: config.clientId,
-      clientSecret: config.secret,
-      callbackURL: config.callback,
-      accessType: "offline",
-      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
-    },
-    function (token, tokenSecret, profile, done) {
-      // console.log(profile);
-      User.findOrCreate({
-        where: {
-          googleId: profile.id,
-          email: profile.emails[0].value,
-          lastname: profile.name.familyName,
-          name: profile.name.givenName,
-          password: profile._json.sub,
-        },
-      })
-        .then((user) => {
-          if (!user) {
-            return done(null, false);
-          }
-          return done(null, user);
-        })
-        .catch((err) => {
-          // console.log(err);
-          return done(err);
-        });
-
-      // .then(function (err, user) {
-      //   // res.send(user[0]);
-      //   return done(err, user);
-      // });
-    }
-
-    // (accessToken, refreshToken, profile, cb) => {
-    //   User.findOne({ where: { googleId: profile.id } }).then((user) => {
-    //     if (user) {
-    //       return cb(err, user);
-    //     }
-    //     return User.create({
-    //       email: profile.emails[0].value,
-    //       googleId: profile.id,
-    //       lastname: profile.name.familyName,
-    //       name: profile.name.givenName,
-    //       password: profile._json.sub,
-    //     }).then((user) => console.log(user));
-    //   }),
-    //     function (err, user) {
-    //       console.log(err, user);
-    //       return cb(err, user);
-    //     };
-    // }
-  )
-);
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
-
 // passport.serializeUser(function (user, done) {
-//   done(null, user.id);
+//   done(null, user);
 // });
 
-// passport.deserializeUser(function (id, done) {
-//   User.findOne({ where: { id: id } })
-//     .then((user) => {
-//       done(null, user);
-//     })
-//     .catch((err) => {
-//       return done(err);
-//     });
+// passport.deserializeUser(function (user, done) {
+//   done(null, user);
 // });
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  User.findOne({ where: { id: id } })
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      return done(err);
+    });
+});
 
 const server = express();
 //Middlewares
@@ -225,12 +142,15 @@ server.use((req, res, next) => {
 });
 
 server.use(
-  session({ secret: "clasificado", resave: false, saveUninitialized: false })
+  session({
+    secret: "clasificado",
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 
 server.use(passport.initialize());
 server.use(passport.session());
-// server.use(passport.initialize());
 
 server.use((req, res, next) => {
   // console.log(req.session);
@@ -250,7 +170,6 @@ function isAuthenticated(req, res, next) {
 }
 
 server.get("/me", isAuthenticated, function (req, res) {
-  console.log(req);
   User.findOne({ where: { id: req.user.id }, include: [Order] })
     .then((user) => {
       res.send(user);
@@ -267,7 +186,6 @@ server.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
   const status = err.status || 500;
   const message = err.message || err;
-  console.error("errrrorrrr");
   console.error(err);
   res.status(status).send(message);
 });
@@ -355,6 +273,7 @@ server.post("/mailgun", (req, res, next) => {
       next(e);
     });
 });
+
 server.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile", "openid"] })

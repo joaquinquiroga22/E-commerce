@@ -5,13 +5,13 @@ module.exports = (sequelize) => {
     email: {
       type: DataTypes.STRING,
       // allowNull: false,
-      // unique: {
-      //   args: true,
-      //   message: "Username must be unique.",
-      // },
-      // validate: {
-      //   isEmail: true,
-      // },
+      unique: {
+        args: true,
+        message: "Username must be unique.",
+      },
+      validate: {
+        isEmail: true,
+      },
     },
     name: {
       type: DataTypes.STRING,
