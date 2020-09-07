@@ -18,12 +18,10 @@ server.post("/", (req, res, next) => {
         };
         User.create(newUser)
           .then((users) => {
-            console.log(users);
             res.status(201);
             res.send(users.dataValues);
           })
           .catch((error) => {
-            console.log("Boka");
             res.status(400);
             res.send(error);
           });
@@ -208,7 +206,6 @@ server.put("/:idUser/cart", async (req, res, next) => {
 
 server.put("/:id/passwordUpdate", (req, res, next) => {
   let { password } = req.body;
-  console.log(password);
   bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(password, salt, function (err, hash) {
       var password = hash;
@@ -217,11 +214,9 @@ server.put("/:id/passwordUpdate", (req, res, next) => {
         { where: { id: req.params.id }, returning: true }
       )
         .then((response) => {
-          console.log("correcto");
           res.json(response);
         })
         .catch((error) => {
-          console.log("ripeo");
           res.json(error);
         });
     });
@@ -239,11 +234,9 @@ server.put("/:id/passwordReset", (req, res, next) => {
         { where: { id: req.params.id }, returning: true }
       )
         .then((response) => {
-          console.log(response);
           res.json(response);
         })
         .catch((error) => {
-          console.log("ripeo");
           res.json(error);
         });
     });

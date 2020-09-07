@@ -26,6 +26,7 @@ export default function TrolleyTable() {
   const [total, setTotal] = useState(0);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authentication.user);
+  const products  = useSelector((state) => state.cart.products);
 
   // useEffect(() => {
   //   if (user) {
@@ -160,17 +161,21 @@ export default function TrolleyTable() {
           )}
           <tr>
             <td className={s.totalspan} colSpan="2">
+              {products.length > 0 &&
               <Button
                 size="small"
                 variant="outlined"
                 color="primary"
-                
+                onClick={emptyCarrito}
               >
                 Vaciar Carrito
               </Button>
+
+              }
             </td>
             <td> 
             <Link to="/checkout"> 
+              {products.length > 0 && 
               <Button
                 size="small"
                 variant="outlined"
@@ -178,6 +183,7 @@ export default function TrolleyTable() {
               >
                 Checkout
               </Button>
+            } 
             </Link>
             </td>
             

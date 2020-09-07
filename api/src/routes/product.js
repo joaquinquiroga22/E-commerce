@@ -289,22 +289,16 @@ server.post("/:id/review", (req, res, next) => {
     .catch((error) => next(error));
 });
 server.put("/:id/review/:idReview", (req, res, next) => {
-  //console.log(req.params)
   let { title, stars, description } = req.body;
-  //const {id,idReview} = req.params;
-  //const id = req.params;
   const idReview = req.params.idReview;
   Reviews.findAll({ where: { id: idReview } })
     .then((values) => {
-      //console.log(values)
-      //res.send(values)
       return Reviews.update(
         { title, stars, description },
         { where: { id: idReview }, returning: true }
       );
     })
     .then((values) => {
-      console.log(values[1][0]);
       if (values[0] === 0) {
         return res.status(400).json({ message: "No se modifico la Review" });
       }

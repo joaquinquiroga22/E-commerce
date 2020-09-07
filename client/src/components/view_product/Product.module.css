@@ -12,7 +12,7 @@
 }
 
 .img {
-  border: solid 1px grey;
+  
   border-radius: 5px;
   margin-right: 5px;
   height: 460px;
@@ -47,16 +47,17 @@
 .titulo {
   font-size: 26px;
   font-weight: 600;
-  font-family: Proxima Nova;
+  font-family: courier,arial,helvetica;
 }
 .title{
   margin-top: -10px;
     text-align: center;
     margin-left:0px;
-    font-family:Arial Black ;
+    font-family: courier,arial,helvetica ;
     font-size: 40px;
-    text-shadow: 0 1px 0 #ddd, 0 2px 0 #ccc, 0 3px 0 #bbb, 0 4px 0 #aaa, 0 5px 0 #acacac, 0 6px 1px rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.2), 0 20px 20px rgba(0,0,0,0.15);
     color: black;
+    margin-right: 10px;
+    margin-left: 25px;
 }
 
 .rating {
@@ -91,15 +92,9 @@ h5 {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .e{
-  border-radius: 8px;
-  width: 500px;
-  height: fit-content;
-  padding: 7px;
-  overflow: hidden;
+  
+  font-family: Proxima Nova, -apple-system, Helvetica Neue, Helvetica, Roboto;
   margin-top: -10px;
-  word-wrap: break-word;
-  text-align: left;
-  border:1px solid whitesmoke
 }
 .daropinion{
   margin-top: -25px;

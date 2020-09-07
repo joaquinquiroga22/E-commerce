@@ -142,16 +142,15 @@ server.get("/:id", (req, res, next) => {
   Category.findOne({
     where: {
       id: req.params.id,
-    }
+    },
   })
     .then((category) => {
-      console.log(category)
       if (!category) {
         return res.send({
           message: `No existe la categoria: ${req.params.id}`,
         });
       }
-      
+
       res.send(category);
     })
     .catch((error) => next(error));

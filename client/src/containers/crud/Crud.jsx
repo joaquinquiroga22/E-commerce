@@ -14,15 +14,12 @@ import { getProducts, getProduct } from "../../actions/products";
 export default function Crud() {
   //Conexion al Store de REDUX
   const { products, product } = useSelector((state) => state.products);
-
   //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct
   const [renderEdit, setRenderEdit] = useState(false);
   //Gestiona si se renderiza el componente CrudUpdate
-
   const [renderDelete, setRenderDelete] = useState(false);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
