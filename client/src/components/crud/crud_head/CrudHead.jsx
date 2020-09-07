@@ -15,19 +15,11 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 import Button from "@material-ui/core/Button";
 
-const useStyless = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
-
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
-  toolbar:{
+  toolbar: {
     backgroundColor: "#362181",
   },
   menuButton: {

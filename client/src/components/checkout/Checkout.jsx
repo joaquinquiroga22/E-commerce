@@ -15,15 +15,11 @@ import Typography from "@material-ui/core/Typography";
 import AddressForm from "./AddressForm.jsx";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
-import CloseBtn from "../close_btn/CloseBtn.jsx";
 
-// import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 import { useSelector, useDispatch } from "react-redux";
 
 import { editOrder } from "../../actions/orders";
 import { emptyCart } from "../../actions/cart";
-
-// import { getCart, fetchCartFromDb } from "../../actions/cart";
 
 function Copyright() {
   return (
