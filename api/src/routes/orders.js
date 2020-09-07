@@ -107,6 +107,13 @@ sendEmail = () =>
         "albertopopelka@gmail.com, cailletn@northlands.edu.ar, morengerman91@gmail.com",
       subject: "Vivero E-Commerce",
       text: "Gracias por su compra, estamos procesando su pedido",
+      html: `<!DOCTYPE html>
+            <html>
+            <body>      
+              <h1>Vivero E-Commerce</h1>
+              <p>Gracias por su compra, estamos procesando su pedido...</p>      
+            </body>
+            </html>`,
     };
 
     mg.messages().send(data, (error, body) => {
