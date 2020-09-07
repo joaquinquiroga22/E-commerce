@@ -30,4 +30,5 @@
   height: 15px;
   margin-right: 5px;
   text-align: center;
+  margin-block-end: -2px;
 }
