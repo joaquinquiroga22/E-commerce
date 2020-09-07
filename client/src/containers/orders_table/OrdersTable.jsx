@@ -41,8 +41,6 @@ export default function OrdersTable() {
             <th>Id del usuario</th>
             <th>
               <label htmlFor="state">Filtro por Estado </label>
-              <tr>
-                <td>
                   <select
                     required
                     onChange={handleChange}
@@ -56,8 +54,6 @@ export default function OrdersTable() {
                     <option value="canceled">Cancelada</option>
                     <option value="completed">Completada</option>
                   </select>
-                </td>
-              </tr>
             </th>
             <th>Fecha de creacion</th>
             <th>Acciones</th>

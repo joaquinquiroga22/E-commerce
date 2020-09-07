@@ -11,7 +11,8 @@ import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
 import Checkout from "./components/checkout/Checkout.jsx";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
-import Profile from "./components/Profile/ProfileCard";
+// import Profile from "./components/Profile/ProfileCard";
+import Me from './components/me/Me.jsx';
 import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
 import { HomePage } from "./containers/home/HomePage.jsx";
@@ -36,11 +37,12 @@ function App() {
             path="/product/:id"
             render={({ match }) => <Product id={match.params.id} />}
           />
-          <Route exact path="/me" component={Profile} />
+          <Route exact path="/me" component={Me} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
           <Route exact path="/checkout" component={Checkout} />
           <Route path="/" component={Footer} />
+          
         </div>
       </Switch>
     </Router>

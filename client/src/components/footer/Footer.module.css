@@ -1,12 +1,11 @@
 .footer{
-  
+  margin-top: 50px;
   color: white;
-  margin:0;
   border-top: 1px solid #5bcc35;
   background-color: #242424;
   height: 200px;
   width: 100%;
-  
+  float:left;
 }
 .authors{
   float: left;

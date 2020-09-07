@@ -1,5 +1,5 @@
 .card{
-  margin: 5px 10px;
+  margin: 10px 10px 20px 10px;
   width: 200px;
   height: 320px;
   overflow: hidden;
@@ -29,7 +29,7 @@
   width: 100%;
   padding: 5px 0;
   background-color: black;
-  border-color: black; 
+  border-color: black;
   border-radius: 5px;
 }
 .description{
@@ -73,7 +73,7 @@
   padding: 10px;
   cursor:pointer;
   border: 1px solid whitesmoke;
-  border-color: lightslategray; 
+  border-color: lightslategray;
   border-radius: 5px;
 }
 .actions:hover{
