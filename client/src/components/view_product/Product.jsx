@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Container, Box, Button } from "@material-ui/core";
+import Rating from "@material-ui/lab/Rating";
 import s from "./Product.module.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -35,6 +37,7 @@ export default function Product({ id }) {
   const message = useSelector((state) => state.cart.message);
   const { product } = useSelector((state) => state.products);
   const cart = useSelector((state) => state.cart.products);
+  const [promedio, setPromedio] = useState();
 
   useEffect(() => {
     dispatch(getProduct(id));
@@ -52,6 +55,18 @@ export default function Product({ id }) {
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/products/${id}/reviews`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data) {
+          setPromedio(res.data);
+        }
+      });
+  }, []);
 
   const addToCarrito = function () {
     if (user) {
@@ -91,6 +106,15 @@ export default function Product({ id }) {
           <p className={s.e}> Descripción: {product.description} </p>
           <h5> Stock: {product.stock}</h5>
           <h3 className={s.num}> ${product.price} </h3>
+          <Rating
+            className={s.rating}
+            name="half-rating-read"
+            defaultValue={4.3}
+            precision={0.1}
+            readOnly
+            size="large"
+            value={promedio && promedio >= 1 ? promedio : 4.3}
+          />
           <Box className={s.daropinion}>
             {user && (
               <Button

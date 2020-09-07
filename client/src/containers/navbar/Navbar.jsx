@@ -10,7 +10,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
-import PersonPinIcon from '@material-ui/icons/PersonPin';
+import PersonPinIcon from "@material-ui/icons/PersonPin";
 //import IconButton from "@material-ui/core/IconButton";
 //import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -36,7 +36,7 @@ const StyledMenu = withStyles({
   paper: {
     border: "1px solid #d3d4d5",
     borderradius: "15px",
-    
+    Zindex: "12000",
   },
 })((props) => (
   <Menu
@@ -180,10 +180,10 @@ export default function Navbar({ onSearch, botonNav }) {
                 </StyledMenu>
               </>
             ) : (
-              <Button  className = {s.hola} startIcon = {<PersonPinIcon/>}>
-              <Link to="/loginpage" className={s.login}>
-                <span>Login</span>
-              </Link>
+              <Button className={s.hola} startIcon={<PersonPinIcon />}>
+                <Link to="/loginpage" className={s.login}>
+                  <span>Login</span>
+                </Link>
               </Button>
             )}
           </button>
