@@ -20,25 +20,23 @@ server.get("/", (req, res, next) => {
 });
 
 server.get("/paginated", (req, res, next) => {
-
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
 
   Product.findAndCountAll({
     offset: limit * (page - 1),
     limit: limit,
-    order: [['createdAt','DESC']],
-    include: Category
-  }).then((values) => {
-    //Items => values.rows
-    //Contador de total => values.count
-    res.status(200).send(values);
+    order: [["createdAt", "DESC"]],
+    include: Category,
   })
-  .catch((error) => {
-    next(error);
-  });
-
-
+    .then((values) => {
+      //Items => values.rows
+      //Contador de total => values.count
+      res.status(200).send(values);
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 //Hcemos un post a / products
@@ -190,6 +188,27 @@ server.put("/:id", (req, res, next) => {
   }
 });
 
+//ruta para cambiar el stock de un product
+server.put("/:id/stock", async (req, res, next) => {
+  const newStock = parseInt(req.body.stock);
+
+  try {
+    const product = await Product.findOne({ where: { id: req.params.id } });
+    if (!product) {
+      return res.send({
+        message: `No existe el producto con ID: ${req.params.id}`,
+      });
+    }
+    product.stock = newStock;
+    await product.save();
+    return res.send({
+      message: `Se actualizo el stock del proucto ID: ${req.params.id}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 //Hacemos un get a / products/:id para traer un producto por su id
 
 server.get("/:id", (req, res, next) => {
@@ -306,23 +325,27 @@ server.delete("/:id/review/:idReview", (req, res, next) => {
     });
 });
 
-server.get("/:id/reviews",(req,res,next) => {
-
+server.get("/:id/reviews", (req, res, next) => {
   const idProduct = req.params.id;
 
-  Reviews.findAll({where: {productId: idProduct},
-    attributes: ['productId', [Reviews.sequelize.fn('AVG',
-    Reviews.sequelize.col('stars')), 'rating']],
-    group: ['productId'],
-    order: [[Reviews.sequelize.fn('AVG', Reviews.sequelize.col('stars')), 'DESC']]
-}).then(function(response) {
-  let rating = Number(response[0].dataValues.rating);
-  res.status(200).send(rating.toFixed(1))
-})
-.catch((error) => {
-  next(error);
+  Reviews.findAll({
+    where: { productId: idProduct },
+    attributes: [
+      "productId",
+      [Reviews.sequelize.fn("AVG", Reviews.sequelize.col("stars")), "rating"],
+    ],
+    group: ["productId"],
+    order: [
+      [Reviews.sequelize.fn("AVG", Reviews.sequelize.col("stars")), "DESC"],
+    ],
+  })
+    .then(function (response) {
+      let rating = Number(response[0].dataValues.rating);
+      res.status(200).send(rating.toFixed(1));
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
-
-})
 
 module.exports = server;
