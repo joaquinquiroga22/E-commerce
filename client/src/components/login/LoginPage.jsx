@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 // Material-UI
-import { FormControl, InputLabel, FormHelperText } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  Box,
+} from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
@@ -21,10 +26,15 @@ import { alertActions } from "../../actions/alert";
 import { emptyCart } from "../../actions/cart";
 //class
 import s from "./ResetPw.module.css";
+import icon from "../../img/Google__G__Logo.svg";
+import style from "./LoginPage.module.css";
 
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
+  },
+  reset: {
+    spacing: 8,
   },
 }));
 function ResetPw(props) {
@@ -37,7 +47,6 @@ function ResetPw(props) {
       password: input.password,
       adminReset: true,
     };
-    console.log(data);
     e.preventDefault();
 
     axios
@@ -86,8 +95,10 @@ function ResetPw(props) {
 }
 
 function LoginPage(props) {
+  const classes = useStyles();
   // Traigo el usuario del Local Storage
   const user = useSelector((state) => state.authentication.user);
+
   useEffect(() => {
     //Si venis de estar logueado borra lo que este en el carrito
     if (user) {
@@ -142,10 +153,6 @@ function LoginPage(props) {
     setSuccess(true);
   };
 
-  // function doLogin() {
-  //   console.log("en el login: " + loginWithGoogleAction());
-  //   loginWithGoogleAction();
-  // }
   return (
     <Container component="main" maxWidth="xs">
       {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
@@ -214,30 +221,36 @@ function LoginPage(props) {
               {alert &&
                 setTimeout(function () {
                   setFailure(true);
-                }, 5) && <></>}
-              {clear && (
-                <Alert severity="clear">
-                  <p>Ingrese los datos correctamente</p>
-                </Alert>
-              )}
+                }, 5) && <></> && (
+                  <Alert severity="error">
+                    <p>Ingrese los datos correctamente</p>
+                  </Alert>
+                )}
               <Grid md={12}>
                 <Button type="submit" variant="contained" color="primary">
                   {loggingIn && <CircularProgress size="40" disableShrink />}
-                  Login
+                  LOGIN
                 </Button>
                 <Button variant="outlined" color="primary">
-                  <Link to="/register">Registrate</Link>
+                  <Link to="/register">Register</Link>
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link variant="body2">Olvido su contraseña?</Link>
+                    <Box m={1}>
+                      <Link className={classes.reset} to="/me" variant="body2">
+                        Olvido su contraseña?
+                      </Link>
+                    </Box>
                   </Grid>
                 </Grid>
-                <button> Sign in with Google </button>
               </Grid>
             </Grid>
           </form>
-          <a href="http://localhost:3000/auth/google">GOOGLE</a>
+          <a className={style.google} href="http://localhost:3000/auth/google">
+            {/* <svg className={style.icon}>{icon}</svg> */}
+            <img className={style.icon} src={icon} />
+            Inicia Sesion con Google
+          </a>
         </Typography>
       </div>
     </Container>

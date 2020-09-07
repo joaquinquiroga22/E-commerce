@@ -15,11 +15,13 @@ import Typography from "@material-ui/core/Typography";
 import AddressForm from "./AddressForm.jsx";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
+import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { editOrder } from "../../actions/orders";
 import { emptyCart } from "../../actions/cart";
+import Axios from "axios";
 
 function Copyright() {
   return (
@@ -71,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ['Direccion de envio', 'Metodo de pago', 'Su orden'];
+const steps = ["Direccion de envio", "Metodo de pago", "Su orden"];
 
 function getStepContent(step, changeInput) {
   switch (step) {
@@ -87,14 +89,11 @@ function getStepContent(step, changeInput) {
 }
 
 export default function Checkout(props) {
-  
-  const [inputs, setInputs] = useState({})
-  
-  const cart = useSelector((state) => state.cart)
-  // const products = useSelector((state) => state.products.products);
-  // const message = useSelector((state) => state.cart.message);
+  const [inputs, setInputs] = useState({});
+
+  const cart = useSelector((state) => state.cart);
+
   const user = useSelector((state) => state.authentication.user);
-  // const categories = useSelector((state) => state.categories.categories);
 
   const dispatch = useDispatch();
 
@@ -122,17 +121,28 @@ export default function Checkout(props) {
     // Sino, redigirlo al login y que despues se guarde con la funcion de albert
     const data = {
       address: inputs.address,
-      state: "completed",
+      state: "process",
     };
 
     if (activeStep === steps.length - 1) {
       dispatch(editOrder(data, cart.orderId));
+      updateStock(cart.products);
       dispatch(emptyCart());
       console.log(editOrder);
       console.log("Estoy haciendo el put");
     }
 
     setActiveStep(activeStep + 1);
+  };
+
+  //actualizo el stock producto segun la compra
+  const updateStock = (products) => {
+    products.forEach((product) => {
+      let stock = product.stock - product.quantity;
+      axios.put(`http://localhost:3000/products/${product.id}/stock`, {
+        stock,
+      });
+    });
   };
 
   const handleBack = () => {
@@ -163,8 +173,9 @@ export default function Checkout(props) {
                   Gracias por su orden.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Tu numero de orden es #2001539. Te hemos enviado un mail con la confirnacion de la orden, 
-                  otro email sera enviado cuando la orden se envie hacia tu direccion.
+                  Tu numero de orden es #2001539. Te hemos enviado un mail con
+                  la confirnacion de la orden, otro email sera enviado cuando la
+                  orden se envie hacia tu direccion.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -191,7 +202,9 @@ export default function Checkout(props) {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Realizar pedido' : 'Next'}
+                    {activeStep === steps.length - 1
+                      ? "Realizar pedido"
+                      : "Next"}
                   </Button>
                 </div>
               </React.Fragment>

@@ -1,9 +1,3 @@
-// const passport = require(‘passport’);
-// const express = require(‘express’)
-const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
-const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
-const mailgun = require("mailgun-js");
-const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -14,12 +8,9 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Strategy = require("passport-local").Strategy;
-var GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const config = require("../config.js");
-// const googleStratergy = require("../googleStrategy");
-// const mercadopago = require("mercadopago");
 require("./db.js");
-
 //Modelo de usuario
 const { User, Review, Order, Products_Order } = require("./db.js");
 
@@ -35,8 +26,6 @@ passport.use(
           return done(null, false);
         }
         bcrypt.compare(password, user.password).then((res) => {
-          // res === true
-          // console.log(res);
           if (res) {
             return done(null, user);
           }
@@ -44,11 +33,11 @@ passport.use(
         });
       })
       .catch((err) => {
-        // console.log(err);
         return done(err);
       });
   })
 );
+
 passport.use(
   new GoogleStrategy(
     {
@@ -68,37 +57,15 @@ passport.use(
         },
       })
         .then((res) => {
-          //console.log(res[0])
           return res[0];
         })
         .then((user) => {
-          //console.log(user)
           done(null, user);
         })
         .catch((err) => done(err));
     }
   )
 );
-
-function extractProfile(profile) {
-  let imageUrl = "";
-  if (profile.photos && profile.photos.length) {
-    imageUrl = profile.photos[0].value;
-  }
-  return {
-    id: profile.id,
-    displayName: profile.displayName,
-    image: imageUrl,
-  };
-}
-
-// passport.serializeUser(function (user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function (user, done) {
-//   done(null, user);
-// });
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -151,21 +118,16 @@ server.use(
 
 server.use(passport.initialize());
 server.use(passport.session());
-
 server.use((req, res, next) => {
-  // console.log(req.session);
-  // console.log(req.user);
   next();
 });
+server.use("/", routes);
 
 function isAuthenticated(req, res, next) {
-  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else {
-    // console.log("no logeado")
     res.send("no logeado");
-    //next();
   }
 }
 
@@ -179,8 +141,6 @@ server.get("/me", isAuthenticated, function (req, res) {
     });
 });
 
-server.use("/", routes);
-
 // Error catching endware.
 server.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
@@ -189,6 +149,23 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(status).send(message);
 });
+
+server.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile", "openid"] })
+);
+
+server.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:3001/catalogo",
+    failureRedirect: "http://localhost:3001/loginpage",
+  })
+);
+
+module.exports = server;
+
+// const mercadopago = require("mercadopago");
 
 // mercadopago.configure({
 //   sandbox: true,
@@ -244,47 +221,3 @@ server.use((err, req, res, next) => {
 // });
 
 //mailgun
-
-sendEmail = () =>
-  new Promise((resolve, reject) => {
-    const data = {
-      from: "ingenieriamg91@gmail.com",
-      to: "ingenieriamg91@gmail.com",
-      subject: "Hello",
-      text: "Testing some Mailgun awesomeness!",
-    };
-
-    mg.messages().send(data, (error, body) => {
-      if (error) {
-        return reject(error);
-      }
-      console.log(body);
-      return resolve();
-    });
-  });
-
-server.post("/mailgun", (req, res, next) => {
-  sendEmail()
-    .then((values) => {
-      console.log(values);
-      res.json({ message: "Your query has been sent" });
-    })
-    .catch((e) => {
-      next(e);
-    });
-});
-
-server.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile", "openid"] })
-);
-
-server.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:3001/catalogo",
-    failureRedirect: "http://localhost:3001/loginpage",
-  })
-);
-
-module.exports = server;

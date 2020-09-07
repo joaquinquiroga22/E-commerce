@@ -2,7 +2,6 @@ import React from "react";
 
 import { Rating } from "@material-ui/lab";
 
-
 import {
   Card,
   CardContent,
@@ -19,7 +18,7 @@ export default function ReviewCard({ title, stars, description, date, user }) {
           {title && title !== "" ? title : "Titulo Review"}
         </Typography>
         <Typography variant="subtitle2">
-          {user && user !== "" ? user : "Alberto"} -{" "}
+          {user && user !== "" ? user : "Usuario"} -{" "}
           {date && date !== "" ? date : "27 de Mayo"}
         </Typography>
         <Grid container>

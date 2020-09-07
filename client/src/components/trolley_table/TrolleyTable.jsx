@@ -14,7 +14,7 @@ import Alert from "@material-ui/lab/Alert";
 import { Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Checkout from "../checkout/Checkout.jsx"
+import Checkout from "../checkout/Checkout.jsx";
 
 //HELPERS
 import replaceChars from "../../helpers/replaceChars";
@@ -22,10 +22,11 @@ import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
 export default function TrolleyTable() {
   const dispatch = useDispatch();
-  const [renderCheck, setRenderCheck] = useState(false)
+  const [renderCheck, setRenderCheck] = useState(false);
   const [total, setTotal] = useState(0);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.authentication.user);
+  const products = useSelector((state) => state.cart.products);
 
   // useEffect(() => {
   //   if (user) {
@@ -81,10 +82,9 @@ export default function TrolleyTable() {
     setTotal(suma);
   };
 
-  const renderCheckout = function (){
+  const renderCheckout = function () {
     setRenderCheck(true);
-
-  }
+  };
 
   return (
     <div className={s.table}>
@@ -104,7 +104,6 @@ export default function TrolleyTable() {
           {cart && cart.products.length > 0 ? (
             cart.products.map((producto) => {
               return (
-                
                 <tr key={producto.id}>
                   <td>
                     <IconButton
@@ -143,16 +142,10 @@ export default function TrolleyTable() {
             <tr>
               <td></td>
               <td></td>
-              <td className={s.totalspan} colSpan= "2">
-                <Alert 
-                icon = {false} 
-                color = "default" 
-                severity="info"
-                >
-                  
-                  <td className = {s.alert}>Tu carrito está vacío</td>
-                  
-                  </Alert>
+              <td className={s.totalspan} colSpan="2">
+                <Alert icon={false} color="default" severity="info">
+                  <td className={s.alert}>Tu carrito está vacío</td>
+                </Alert>
               </td>
               <td></td>
               <td></td>
@@ -160,27 +153,27 @@ export default function TrolleyTable() {
           )}
           <tr>
             <td className={s.totalspan} colSpan="2">
-              <Button
-                size="small"
-                variant="outlined"
-                color="primary"
-                
-              >
-                Vaciar Carrito
-              </Button>
+              {products.length > 0 && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="secondary"
+                  onClick={emptyCarrito}
+                >
+                  Vaciar Carrito
+                </Button>
+              )}
             </td>
-            <td> 
-            <Link to="/checkout"> 
-              <Button
-                size="small"
-                variant="outlined"
-                color="primary"
-              >
-                Checkout
-              </Button>
-            </Link>
+            <td>
+              <Link to="/checkout">
+                {products.length > 0 && (
+                  <Button size="small" variant="outlined" color="primary">
+                    COMPRAR
+                  </Button>
+                )}
+              </Link>
             </td>
-            
+
             <td className={s.totalspan} colSpan="2">
               <span className={s.total}>Total:</span>
               {total.toFixed(2)}

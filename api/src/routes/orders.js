@@ -1,13 +1,16 @@
 const server = require("express").Router();
-const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
-const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
+
+// const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
+// const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
+
+const { API_KEY, DOMAIN } = process.env;
+
 const mailgun = require("mailgun-js");
 const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 const { Product } = require("../db.js");
-const { Category } = require("../db.js");
+
 const { Order, User, Productsorder } = require("../db.js");
 const { Sequelize } = require("sequelize");
-const mercadopago = require("mercadopago");
 
 server.post("/", (req, res, next) => {
   let { state, address } = req.body;
@@ -94,35 +97,29 @@ server.put("/:id", (req, res, next) => {
   }
 });
 
-mercadopago.configure({
-  sandbox: true,
-  access_token:
-    "TEST-7291361459687504-090121-277640c872600cf5f29c4db7d737b521-250042965",
-});
-
-server.get("/mercadopago", (req, res, next) => {
-  mercadopago.payment.search().then((values) => {
-    console.log(values);
-    res.send(values);
-  });
-});
-
 //mailgun
 
 sendEmail = () =>
   new Promise((resolve, reject) => {
     const data = {
-      from: "test@domain",
-      to: "albertopopelka@gmail.com",
-      subject: "Viverooooo",
-      text: "Estamos enviando el mail del checkout",
+      from: "morengerman91@gmail.com",
+      to:
+        "albertopopelka@gmail.com, cailletn@northlands.edu.ar, morengerman91@gmail.com",
+      subject: "Vivero E-Commerce",
+      text: "Gracias por su compra, estamos procesando su pedido",
+      html: `<!DOCTYPE html>
+            <html>
+            <body>      
+              <h1>Vivero E-Commerce</h1>
+              <p>Gracias por su compra, estamos procesando su pedido...</p>      
+            </body>
+            </html>`,
     };
 
     mg.messages().send(data, (error, body) => {
       if (error) {
         return reject(error);
       }
-      console.log(body);
       return resolve();
     });
   });
@@ -130,7 +127,6 @@ sendEmail = () =>
 server.post("/mailgun", (req, res, next) => {
   sendEmail()
     .then((values) => {
-      console.log(values);
       res.json({ message: "Your query has been sent" });
     })
     .catch((e) => {

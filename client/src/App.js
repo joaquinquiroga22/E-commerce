@@ -9,20 +9,15 @@ import Catalogue from "./containers/catalogue/Catalogue.jsx";
 import AdminPage from "./containers/admin_page/AdminPage.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import TrolleyTable from "./components/trolley_table/TrolleyTable";
-import Checkout from "./components/checkout/Checkout.jsx"
-
+import Checkout from "./components/checkout/Checkout.jsx";
 import { PrivateRoute } from "./components/privateRouter/PrivateRoute";
 // import Profile from "./components/Profile/ProfileCard";
 import Me from './components/me/Me.jsx';
 import { LoginPage } from "./components/login/LoginPage";
 import { RegisterPage } from "./components/login/RegisterPage";
 import { HomePage } from "./containers/home/HomePage.jsx";
-import { useHistory } from "react-router-dom";
-// export const history = createBrowserHistory();
 
 function App() {
-  let history = useHistory();
-
   const [renderAddUser, setRenderAddUser] = useState(false);
 
   return (
@@ -45,11 +40,7 @@ function App() {
           <Route exact path="/me" component={Me} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/loginpage" component={LoginPage} />
-          <Route exact path="/checkout" component={Checkout}/>
-          {/* <Redirect from="*" to="/" /> */}
-          {/* <Route exact path="/">
-            {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />}
-          </Route> */}
+          <Route exact path="/checkout" component={Checkout} />
           <Route path="/" component={Footer} />
           
         </div>

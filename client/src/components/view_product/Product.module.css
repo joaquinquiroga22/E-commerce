@@ -12,7 +12,6 @@
 }
 
 .img {
-  border: solid 1px grey;
   border-radius: 5px;
   margin-right: 5px;
   height: 460px;
@@ -41,36 +40,38 @@
   font-weight: 300;
   font-family: Proxima Nova, -apple-system, Helvetica Neue, Helvetica, Roboto,
     Arial, sans-serif;
-    margin-top: -10px;
+  margin-top: -10px;
 }
 
 .titulo {
   font-size: 26px;
   font-weight: 600;
-  font-family: Proxima Nova;
+  font-family: courier, arial, helvetica;
 }
-.title{
+.title {
   margin-top: -10px;
-    text-align: center;
-    margin-left:0px;
-    font-family:Arial Black ;
-    font-size: 40px;
-    text-shadow: 0 1px 0 #ddd, 0 2px 0 #ccc, 0 3px 0 #bbb, 0 4px 0 #aaa, 0 5px 0 #acacac, 0 6px 1px rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.2), 0 20px 20px rgba(0,0,0,0.15);
-    color: black;
+  text-align: center;
+  margin-left: 0px;
+  font-family: courier, arial, helvetica;
+  font-size: 40px;
+  color: black;
+  margin-right: 10px;
+  margin-left: 25px;
 }
 
 .rating {
   flex-direction: row;
+  margin-bottom: 50px;
+  margin-left: 95px;
 }
-.opinion{
-    font-weight: bold;
-    color: black;
-    border: 1px solid black;
-    background-color: whitesmoke;
-    margin: 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    
+.opinion {
+  font-weight: bold;
+  color: black;
+  border: 1px solid black;
+  background-color: whitesmoke;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 .buttoms {
   display: flex;
@@ -84,26 +85,20 @@ h5 {
 .review {
   flex-direction: column;
 }
-.opinion{
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-.e{
+.opinion {
+  border: 1px solid black;
   border-radius: 8px;
-  width: 500px;
-  height: fit-content;
-  padding: 7px;
-  overflow: hidden;
-  margin-top: -10px;
-  word-wrap: break-word;
-  text-align: left;
-  border:1px solid whitesmoke
+  background-color: white;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.daropinion{
+.e {
+  font-family: Proxima Nova, -apple-system, Helvetica Neue, Helvetica, Roboto;
+  margin-top: -10px;
+}
+.daropinion {
   margin-top: -25px;
 }
-.alert{
+.alert {
   width: 95%;
 }

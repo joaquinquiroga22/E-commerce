@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import s from "./OrdersTable.module.css";
-import axios from "axios";
 import ViewOrder from "../../components/view_order/ViewOrder.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrders, getOrder } from "../../actions/orders";
+
+import formatDate from "../../helpers/formatDate";
 
 export default function OrdersTable() {
   const { orders } = useSelector((state) => state.order);
@@ -78,7 +79,7 @@ export default function OrdersTable() {
                       {order.state}
                     </p>
                   </td>
-                  <td>{order.createdAt}</td>
+                  <td>{formatDate(order.createdAt)}</td>
                   <td>
                     <input
                       id={order.id}
