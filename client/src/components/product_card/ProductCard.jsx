@@ -7,7 +7,7 @@ import s from "./ProductCard.module.css";
 import replaceChars from "../../helpers/replaceChars";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, REMOVE_MESSAGE, cleanMessage } from "../../actions/cart";
+import { addToCart, cleanMessage } from "../../actions/cart";
 
 const shortText = function (text) {
   var newText = text.substring(0, 50);

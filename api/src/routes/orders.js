@@ -28,9 +28,7 @@ server.get("/", (req, res, next) => {
     Order.findAll({ where: { state: status }, include: User })
       .then((orders) => {
         if (orders && orders.length === 0) {
-          return res
-            .status(400)
-            .json({ message: `No hay ordenes con status: ${status}` });
+          return res.json({ message: `No hay ordenes con status: ${status}` });
         }
         res.send(orders);
       })
@@ -51,9 +49,9 @@ server.get("/", (req, res, next) => {
 
 server.get("/:id", (req, res, next) => {
   const idOrder = req.params.id;
-  Order.findAll({
+  Order.findOne({
     where: { id: idOrder },
-    include: User,
+    include: [User, Product],
   })
     .then((orders) => {
       res.send(orders);
@@ -114,8 +112,8 @@ server.get("/mercadopago", (req, res, next) => {
 sendEmail = () =>
   new Promise((resolve, reject) => {
     const data = {
-      from: "cailletn@northlands.edu.ar",
-      to: "cailletn@northlands.edu.ar",
+      from: "test@domain",
+      to: "albertopopelka@gmail.com",
       subject: "Viverooooo",
       text: "Estamos enviando el mail del checkout",
     };

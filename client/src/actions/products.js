@@ -12,7 +12,6 @@ export const GET_PRODUCTS_CATEGORY = "GET_PRODUCTS_CATEGORY";
 
 //Trae todos los products productos del back y se lo manda al reducer
 export const getProducts = () => {
-  console.log("Accion Traer todo los productos");
   return (dispatch) => {
     axios.get(`http://localhost:3000/products`).then((products) => {
       dispatch({
@@ -25,7 +24,6 @@ export const getProducts = () => {
 
 //trae un unico producto por id del back y lo manda al reducer
 export const getProduct = (id) => {
-  console.log("Accion Traer un producto");
   return (dispatch) => {
     axios.get(`http://localhost:3000/products/${id}`).then((product) => {
       dispatch({
@@ -38,7 +36,6 @@ export const getProduct = (id) => {
 
 //Trae todos los productos asociados a una categoria
 export const getProductsCategory = (id) => {
-  console.log(`Accion Traer productos en categoria: ${id}`);
   return (dispatch) => {
     axios
       .get(`http://localhost:3000/products/category/?id=${id}`)
@@ -53,7 +50,6 @@ export const getProductsCategory = (id) => {
 
 //Agrega un producto al back y dispatchea action para recargar store de products
 export const addProduct = (data) => {
-  console.log("Accion Agregar un producto");
   return (dispatch) => {
     axios.post("http://localhost:3000/products", data).then((product) => {
       dispatch({
@@ -65,7 +61,6 @@ export const addProduct = (data) => {
 };
 
 export const deleteProduct = (id) => {
-  console.log(`Accion eliminar producto con ${id}`);
   return (dispatch) => {
     axios.delete(`http://localhost:3000/products/${id}`).then(
       dispatch({
@@ -77,7 +72,6 @@ export const deleteProduct = (id) => {
 };
 
 export const editProduct = (id, data) => {
-  console.log(`Accion editar producto id: ${id}`);
   return (dispatch) => {
     axios.put(`http://localhost:3000/products/${id}`, data).then((product) => {
       dispatch({
@@ -89,7 +83,6 @@ export const editProduct = (id, data) => {
 };
 
 export const searchProduct = (query) => {
-  console.log(`Accion buscar productos con query: ${query}`);
   return (dispatch) => {
     axios
       .get(`http://localhost:3000/search?valor=${query}`)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import s from "./Review.module.css";
 import CancelBtn from "../cancel_btn/CancelBtn.jsx";
 import CloseBtn from "../close_btn/CloseBtn.jsx";
@@ -6,7 +6,7 @@ import SuccessBtn from "../success_btn/SuccessBtn.jsx";
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios";
 import { getProduct } from "../../actions/products";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function Review(props) {
   const [renderUpdate, setRenderUpdate] = useState(false);

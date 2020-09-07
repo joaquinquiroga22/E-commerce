@@ -20,7 +20,6 @@ export const getCart = (localCart) => {
 export const fetchCartFromDb = (idUser) => {
   return (dispatch) => {
     axios.get(`http://localhost:3000/users/${idUser}/cart`).then((res) => {
-      console.log(res);
       dispatch({
         type: FETCH_FROM_DB,
         products: res.data.products,
