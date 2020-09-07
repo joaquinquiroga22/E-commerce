@@ -1,9 +1,6 @@
 // const passport = require(‘passport’);
 // const express = require(‘express’)
-const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
-const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
-const mailgun = require("mailgun-js");
-const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
+
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -245,35 +242,6 @@ server.use((err, req, res, next) => {
 // });
 
 //mailgun
-
-sendEmail = () =>
-  new Promise((resolve, reject) => {
-    const data = {
-      from: "ingenieriamg91@gmail.com",
-      to: "ingenieriamg91@gmail.com",
-      subject: "Hello",
-      text: "Testing some Mailgun awesomeness!",
-    };
-
-    mg.messages().send(data, (error, body) => {
-      if (error) {
-        return reject(error);
-      }
-      console.log(body);
-      return resolve();
-    });
-  });
-
-server.post("/mailgun", (req, res, next) => {
-  sendEmail()
-    .then((values) => {
-      console.log(values);
-      res.json({ message: "Your query has been sent" });
-    })
-    .catch((e) => {
-      next(e);
-    });
-});
 
 server.get(
   "/auth/google",
