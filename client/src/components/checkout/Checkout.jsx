@@ -122,7 +122,7 @@ export default function Checkout(props) {
     // Sino, redigirlo al login y que despues se guarde con la funcion de albert
     const data = {
       address: inputs.address,
-      state: "completed",
+      state: "process",
     };
 
     if (activeStep === steps.length - 1) {
@@ -191,7 +191,9 @@ export default function Checkout(props) {
                     onClick={handleNext}
                     className={classes.button}
                   >
+                    
                     {activeStep === steps.length - 1 ? 'Realizar pedido' : 'Next'}
+                    
                   </Button>
                 </div>
               </React.Fragment>
