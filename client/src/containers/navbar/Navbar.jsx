@@ -10,6 +10,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
+import PersonPinIcon from '@material-ui/icons/PersonPin';
 //import IconButton from "@material-ui/core/IconButton";
 //import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -34,7 +35,8 @@ import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 const StyledMenu = withStyles({
   paper: {
     border: "1px solid #d3d4d5",
-    borderradius: "8px",
+    borderradius: "15px",
+    
   },
 })((props) => (
   <Menu
@@ -66,14 +68,9 @@ export default function Navbar({ onSearch, botonNav }) {
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [nombre, setNombre] = useState("");
-  const [loggedWithGoogle, setLoggedWithGoogle] = useState(false);
   const open = Boolean(anchorEl);
   const user = useSelector((state) => state.authentication.user);
-  //const loggedIn = user ? true : false;
-  // console.log(nombre);
-
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
-
   const cart = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
@@ -104,7 +101,6 @@ export default function Navbar({ onSearch, botonNav }) {
       .get(`http://localhost:3000/me`, { withCredentials: true })
       .then((res) => {
         setNombre(res.data.name);
-        setLoggedWithGoogle(true);
       });
   }, [nombre]);
 
@@ -178,9 +174,11 @@ export default function Navbar({ onSearch, botonNav }) {
                 </StyledMenu>
               </>
             ) : (
+              <Button  className = {s.hola} startIcon = {<PersonPinIcon/>}>
               <Link to="/loginpage" className={s.login}>
-                <span>Iniciar Sesion</span>
+                <span>Login</span>
               </Link>
+              </Button>
             )}
           </button>
         </div>
