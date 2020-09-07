@@ -1,9 +1,3 @@
-// const passport = require(‘passport’);
-// const express = require(‘express’)
-const API_KEY = "8c2187dc7c9fd962c4e8f92e52d63f8e-7cd1ac2b-31b88aa3";
-const DOMAIN = "sandbox65c135321b814aaa8813daf82bba2367.mailgun.org";
-const mailgun = require("mailgun-js");
-const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -14,12 +8,9 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const Strategy = require("passport-local").Strategy;
-var GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const config = require("../config.js");
-// const googleStratergy = require("../googleStrategy");
-// const mercadopago = require("mercadopago");
 require("./db.js");
-
 //Modelo de usuario
 const { User, Review, Order, Products_Order } = require("./db.js");
 
@@ -46,6 +37,7 @@ passport.use(
       });
   })
 );
+
 passport.use(
   new GoogleStrategy(
     {
@@ -74,26 +66,6 @@ passport.use(
     }
   )
 );
-
-function extractProfile(profile) {
-  let imageUrl = "";
-  if (profile.photos && profile.photos.length) {
-    imageUrl = profile.photos[0].value;
-  }
-  return {
-    id: profile.id,
-    displayName: profile.displayName,
-    image: imageUrl,
-  };
-}
-
-// passport.serializeUser(function (user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function (user, done) {
-//   done(null, user);
-// });
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -146,10 +118,10 @@ server.use(
 
 server.use(passport.initialize());
 server.use(passport.session());
-
 server.use((req, res, next) => {
   next();
 });
+server.use("/", routes);
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -169,8 +141,6 @@ server.get("/me", isAuthenticated, function (req, res) {
     });
 });
 
-server.use("/", routes);
-
 // Error catching endware.
 server.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars
@@ -178,35 +148,6 @@ server.use((err, req, res, next) => {
   const message = err.message || err;
   console.error(err);
   res.status(status).send(message);
-});
-
-//mailgun
-
-sendEmail = () =>
-  new Promise((resolve, reject) => {
-    const data = {
-      from: "ingenieriamg91@gmail.com",
-      to: "ingenieriamg91@gmail.com",
-      subject: "Hello",
-      text: "Testing some Mailgun awesomeness!",
-    };
-
-    mg.messages().send(data, (error, body) => {
-      if (error) {
-        return reject(error);
-      }
-      return resolve();
-    });
-  });
-
-server.post("/mailgun", (req, res, next) => {
-  sendEmail()
-    .then((values) => {
-      res.json({ message: "Your query has been sent" });
-    })
-    .catch((e) => {
-      next(e);
-    });
 });
 
 server.get(
@@ -223,6 +164,8 @@ server.get(
 );
 
 module.exports = server;
+
+// const mercadopago = require("mercadopago");
 
 // mercadopago.configure({
 //   sandbox: true,
@@ -276,3 +219,5 @@ module.exports = server;
 
 //   // console.log(req.headers, req.body);
 // });
+
+//mailgun

@@ -166,7 +166,7 @@ function LoginPage(props) {
           }}
         >
           <Typography component="h1" variant="h5">
-            INICIAR SESION
+            Login
           </Typography>
           <form name="form" onSubmit={handleSubmit}>
             <Grid>
@@ -229,10 +229,10 @@ function LoginPage(props) {
               <Grid md={12}>
                 <Button type="submit" variant="contained" color="primary">
                   {loggingIn && <CircularProgress size="40" disableShrink />}
-                  INICIAR SESION
+                  LOGIN
                 </Button>
                 <Button variant="outlined" color="primary">
-                  <Link to="/register">Registrate</Link>
+                  <Link to="/register">Register</Link>
                 </Button>
                 <Grid container>
                   <Grid item xs>
