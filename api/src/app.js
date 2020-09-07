@@ -35,8 +35,6 @@ passport.use(
           return done(null, false);
         }
         bcrypt.compare(password, user.password).then((res) => {
-          // res === true
-          // console.log(res);
           if (res) {
             return done(null, user);
           }
@@ -44,7 +42,6 @@ passport.use(
         });
       })
       .catch((err) => {
-        // console.log(err);
         return done(err);
       });
   })
@@ -68,11 +65,9 @@ passport.use(
         },
       })
         .then((res) => {
-          //console.log(res[0])
           return res[0];
         })
         .then((user) => {
-          //console.log(user)
           done(null, user);
         })
         .catch((err) => done(err));
@@ -153,20 +148,14 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 server.use((req, res, next) => {
-  // console.log(req.session);
-  // console.log(req.user);
   next();
 });
 
 function isAuthenticated(req, res, next) {
-  // console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else {
-    // res.redirect("/auth/login");
-    // console.log("no logeado")
     res.send("no logeado");
-    //next();
   }
 }
 
@@ -190,6 +179,50 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(status).send(message);
 });
+
+//mailgun
+
+sendEmail = () =>
+  new Promise((resolve, reject) => {
+    const data = {
+      from: "ingenieriamg91@gmail.com",
+      to: "ingenieriamg91@gmail.com",
+      subject: "Hello",
+      text: "Testing some Mailgun awesomeness!",
+    };
+
+    mg.messages().send(data, (error, body) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve();
+    });
+  });
+
+server.post("/mailgun", (req, res, next) => {
+  sendEmail()
+    .then((values) => {
+      res.json({ message: "Your query has been sent" });
+    })
+    .catch((e) => {
+      next(e);
+    });
+});
+
+server.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile", "openid"] })
+);
+
+server.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:3001/catalogo",
+    failureRedirect: "http://localhost:3001/loginpage",
+  })
+);
+
+module.exports = server;
 
 // mercadopago.configure({
 //   sandbox: true,
@@ -243,49 +276,3 @@ server.use((err, req, res, next) => {
 
 //   // console.log(req.headers, req.body);
 // });
-
-//mailgun
-
-sendEmail = () =>
-  new Promise((resolve, reject) => {
-    const data = {
-      from: "ingenieriamg91@gmail.com",
-      to: "ingenieriamg91@gmail.com",
-      subject: "Hello",
-      text: "Testing some Mailgun awesomeness!",
-    };
-
-    mg.messages().send(data, (error, body) => {
-      if (error) {
-        return reject(error);
-      }
-      console.log(body);
-      return resolve();
-    });
-  });
-
-server.post("/mailgun", (req, res, next) => {
-  sendEmail()
-    .then((values) => {
-      console.log(values);
-      res.json({ message: "Your query has been sent" });
-    })
-    .catch((e) => {
-      next(e);
-    });
-});
-
-server.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile", "openid"] })
-);
-
-server.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "http://localhost:3001/catalogo",
-    failureRedirect: "http://localhost:3001/loginpage",
-  })
-);
-
-module.exports = server;

@@ -102,7 +102,6 @@ mercadopago.configure({
 
 server.get("/mercadopago", (req, res, next) => {
   mercadopago.payment.search().then((values) => {
-    console.log(values);
     res.send(values);
   });
 });
@@ -122,7 +121,6 @@ sendEmail = () =>
       if (error) {
         return reject(error);
       }
-      console.log(body);
       return resolve();
     });
   });
@@ -130,7 +128,6 @@ sendEmail = () =>
 server.post("/mailgun", (req, res, next) => {
   sendEmail()
     .then((values) => {
-      console.log(values);
       res.json({ message: "Your query has been sent" });
     })
     .catch((e) => {

@@ -3,7 +3,6 @@ import axios from "axios";
 function authHeader() {
   // return authorization header with jwt token
   let user = JSON.parse(localStorage.getItem("user"));
-  console.log("el usuario traido de localStorage:-------" + user);
 
   if (user && user.token) {
     return { Authorization: "Bearer " + user.token };
@@ -36,26 +35,20 @@ function login(email, password) {
     password,
   };
 
-  return (
-    axios
-      .post(`http://localhost:3000/auth/login`, requestOptions, {
-        withCredentials: true,
-      })
-      // .then(handleResponse)
-      .then((user) => {
-        // console.log("en el login:         " + user.data);
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(user.data));
-
-        return user.data;
-      })
-  );
+  return axios
+    .post(`http://localhost:3000/auth/login`, requestOptions, {
+      withCredentials: true,
+    })
+    .then((user) => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem("user", JSON.stringify(user.data));
+      return user.data;
+    });
 }
 
 function logout() {
   // remove user from local storage to log user out
   return axios.get(`http://localhost:3000/auth/logout`).then((res) => {
-    // console.log("el user en el logout " + res);
     localStorage.removeItem("user");
   });
 }

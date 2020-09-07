@@ -51,6 +51,7 @@ const StyledMenu = withStyles({
     {...props}
   />
 ));
+
 const StyledMenuItem = withStyles((theme) => ({
   root: {
     "&:focus": {
@@ -62,10 +63,12 @@ const StyledMenuItem = withStyles((theme) => ({
     },
   },
 }))(MenuItem);
+
 export default function Navbar({ onSearch, botonNav }) {
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [nombre, setNombre] = useState("");
+  const [loggedWithGoogle, setLoggedWithGoogle] = useState(false);
   const open = Boolean(anchorEl);
   const user = useSelector((state) => state.authentication.user);
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
@@ -98,7 +101,10 @@ export default function Navbar({ onSearch, botonNav }) {
     axios
       .get(`http://localhost:3000/me`, { withCredentials: true })
       .then((res) => {
-        setNombre(res.data.name);
+        if (res.data.googleId) {
+          setNombre(res.data.name);
+          setLoggedWithGoogle(true);
+        }
       });
   }, [nombre]);
 
@@ -134,7 +140,7 @@ export default function Navbar({ onSearch, botonNav }) {
         <SearchInput onSearch={onSearch} />
         <div>
           <button className={s.buttons}>
-            {loggedIn ? (
+            {loggedIn || loggedWithGoogle ? (
               <>
                 <Button
                   aria-controls="customized-menu"
@@ -144,7 +150,7 @@ export default function Navbar({ onSearch, botonNav }) {
                   onClick={handleClick}
                   startIcon={<PersonIcon />}
                 >
-                  {nombre ? nombre : "USUARIO"}
+                  {nombre || user ? nombre || user.name : "USUARIO"}
                 </Button>
                 <StyledMenu
                   id="customized-menu"
