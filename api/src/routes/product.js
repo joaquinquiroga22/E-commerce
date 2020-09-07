@@ -188,6 +188,27 @@ server.put("/:id", (req, res, next) => {
   }
 });
 
+//ruta para cambiar el stock de un product
+server.put("/:id/stock", async (req, res, next) => {
+  const newStock = parseInt(req.body.stock);
+
+  try {
+    const product = await Product.findOne({ where: { id: req.params.id } });
+    if (!product) {
+      return res.send({
+        message: `No existe el producto con ID: ${req.params.id}`,
+      });
+    }
+    product.stock = newStock;
+    await product.save();
+    return res.send({
+      message: `Se actualizo el stock del proucto ID: ${req.params.id}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 //Hacemos un get a / products/:id para traer un producto por su id
 
 server.get("/:id", (req, res, next) => {

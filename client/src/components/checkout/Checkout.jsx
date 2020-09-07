@@ -15,11 +15,13 @@ import Typography from "@material-ui/core/Typography";
 import AddressForm from "./AddressForm.jsx";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
+import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { editOrder } from "../../actions/orders";
 import { emptyCart } from "../../actions/cart";
+import Axios from "axios";
 
 function Copyright() {
   return (
@@ -124,12 +126,23 @@ export default function Checkout(props) {
 
     if (activeStep === steps.length - 1) {
       dispatch(editOrder(data, cart.orderId));
+      updateStock(cart.products);
       dispatch(emptyCart());
       console.log(editOrder);
       console.log("Estoy haciendo el put");
     }
 
     setActiveStep(activeStep + 1);
+  };
+
+  //actualizo el stock producto segun la compra
+  const updateStock = (products) => {
+    products.forEach((product) => {
+      let stock = product.stock - product.quantity;
+      axios.put(`http://localhost:3000/products/${product.id}/stock`, {
+        stock,
+      });
+    });
   };
 
   const handleBack = () => {
