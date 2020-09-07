@@ -17,7 +17,7 @@
   -webkit-box-shadow: 0px 4px 5px -1px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0px 4px 5px -1px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 4px 5px -1px rgba(0, 0, 0, 0.2);
-  z-index: 10;
+  z-index: 1000;
 }
 .navbar a {
   text-decoration: none;
@@ -100,7 +100,7 @@
 .buttons p {
   margin: 0;
 }
-.hola{
+.hola {
   border-radius: 8px;
 }
 

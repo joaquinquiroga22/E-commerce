@@ -12,7 +12,6 @@
 }
 
 .img {
-  
   border-radius: 5px;
   margin-right: 5px;
   height: 460px;
@@ -41,37 +40,38 @@
   font-weight: 300;
   font-family: Proxima Nova, -apple-system, Helvetica Neue, Helvetica, Roboto,
     Arial, sans-serif;
-    margin-top: -10px;
+  margin-top: -10px;
 }
 
 .titulo {
   font-size: 26px;
   font-weight: 600;
-  font-family: courier,arial,helvetica;
+  font-family: courier, arial, helvetica;
 }
-.title{
+.title {
   margin-top: -10px;
-    text-align: center;
-    margin-left:0px;
-    font-family: courier,arial,helvetica ;
-    font-size: 40px;
-    color: black;
-    margin-right: 10px;
-    margin-left: 25px;
+  text-align: center;
+  margin-left: 0px;
+  font-family: courier, arial, helvetica;
+  font-size: 40px;
+  color: black;
+  margin-right: 10px;
+  margin-left: 25px;
 }
 
 .rating {
   flex-direction: row;
+  margin-bottom: 50px;
+  margin-left: 95px;
 }
-.opinion{
-    font-weight: bold;
-    color: black;
-    border: 1px solid black;
-    background-color: whitesmoke;
-    margin: 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    
+.opinion {
+  font-weight: bold;
+  color: black;
+  border: 1px solid black;
+  background-color: whitesmoke;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 .buttoms {
   display: flex;
@@ -85,20 +85,20 @@ h5 {
 .review {
   flex-direction: column;
 }
-.opinion{
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+.opinion {
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: white;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.e{
-  
+.e {
   font-family: Proxima Nova, -apple-system, Helvetica Neue, Helvetica, Roboto;
   margin-top: -10px;
 }
-.daropinion{
+.daropinion {
   margin-top: -25px;
 }
-.alert{
+.alert {
   width: 95%;
 }
