@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 // Components
 import SearchInput from "../../components/search_input/SearchInput.jsx";
 // Material y estilos
@@ -9,11 +10,20 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import FilterVintageIcon from "@material-ui/icons/FilterVintage";
 import Badge from "@material-ui/core/Badge";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+//import IconButton from "@material-ui/core/IconButton";
+//import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import { green } from "@material-ui/core/colors";
+//import { green } from "@material-ui/core/colors";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+//import InboxIcon from '@material-ui/icons/MoveToInbox';
+//import DraftsIcon from '@material-ui/icons/Drafts';
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PersonIcon from "@material-ui/icons/Person";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
 
@@ -21,12 +31,46 @@ import { addToCart, getCart, fetchCartFromDb } from "../../actions/cart";
 
 import getOrCreateLocalStorage from "../../helpers/getLocalStorage";
 
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+    borderradius: "8px",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    "&:focus": {
+      backgroundColor: theme.palette.primary.main,
+
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
 export default function Navbar({ onSearch, botonNav }) {
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [nombre, setNombre] = useState("");
+  const [loggedWithGoogle, setLoggedWithGoogle] = useState(false);
   const open = Boolean(anchorEl);
   const user = useSelector((state) => state.authentication.user);
   //const loggedIn = user ? true : false;
+  // console.log(nombre);
 
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
 
@@ -55,6 +99,15 @@ export default function Navbar({ onSearch, botonNav }) {
     }
   }, [loggedIn]);
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/me`, { withCredentials: true })
+      .then((res) => {
+        setNombre(res.data.name);
+        setLoggedWithGoogle(true);
+      });
+  }, [nombre]);
+
   if (window.location.pathname === "/admin") {
     return (
       <div className={s.adminNav}>
@@ -74,6 +127,9 @@ export default function Navbar({ onSearch, botonNav }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   return (
     <div className={s.navbar}>
@@ -86,45 +142,40 @@ export default function Navbar({ onSearch, botonNav }) {
           <button className={s.buttons}>
             {loggedIn ? (
               <>
-                <IconButton
+                <Button
+                  aria-controls="customized-menu"
                   aria-haspopup="true"
-                  onClick={handleMenu}
-                  zIndex="modal"
-                  style={{ fontSize: 14, color: green[500] }}
+                  variant="contained"
+                  color="default"
+                  onClick={handleClick}
+                  startIcon={<PersonIcon />}
                 >
-                  <AccountCircle style={{ fontSize: 18 }} />
-                  <p> {user.name}</p>
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
+                  {nombre ? nombre : "USUARIO"}
+                </Button>
+                <StyledMenu
+                  id="customized-menu"
                   anchorEl={anchorEl}
-                  zIndex="modal"
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
                   keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={open}
+                  open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>
-                    <Link to="/me">
-                      <span>
-                        <FilterVintageIcon className={s.icon} />
-                        Profile
-                      </span>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <Link to="/loginpage" className={s.login}>
-                      <span>Cerrar Sesion</span>
-                    </Link>
-                  </MenuItem>
-                </Menu>
+                  <Link to="/me">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <AccountBoxIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText secondary="Profile" />
+                    </StyledMenuItem>
+                  </Link>
+                  <Link to="/loginpage">
+                    <StyledMenuItem>
+                      <ListItemIcon>
+                        <ExitToAppIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText secondary="Cerrar Sesion" />
+                    </StyledMenuItem>
+                  </Link>
+                </StyledMenu>
               </>
             ) : (
               <Link to="/loginpage" className={s.login}>

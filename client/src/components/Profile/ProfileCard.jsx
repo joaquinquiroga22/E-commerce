@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ViewReset from "../view_reset/ViewReset";
 
-import s from "./ProfileCard.module.css"
+import s from "./ProfileCard.module.css";
 //Material-ui
-import RotateLeftOutlinedIcon from '@material-ui/icons/RotateLeftOutlined';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import PersonIcon from '@material-ui/icons/Person';
-import PermIdentityIcon from '@material-ui/icons/PermIdentity';
-import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-import { Typography,Container,Box } from "@material-ui/core";
+import RotateLeftOutlinedIcon from "@material-ui/icons/RotateLeftOutlined";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import PersonIcon from "@material-ui/icons/Person";
+import PermIdentityIcon from "@material-ui/icons/PermIdentity";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
+import { Typography, Container, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 const useStyles = makeStyles((theme) => ({
@@ -28,16 +28,17 @@ export default function Profile({ id, onClose }) {
   const [renderReset, setRenderReset] = useState(false);
 
   useEffect(() => {
-    if (usuario) {
-      axios
+    // if (usuario) {
+    axios
 
-        .get(`http://localhost:3000/me`, { withCredentials: true })
+      .get(`http://localhost:3000/me`, { withCredentials: true })
 
-        .then((res) => {
-          setUser(res.data);
-          setInput(res.data);
-        });
-    }
+      .then((res) => {
+        console.log(res);
+        setUser(res.data);
+        setInput(res.data);
+      });
+    // }
   }, []);
 
   const handleInputChange = function (e) {
@@ -57,12 +58,11 @@ export default function Profile({ id, onClose }) {
     });
   };
 
-  const onViewReset = function (e) {
-    setReset(Number(e.target.id));
+  const onViewReset = function (id) {
+    setReset(id);
     setRenderReset(true);
   };
   return (
-
     <Container component="main" maxWidth="xs">
       <div className={s.container}>
         <Typography
@@ -73,103 +73,99 @@ export default function Profile({ id, onClose }) {
             backgroundColor: "rgb(245 245 245)",
           }}
         >
-      <div className = {s.form}>
-        {renderReset && <ViewReset id={reset} onClose={setRenderReset} />}
-        <h3 className = {s.title}>Bienvenido {user && user.name}</h3>
-        <div >
-          <p>
-          <i className={s.icon}>{<MailOutlineIcon />}</i>
+          <div className={s.form}>
+            {renderReset && <ViewReset id={reset} onClose={setRenderReset} />}
+            <h3 className={s.title}>Bienvenido {user && user.name}</h3>
+            <div>
+              <p>
+                <i className={s.icon}>{<MailOutlineIcon />}</i>
 
-            {edit ? (
-              <input
-                type="text"
-                name="email"
+                {edit ? (
+                  <input
+                    type="text"
+                    name="email"
+                    placeholder="Email"
+                    onChange={handleInputChange}
+                    value={input.email}
+                    disabled={!edit}
+                  />
+                ) : (
+                  user && user.email
+                )}
+              </p>
+              <p>
+                <i className={s.icon}>{<PersonIcon />}</i>
 
-                placeholder = "Email"
+                {edit ? (
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Nombre"
+                    onChange={handleInputChange}
+                    value={input.name}
+                    disabled={!edit}
+                  />
+                ) : (
+                  user && user.name
+                )}
+              </p>
+              <p>
+                <i className={s.icon}>{<PermIdentityIcon />}</i>
+                {edit ? (
+                  <input
+                    type="text"
+                    name="lastname"
+                    placeholder="Apellido"
+                    onChange={handleInputChange}
+                    value={input.lastname}
+                    disabled={!edit}
+                  />
+                ) : (
+                  user && user.lastname
+                )}
+              </p>
+            </div>
+            <div>
+              <div>
+                <p>Editar</p>
 
-                onChange={handleInputChange}
-                value={input.email}
-                disabled={!edit}
-              />
-            ) : (
-              user && user.email
-            )}
-          </p>
-          <p>
-
-          <i className={s.icon}>{<PersonIcon />}</i>
-
-            {edit ? (
-              <input
-                type="text"
-                name="name"
-
-                placeholder = "Nombre"
-
-                onChange={handleInputChange}
-                value={input.name}
-                disabled={!edit}
-              />
-            ) : (
-              user && user.name
-            )}
-          </p>
-          <p>
-
-          <i className={s.icon}>{<PermIdentityIcon />}</i>
-           {edit ? (
-              <input
-                type="text"
-                name="lastname"
-                placeholder = "Apellido"
-
-                onChange={handleInputChange}
-                value={input.lastname}
-                disabled={!edit}
-              />
-            ) : (
-              user && user.lastname
-            )}
-          </p>
-        </div>
-        <div>
-          <div>
-            <p>Editar</p>
-
-            <label className={s.switch}>
-              <input type="checkbox" onChange={() => setEdit(!edit)} />
-              <span className={[s.slider, s.round].join(" ")}></span>
-            </label>
+                <label className={s.switch}>
+                  <input type="checkbox" onChange={() => setEdit(!edit)} />
+                  <span className={[s.slider, s.round].join(" ")}></span>
+                </label>
+              </div>
+              <Box className={s.box}>
+                <div className={s.button1}>
+                  <Button
+                    onClick={onSave}
+                    disabled={!edit}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    endIcon={<SaveOutlinedIcon />}
+                  >
+                    Guardar Cambios
+                  </Button>
+                </div>
+                <div className={s.button2}>
+                  <Button
+                    id={user && user.id}
+                    onClick={() => onViewReset(user.id)}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    endIcon={<RotateLeftOutlinedIcon />}
+                  >
+                    Reset Password
+                  </Button>
+                </div>
+              </Box>
+              <div></div>
+            </div>
           </div>
-          <Box className = {s.box}>
-          <div className = {s.button1}>
-          <Button onClick={onSave} disabled={!edit}
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                endIcon={<SaveOutlinedIcon />}
-                >
-              Guardar Cambios
-          </Button>
-          </div>
-          <div className = {s.button2} >
-            <Button id={user && user.id} onClick={onViewReset}
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button}
-                  endIcon={<RotateLeftOutlinedIcon />}
-                >
-                  Reset Password
-                </Button>
-          </div>
-          </Box>
-          <div></div>
-        </div>
+        </Typography>
       </div>
-    </Typography> 
-  </div>
- </Container>
-
+    </Container>
   );
 }

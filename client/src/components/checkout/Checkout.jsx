@@ -71,14 +71,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ["Shipping address", "Payment details", "Review your order"];
+const steps = ['Direccion de envio', 'Metodo de pago', 'Su orden'];
 
 function getStepContent(step, changeInput) {
   switch (step) {
     case 0:
       return <AddressForm onChange={changeInput} />;
     case 1:
-      return <PaymentForm />;
+      return <PaymentForm onChange={changeInput} />;
     case 2:
       return <Review />;
     default:
@@ -86,10 +86,11 @@ function getStepContent(step, changeInput) {
   }
 }
 
-export default function Checkout() {
-  const [inputs, setInputs] = useState({});
-
-  const cart = useSelector((state) => state.cart);
+export default function Checkout(props) {
+  
+  const [inputs, setInputs] = useState({})
+  
+  const cart = useSelector((state) => state.cart)
   // const products = useSelector((state) => state.products.products);
   // const message = useSelector((state) => state.cart.message);
   const user = useSelector((state) => state.authentication.user);
@@ -159,12 +160,11 @@ export default function Checkout() {
             {activeStep === steps.length ? (
               <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  Gracias por su orden.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order
-                  confirmation, and will send you an update when your order has
-                  shipped.
+                  Tu numero de orden es #2001539. Te hemos enviado un mail con la confirnacion de la orden, 
+                  otro email sera enviado cuando la orden se envie hacia tu direccion.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -191,7 +191,7 @@ export default function Checkout() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                    {activeStep === steps.length - 1 ? 'Realizar pedido' : 'Next'}
                   </Button>
                 </div>
               </React.Fragment>

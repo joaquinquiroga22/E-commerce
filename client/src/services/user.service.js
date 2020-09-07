@@ -13,6 +13,7 @@ function authHeader() {
 }
 
 export const userService = {
+  loginWithGoogle,
   login,
   logout,
   register,
@@ -21,6 +22,13 @@ export const userService = {
   update,
   delete: _delete,
 };
+
+function loginWithGoogle() {
+  return axios.get(`http://localhost:3000/auth/google`).then((user) => {
+    localStorage.setItem("user", JSON.stringify(user.data));
+    return user.data;
+  });
+}
 
 function login(email, password) {
   const requestOptions = {

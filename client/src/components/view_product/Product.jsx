@@ -8,7 +8,7 @@ import ReviewCard from "../reviews/ReviewCard";
 import Review from "../view_review/Review.jsx";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
 import ImgSlider from "../images_slider/ImgSlider.jsx";
-
+import Alert from '@material-ui/lab/Alert';
 //Helper
 import replaceChars from "../../helpers/replaceChars";
 
@@ -31,6 +31,7 @@ export default function Product({ id }) {
 
   const classes = useStyles();
   const dispatch = useDispatch();
+  const message = useSelector((state) => state.cart.message);
   const { product } = useSelector((state) => state.products);
   const cart = useSelector((state) => state.cart.products);
 
@@ -103,8 +104,17 @@ export default function Product({ id }) {
             )}
           </Box>
           <Box>
+            {/* <Button variant="contained" color="secondary">
+              Comprar ya
+            </Button>
+            <span> </span> */}
+            {message && (
+          <Alert className = {s.alert} severity="warning">
+            El Producto ya se encuentra en el carrito
+          </Alert>
+           )}
             <Button variant="contained" color="primary" onClick={addToCarrito}>
-              Carrito
+              Añadir al Carrito
             </Button>
           </Box>
         </Box>

@@ -47,6 +47,11 @@ a {
 }
 .totalspan {
   font-size: 18px;
-  text-align: right;
+  text-align: left;
+  width: 100px;
+}
+.alert{
+  font-size:20px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
