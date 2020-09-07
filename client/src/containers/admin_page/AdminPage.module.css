@@ -1,8 +1,10 @@
 .admin{
+    position: relative;
     width: 100%;
-    min-height: 500px;
-    height: 100vh;
+    display: block;
     background-color: #fff;
+    padding-bottom: 20px;
+    min-height: 400px;
   }
 .aside{
   border-radius: 10px;
@@ -46,4 +48,5 @@ top: 12px;
 .main{
   float: left;
   padding: 10px 0px 0px 20px;
+  height: fit-content;
 }
