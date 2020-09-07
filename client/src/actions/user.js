@@ -20,40 +20,12 @@ const DELETE_SUCCESS = "USERS_DELETE_SUCCESS";
 const DELETE_FAILURE = "USERS_DELETE_FAILURE";
 
 export const userActions = {
-  loginWithGoogle,
   login,
   logout,
   register,
   getAll,
   delete: _delete,
 };
-
-function loginWithGoogle() {
-  return (dispatch) => {
-    dispatch(request());
-    userService.loginWithGoogle().then(
-      (user) => {
-        console.log(user);
-        dispatch(success(user));
-        // return user;
-      },
-      (error) => {
-        dispatch(failure(error.toString()));
-        dispatch(alertActions.error(error.toString()));
-      }
-    );
-  };
-
-  function request(user) {
-    return { type: LOGIN_REQUEST, user };
-  }
-  function success(user) {
-    return { type: LOGIN_SUCCESS, user };
-  }
-  function failure(error) {
-    return { type: LOGIN_FAILURE, error };
-  }
-}
 
 function login(email, password) {
   return (dispatch) => {

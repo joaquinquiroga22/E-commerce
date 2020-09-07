@@ -11,19 +11,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
       };
-
     case FETCH_ORDERS:
       return {
         ...state,
         orders: action.orders,
       };
-
     case GET_ORDER:
       return {
         ...state,
         order: action.order,
       };
-
     default:
       return state;
   }

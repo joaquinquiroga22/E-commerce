@@ -47,7 +47,6 @@ function ResetPw(props) {
       password: input.password,
       adminReset: true,
     };
-    console.log(data);
     e.preventDefault();
 
     axios
@@ -99,6 +98,7 @@ function LoginPage(props) {
   const classes = useStyles();
   // Traigo el usuario del Local Storage
   const user = useSelector((state) => state.authentication.user);
+
   useEffect(() => {
     //Si venis de estar logueado borra lo que este en el carrito
     if (user) {
@@ -153,10 +153,6 @@ function LoginPage(props) {
     setSuccess(true);
   };
 
-  // function doLogin() {
-  //   console.log("en el login: " + loginWithGoogleAction());
-  //   loginWithGoogleAction();
-  // }
   return (
     <Container component="main" maxWidth="xs">
       {renderReset && <ResetPw info={email} onClose={setRenderReset} />}
@@ -225,12 +221,11 @@ function LoginPage(props) {
               {alert &&
                 setTimeout(function () {
                   setFailure(true);
-                }, 5) && <></>}
-              {clear && (
-                <Alert severity="clear">
-                  <p>Ingrese los datos correctamente</p>
-                </Alert>
-              )}
+                }, 5) && <></> && (
+                  <Alert severity="error">
+                    <p>Ingrese los datos correctamente</p>
+                  </Alert>
+                )}
               <Grid md={12}>
                 <Button type="submit" variant="contained" color="primary">
                   {loggingIn && <CircularProgress size="40" disableShrink />}

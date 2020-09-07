@@ -4,16 +4,17 @@ import axios from "axios";
 import ViewUser from "../../components/view_user/ViewUser.jsx";
 import ViewReset from "../../components/view_reset/ViewReset.jsx";
 //Material-ui
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
 }));
+
 export default function UsersPanel() {
   const [users, setUsers] = useState();
   const [renderViewUser, setRenderViewUser] = useState(false);
@@ -21,6 +22,7 @@ export default function UsersPanel() {
   const [reset, setReset] = useState(0);
   const [renderReset, setRenderReset] = useState(false);
   const classes = useStyles();
+
   useEffect(() => {
     getUsers("mounted");
   }, [users]);
@@ -62,7 +64,6 @@ export default function UsersPanel() {
     <div className={s.container}>
       {renderViewUser && <ViewUser id={viewId} onClose={setRenderViewUser} />}
       {renderReset && <ViewReset id={reset} onClose={setRenderReset} />}
-      
       <table className={s.usersTable}>
         <caption>Administración de usuarios</caption>
         <thead>
@@ -84,17 +85,23 @@ export default function UsersPanel() {
                   <td>{user.role}</td>
                   <td>
                     <Button
-                    id={user.id} onClick={() => onViewUser(user.id)}
-                    color= "primary"
-                   >
-                    Ver Usuario
+                      id={user.id}
+                      onClick={() => onViewUser(user.id)}
+                      color="primary"
+                    >
+                      Ver Usuario
                     </Button>
                   </td>
                   <td>
-                    {" "}
-                    <Button  size="small" color = "secondary" className={classes.margin} id={user.id} onClick={() => onViewReset(user.id)}>
-                    Reset
-                   </Button>
+                    <Button
+                      size="small"
+                      color="secondary"
+                      className={classes.margin}
+                      id={user.id}
+                      onClick={() => onViewReset(user.id)}
+                    >
+                      Reset
+                    </Button>
                   </td>
                 </tr>
               );

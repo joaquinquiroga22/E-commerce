@@ -122,7 +122,7 @@ export default function Catalogue() {
               }
             })
           ) : (
-            <h2>No hay productos para mostrar</h2>
+            <h2>Sin productos Disponibles</h2>
           )}
         </div>
       </div>
