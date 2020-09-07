@@ -51,11 +51,16 @@ function isAuthenticated(req, res, next) {
 }
 
 server.get("/logout", function (req, res) {
-  req.session.destroy(function (e) {
-    req.logout();
-    // res.redirect('/');
-    res.status(205).send({ message: "Deslogeado correctamente" });
-  });
+  // req.session.destroy(function (e) {
+  console.log(req.isAuthenticated());
+  req.logout();
+  console.log(req.isAuthenticated());
+  // res
+  //   .status(205)
+  //   // res.redirect("https://mail.google.com/mail/u/0/?logout&hl=en");
+  //   // .send({ message: "Deslogeado correctamente" });
+  //   // });
+  //   .send(req.user);
   // req.logout();
   // res.cookie("connect.sid", "", { expires: new Date(1), path: "/" });
   // req.logout();
@@ -63,6 +68,16 @@ server.get("/logout", function (req, res) {
   // // res.redirect("/");
   // console.log(req.session);
   // req.session = null;
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log(req.isAuthenticated());
+      return next(err);
+    }
+    console.log(req.isAuthenticated());
+    // The response should indicate that the user is no longer authenticated.
+    return res.send({ authenticated: req.isAuthenticated() });
+  });
+  console.log(req.isAuthenticated());
   // req.session.destroy((err) => {
   //   if (!err) {
   //     res

@@ -159,10 +159,11 @@ server.use((req, res, next) => {
 });
 
 function isAuthenticated(req, res, next) {
-  console.log(req.isAuthenticated());
+  // console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else {
+    // res.redirect("/auth/login");
     // console.log("no logeado")
     res.send("no logeado");
     //next();
