@@ -8,9 +8,10 @@ import ReviewCard from "../reviews/ReviewCard";
 import Review from "../view_review/Review.jsx";
 import RateReviewOutlinedIcon from "@material-ui/icons/RateReviewOutlined";
 import ImgSlider from "../images_slider/ImgSlider.jsx";
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 //Helper
 import replaceChars from "../../helpers/replaceChars";
+import formatDate from "../../helpers/formatDate";
 
 //Importamos de redux para poder conectar al estado y poder dispatchear actions
 import { useSelector, useDispatch } from "react-redux";
@@ -109,10 +110,10 @@ export default function Product({ id }) {
             </Button>
             <span> </span> */}
             {message && (
-          <Alert className = {s.alert} severity="warning">
-            El Producto ya se encuentra en el carrito
-          </Alert>
-           )}
+              <Alert className={s.alert} severity="warning">
+                El Producto ya se encuentra en el carrito
+              </Alert>
+            )}
             <Button variant="contained" color="primary" onClick={addToCarrito}>
               Añadir al Carrito
             </Button>
@@ -134,7 +135,7 @@ export default function Product({ id }) {
                 stars={review.stars}
                 description={review.description}
                 user={user && user.name}
-                date={review.updatedAt}
+                date={formatDate(review.updatedAt)}
               />
             );
           })
