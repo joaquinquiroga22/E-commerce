@@ -66,14 +66,9 @@ export default function Navbar({ onSearch, botonNav }) {
   const [count, setCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [nombre, setNombre] = useState("");
-  const [loggedWithGoogle, setLoggedWithGoogle] = useState(false);
   const open = Boolean(anchorEl);
   const user = useSelector((state) => state.authentication.user);
-  //const loggedIn = user ? true : false;
-  // console.log(nombre);
-
   const loggedIn = useSelector((state) => state.authentication.loggedIn);
-
   const cart = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
@@ -104,7 +99,6 @@ export default function Navbar({ onSearch, botonNav }) {
       .get(`http://localhost:3000/me`, { withCredentials: true })
       .then((res) => {
         setNombre(res.data.name);
-        setLoggedWithGoogle(true);
       });
   }, [nombre]);
 
