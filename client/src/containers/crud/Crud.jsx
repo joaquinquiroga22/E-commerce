@@ -3,83 +3,82 @@ import s from "./Crud.module.css";
 import CrudHead from "../../components/crud/crud_head/CrudHead.jsx";
 import CrudTitle from "../../components/crud/crud_list_title/CrudTitle.jsx";
 import CrudListItem from "../../components/crud/crud_item/CrudItem.jsx";
-import axios from "axios";
 import CrudAddProduct from "./../../components/crud/crud_add_product/CrudAddProduct.jsx";
 import CrudDeleteProduct from "./../../components/crud/crud_delete_product/CrudDeleteProduct.jsx";
-import AddCategory from "../../components/crud_categories/add_category/AddCategory.jsx";
+
+import { useSelector, useDispatch } from "react-redux";
+
+//Action Creators REDUX
+import { getProducts, getProduct } from "../../actions/products";
 
 export default function Crud() {
-  //obtiene la lista de productos
-  const [products, setProducts] = useState([]);
+  //Conexion al Store de REDUX
+  const { products, product } = useSelector((state) => state.products);
   //Gestiona si se renderiza el componente CrudAddProduct
   const [renderAdd, setRenderAdd] = useState(false);
   //Gestiona si se renderiza el componente CrudEditProduct
   const [renderEdit, setRenderEdit] = useState(false);
   //Gestiona si se renderiza el componente CrudUpdate
-  const [updateId, setUpdateId] = useState();
   const [renderDelete, setRenderDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState();
-  const [renderCat, setRenderCat] = useState(false);
-  const [updateTable,setUpdateTable] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getProducts();
-  },[products]);
-
-  const getProducts = function(){
-    axios.get("http://localhost:3000/products").then(function (res) {
-      if(res.data.length !== products.length){
-        return setProducts(res.data);
-      }
-    });
-  }
+    dispatch(getProducts());
+  }, []);
 
   const updateRenderAdd = function (value) {
     setRenderAdd(value);
-    getProducts();
+    dispatch(getProducts());
   };
 
   const updateRenderEdit = function (value, id) {
+    if (renderEdit) {
+      setRenderEdit(false);
+      return dispatch(getProducts());
+    }
+    //Seteo El producto a editar en el store
+    dispatch(getProduct(id));
     setRenderEdit(value);
-    setUpdateId(id);
-    getProducts();
+    dispatch(getProducts());
   };
 
   const updateRenderDelete = function (value, id) {
+    if (renderDelete) {
+      setRenderDelete(false);
+      return dispatch(getProducts());
+    }
+    //Seteo El producto a eliminar en el store
+    dispatch(getProduct(id));
     setRenderDelete(value);
-    setDeleteId(id);
-    getProducts();
+    dispatch(getProducts());
   };
 
-  const updateRenderCategory = function (value) {
-    setRenderCat(value);
-  };
   return (
     <div className={s.component}>
       {renderAdd && <CrudAddProduct type="Add" onClose={updateRenderAdd} />}
 
       {renderEdit && (
-        <CrudAddProduct id={updateId} type="Edit" onClose={updateRenderEdit} />
+        <CrudAddProduct
+          product={product}
+          type="Edit"
+          onClose={updateRenderEdit}
+        />
       )}
 
-      {/* {renderCat && <AddCategory onClose={updateRenderCategory} />} */}
-      {renderDelete && (
-        <CrudDeleteProduct id={deleteId} onClose={updateRenderDelete} />
-      )}
-      <CrudHead
-        onAddProduct={updateRenderAdd}
-      />
+      {renderDelete && <CrudDeleteProduct onClose={updateRenderDelete} />}
+      <CrudHead onAddProduct={updateRenderAdd} />
       <CrudTitle />
-      {products.length > 0 && products.map(function (product) {
-        return (
-          <CrudListItem
-            onEditProduct={updateRenderEdit}
-            onDeleteProduct={updateRenderDelete}
-            key={product.id}
-            product={product}
-          />
-        );
-      })}
+      {products.length > 0 &&
+        products.map(function (prod) {
+          return (
+            <CrudListItem
+              onEditProduct={updateRenderEdit}
+              onDeleteProduct={updateRenderDelete}
+              key={prod.id}
+              product={prod}
+            />
+          );
+        })}
     </div>
   );
 }

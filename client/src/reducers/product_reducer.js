@@ -4,6 +4,8 @@ import {
   ADD_PRODUCT,
   EDIT_PRODUCT,
   DELETE_PRODUCT,
+  SEARCH_PRODUCT,
+  GET_PRODUCTS_CATEGORY,
 } from "../actions/products";
 
 const initialState = {
@@ -25,7 +27,15 @@ export default (state = initialState, action) => {
         ...state,
         product: action.product,
       };
-    // Al arreglo de productos le agrego un nuevoproducto
+
+    case GET_PRODUCTS_CATEGORY:
+      return {
+        ...state,
+        products: action.productsCategory,
+      };
+
+    // Al arreglo de productos le devuelvo un nuevo arreglo con nuevoproducto
+
     case ADD_PRODUCT:
       return {
         ...state,
@@ -47,6 +57,13 @@ export default (state = initialState, action) => {
         ...state,
         products: state.products.filter((product) => product.id !== action.id),
       };
+
+    case SEARCH_PRODUCT:
+      return {
+        ...state,
+        products: action.founds,
+      };
+
     default:
       return state;
   }

@@ -1,31 +1,22 @@
 import React from "react";
 import s from "./CrudItem.module.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+import replaceChars from "../../../helpers/replaceChars";
 
 export default function CrudListItem({
   product,
   onEditProduct,
   onDeleteProduct,
-
-})
-
-{
-
+}) {
   return (
     <div className={s.component}>
       <div className={s.div}> {product.id} </div>
-      <div className={s.div}> {product.name} </div>
+      <div className={s.div}> {replaceChars(product.name)} </div>
       <div className={s.div}> {"$ " + product.price} </div>
-      <div className={s.div}> {product.categories[0].name} </div>
+      <div className={s.div}>
+        {product.categories[0] && replaceChars(product.categories[0].name)}
+      </div>
 
       <div className={s.buttons}>
         <Button

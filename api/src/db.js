@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/development`,
   {
     logging: false, // set to console.log to see the raw SQL queries
-    native: false, // lets Sequelize know we can use pg-native for ~30% more speed
+    // native: false, lets Sequelize know we can use pg-native for ~30% more speed
   }
 );
 const basename = path.basename(__filename);
@@ -41,16 +41,24 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Product, Category, User, Order, Reviews } = sequelize.models;
+const {
+  Product,
+  Category,
+  User,
+  Order,
+  Reviews,
+  Productsorder,
+} = sequelize.models;
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+// Relaciones :
 
+// Aca category_products se define automaticamente (con productid y categoryid)
 Category.belongsToMany(Product, { through: "category_products" });
 Product.belongsToMany(Category, { through: "category_products" });
 
-Order.belongsToMany(Product, { through: "productsorder" });
-Product.belongsToMany(Order, { through: "productsorder" });
+//Aca usamos una tabla ya definida (le agrega price, quantity y description a (productid y orderid))
+Order.belongsToMany(Product, { through: Productsorder });
+Product.belongsToMany(Order, { through: Productsorder });
 
 User.hasMany(Order);
 Order.belongsTo(User);

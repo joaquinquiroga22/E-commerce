@@ -8,6 +8,9 @@
     overflow: hidden;
     border-collapse: collapse;
 }
+.orders select{
+  margin: 0;
+}
 .orders caption{
   background-color: #362181;
   color: white;

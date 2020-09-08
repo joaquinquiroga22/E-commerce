@@ -1,28 +1,16 @@
 import React from "react";
 import s from "./CrudItem.module.css";
-import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+import replaceChars from "../../../helpers/replaceChars";
 
 export default function CrudItem({
   category,
   onEditCategory,
   onDeleteCategory,
-
-})
-
-{
-
+}) {
   return (
     <div className={s.component}>
-      <div className={s.div}> {category.name} </div>      
+      <div className={s.div}> {replaceChars(category.name)} </div>
 
       <div className={s.button}>
         <Button
@@ -33,6 +21,7 @@ export default function CrudItem({
         >
           Editar
         </Button>
+
         <Button
           onClick={() => onDeleteCategory(true, category.id)}
           variant="contained"
