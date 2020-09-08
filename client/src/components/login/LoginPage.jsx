@@ -237,9 +237,9 @@ function LoginPage(props) {
                 <Grid container>
                   <Grid item xs>
                     <Box m={1}>
-                      <Link className={classes.reset} to="/me" variant="body2">
+                      {/* <Link className={classes.reset} to="/me" variant="body2">
                         Olvido su contraseña?
-                      </Link>
+                      </Link> */}
                     </Box>
                   </Grid>
                 </Grid>
