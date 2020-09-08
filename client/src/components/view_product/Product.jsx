@@ -148,7 +148,7 @@ export default function Product({ id }) {
       <Box m={5} display="flex" flexDirection="column" alignItems="strech">
         <Typography className={s.Palabrareview} variant="h4">
           {" "}
-          Reviews{" "}
+          Opiniones{" "}
         </Typography>
         {product.reviews && product.reviews.length > 0 ? (
           product.reviews.map((review) => {
