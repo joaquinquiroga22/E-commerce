@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import s from "./AdminPage.module.css";
 import Crud from "../crud/Crud.jsx";
 import OrdersTable from "../orders_table/OrdersTable.jsx";
 import Categories from "../category_crud/CategoryAdmin.jsx";
 import UsersPanel from "../users_panel/UsersPanel.jsx";
+
 
 //material ui
 import ReceiptIcon from "@material-ui/icons/Receipt";
@@ -39,6 +41,7 @@ export default function AdminPage() {
     }
     setComponent(element);
   };
+
 
   return (
     <div className={s.admin}>
@@ -92,4 +95,5 @@ export default function AdminPage() {
       <div className={s.main}>{component && component}</div>
     </div>
   );
+
 }
