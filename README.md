@@ -18,7 +18,7 @@ This is a student project we made as part of our education at [Soy Henry](https:
 - Front End:
     + HTML - CSS - Javascript
     + React
-    + React-Bootstrap
+    + React-Material-ui
     + Redux
 
 - Back End:
