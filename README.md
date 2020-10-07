@@ -32,10 +32,7 @@ This is a student project we made as part of our education at [Soy Henry](https:
 
 # How to start the project:
 
-If you want to see the page for yourself, you'll need to do the following:
 
-- Clone the repository
-- Create a `.env` file in the `client` folder with the following contents: 
 ```
-REACT_APP_API_URL=http://localhost:3001
+https://vivero.vercel.app/
 ```
